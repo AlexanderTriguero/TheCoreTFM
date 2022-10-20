@@ -1,3 +1,3 @@
 Algo
 
-Algo 4
+Algo 256
