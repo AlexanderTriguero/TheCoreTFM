@@ -10,9 +10,12 @@ UCLASS()
 class TFM_G1_API ATFM_WeaponBase : public AActor
 {
 	GENERATED_BODY()
-	
+
 public:	
-	// Sets default values for this actor's properties
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		UStaticMeshComponent* WeaponMesh;
+
 	ATFM_WeaponBase();
 
 protected:
