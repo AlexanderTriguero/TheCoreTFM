@@ -6,21 +6,31 @@
 #include "GameFramework/Actor.h"
 #include "TFM_WeaponBase.generated.h"
 
+class USkeletalMeshComponent;
+class USphereComponent;
+class USceneComponent;
 UCLASS()
 class TFM_G1_API ATFM_WeaponBase : public AActor
 {
 	GENERATED_BODY()
 	
-public:	
-	// Sets default values for this actor's properties
+public:
 	ATFM_WeaponBase();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mesh")
+		USkeletalMeshComponent* SkeletalMesh = nullptr;
+	//Sphere Collision to pick gun up if on the floor 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties")
+		USphereComponent* SphereCollision = nullptr;
+	UPROPERTY(EditDefaultsOnly)
+		USceneComponent* ProjectilePosition = nullptr;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	float ChargePercent = 1.f;
+
+protected:
+	virtual void BeginPlay() override;
+	virtual void Shoot();
+	virtual void ShootSecondary();
+	virtual void Reload();
 
 };
