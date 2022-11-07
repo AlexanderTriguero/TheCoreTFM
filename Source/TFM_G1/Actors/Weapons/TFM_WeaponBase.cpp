@@ -23,7 +23,6 @@ void ATFM_WeaponBase::BeginPlay()
 
 void ATFM_WeaponBase::Shoot()
 {
-
 }
 
 void ATFM_WeaponBase::ShootSecondary()

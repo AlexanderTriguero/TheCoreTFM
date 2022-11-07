@@ -24,7 +24,7 @@ protected:
 		UCapsuleComponent* VacuumCollision=nullptr;
 
 	UPROPERTY(EditAnywhere, Category="AirGun")
-		float Force=10000;
+		float Force= 3000000.f;
 
 	virtual void BeginPlay() override;
 	virtual void Shoot() override;

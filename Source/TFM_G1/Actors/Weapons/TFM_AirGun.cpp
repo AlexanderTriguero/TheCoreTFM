@@ -60,7 +60,7 @@ void ATFM_AirGun::Shoot()
 	if (!bIsShooting)
 	{
 		bIsShooting = true;
-		PushAttracValue = -1;
+		PushAttracValue = 1;
 	}
 }
 void ATFM_AirGun::ShootSecondary()
@@ -68,7 +68,7 @@ void ATFM_AirGun::ShootSecondary()
 	if (!bIsShooting)
 	{
 		bIsShooting = true;
-		PushAttracValue = 1;
+		PushAttracValue = -1;
 	}
 }
 
