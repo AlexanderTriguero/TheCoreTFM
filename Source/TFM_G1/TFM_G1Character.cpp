@@ -180,6 +180,7 @@ void ATFM_G1Character::OnFire()
 	//		AnimInstance->Montage_Play(FireAnimation, 1.f);
 	//	}
 	//}
+	CurrentWeapon->Shoot();
 }
 
 void ATFM_G1Character::SwitchNextWeapon()

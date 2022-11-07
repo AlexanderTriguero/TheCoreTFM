@@ -6,21 +6,26 @@
 #include "GameFramework/Actor.h"
 #include "TFM_BubbleBase.generated.h"
 
+class UBoxComponent;
+UENUM()
+enum EBubbleSize
+{
+	NORMAL	UMETA(DisplayName = "Normal"),
+	LARGE	UMETA(DisplayName = "Large"),
+};
+
 UCLASS()
 class TFM_G1_API ATFM_BubbleBase : public AActor
 {
 	GENERATED_BODY()
-	
 public:	
-	// Sets default values for this actor's properties
 	ATFM_BubbleBase();
+	
+	void Explode();
+	void Resize(TEnumAsByte<EBubbleSize> NewSize);
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	TEnumAsByte<EBubbleSize> Size;
 
 };

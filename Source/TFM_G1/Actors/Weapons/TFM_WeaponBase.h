@@ -18,13 +18,10 @@ class TFM_G1_API ATFM_WeaponBase : public AActor
 public:	
 	
 public:	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		UStaticMeshComponent* WeaponMesh;
-
 	ATFM_WeaponBase();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Mesh")
-		USkeletalMeshComponent* SkeletalMesh = nullptr;
+		USkeletalMeshComponent* WeaponMesh = nullptr;
 	//Sphere Collision to pick gun up if on the floor
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Properties")
 		USphereComponent* SphereCollision = nullptr;
@@ -33,11 +30,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bubble Class")
 		TSubclassOf<ATFM_BubbleBase> BubbleToSpawn = nullptr;
 	float ChargePercent = 1.f;
-
-protected:
-	virtual void BeginPlay() override;
+	class USkeletalMeshComponent* GetWeaponMesh() { return WeaponMesh; }
 	virtual void Shoot();
 	virtual void ShootSecondary();
 	virtual void Reload();
-	class UStaticMeshComponent* GetWeaponMesh() { return WeaponMesh; }
+
+protected:
+	virtual void BeginPlay() override;
 };

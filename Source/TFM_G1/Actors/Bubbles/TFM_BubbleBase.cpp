@@ -11,6 +11,16 @@ ATFM_BubbleBase::ATFM_BubbleBase()
 
 }
 
+void ATFM_BubbleBase::Explode()
+{
+	Destroy();
+}
+
+void ATFM_BubbleBase::Resize(TEnumAsByte<EBubbleSize> NewSize)
+{
+	Size = NewSize;
+}
+
 // Called when the game starts or when spawned
 void ATFM_BubbleBase::BeginPlay()
 {
@@ -18,10 +28,5 @@ void ATFM_BubbleBase::BeginPlay()
 	
 }
 
-// Called every frame
-void ATFM_BubbleBase::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 
-}
 
