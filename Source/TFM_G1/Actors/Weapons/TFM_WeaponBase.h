@@ -14,8 +14,13 @@ UCLASS()
 class TFM_G1_API ATFM_WeaponBase : public AActor
 {
 	GENERATED_BODY()
+
+public:	
 	
 public:	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		UStaticMeshComponent* WeaponMesh;
+
 	ATFM_WeaponBase();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Mesh")
@@ -34,4 +39,5 @@ protected:
 	virtual void Shoot();
 	virtual void ShootSecondary();
 	virtual void Reload();
+	class UStaticMeshComponent* GetWeaponMesh() { return WeaponMesh; }
 };
