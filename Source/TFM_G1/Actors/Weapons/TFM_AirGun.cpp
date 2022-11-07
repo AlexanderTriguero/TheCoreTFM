@@ -48,7 +48,7 @@ void ATFM_AirGun::Tick(float DeltaTime)
 				Direction = UKismetMathLibrary::GetDirectionUnitVector(Start, End);
 				if (ActorBase == OutHit.Actor)
 				{
-					ActorBase->GetMesh()->AddForce(Direction * Force * -1);
+					ActorBase->GetMesh()->AddForce(Direction * Force * PushAttracValue);
 				}
 			}
 		}
@@ -57,9 +57,22 @@ void ATFM_AirGun::Tick(float DeltaTime)
 
 void ATFM_AirGun::Shoot()
 {
-	bIsShooting = true;
+	if (!bIsShooting)
+	{
+		bIsShooting = true;
+		PushAttracValue = -1;
+	}
 }
 void ATFM_AirGun::ShootSecondary()
 {
-	bIsShooting = true;
+	if (!bIsShooting)
+	{
+		bIsShooting = true;
+		PushAttracValue = 1;
+	}
+}
+
+void ATFM_AirGun::StopShooting()
+{
+	bIsShooting = false;
 }
