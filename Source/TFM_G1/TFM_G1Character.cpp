@@ -64,7 +64,6 @@ ATFM_G1Character::ATFM_G1Character()
 
 	WeaponIndex = 0;
 
-	CurrentWeapon = CreateDefaultSubobject<ATFM_WeaponBase>(TEXT("Current Weapon"));
 }
 
 void ATFM_G1Character::BeginPlay()
@@ -73,15 +72,33 @@ void ATFM_G1Character::BeginPlay()
 	Super::BeginPlay();
 
 	//Spawn the weapon using StartingWeaponClass and attach weapon to arm socket GripPoint
-	if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(StartingWeaponClass))
+	/*if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(StartingWeaponClass))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawned and attempted to attach weapon to hand"));
 		Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
+	}*/
+
+	//Spawn Weapon using StartingWeaponClass
+
+	CurrentWeapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(StartingWeaponClass);
+	if (CurrentWeapon)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Spawned and attempted to attach weapon to hand"));
+		WeaponArray.Add(CurrentWeapon);
+		CurrentWeapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
 	}
-
-	
-
-
+	if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(SecondWeaponClass))
+	{
+		Weapon->GetWeaponMesh()->SetHiddenInGame(true);
+		WeaponArray.Add(Weapon);
+		Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
+	}
+	if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(ThirdWeaponClass))
+	{
+		Weapon->GetWeaponMesh()->SetHiddenInGame(true);
+		WeaponArray.Add(Weapon);
+		Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
+	}
 
 	//Attach gun mesh component to Skeleton, doing it here because the skeleton is not yet created in the constructor
 	//FP_Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
@@ -168,6 +185,23 @@ void ATFM_G1Character::OnFire()
 void ATFM_G1Character::SwitchNextWeapon()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Switching To Next Weapon"));
+	if (CurrentWeapon)
+	{
+		if (WeaponArray.Num() > WeaponIndex + 1)
+		{
+			++WeaponIndex;
+			if (ATFM_WeaponBase* NextWeapon = WeaponArray[WeaponIndex])
+			{
+				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(true);
+				CurrentWeapon = NextWeapon;
+				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
+			}
+			if (WeaponIndex + 1 >= WeaponArray.Num())
+			{
+				WeaponIndex = -1;
+			}
+		}
+	}
 }
 
 void ATFM_G1Character::OnResetVR()
