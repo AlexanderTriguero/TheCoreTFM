@@ -42,46 +42,28 @@ ATFM_G1Character::ATFM_G1Character()
 	Mesh1P->SetRelativeLocation(FVector(-0.5f, -4.4f, -155.7f));
 
 	// Create a gun mesh component
-	FP_Gun = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FP_Gun"));
-	FP_Gun->SetOnlyOwnerSee(false);			// otherwise won't be visible in the multiplayer
-	FP_Gun->bCastDynamicShadow = false;
-	FP_Gun->CastShadow = false;
-	// FP_Gun->SetupAttachment(Mesh1P, TEXT("GripPoint"));
-	FP_Gun->SetupAttachment(RootComponent);
+	//FP_Gun = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FP_Gun"));
+	//FP_Gun->SetOnlyOwnerSee(false);			// otherwise won't be visible in the multiplayer
+	//FP_Gun->bCastDynamicShadow = false;
+	//FP_Gun->CastShadow = false;
+	//// FP_Gun->SetupAttachment(Mesh1P, TEXT("GripPoint"));
+	//FP_Gun->SetupAttachment(RootComponent);
 
-	FP_MuzzleLocation = CreateDefaultSubobject<USceneComponent>(TEXT("MuzzleLocation"));
-	FP_MuzzleLocation->SetupAttachment(FP_Gun);
-	FP_MuzzleLocation->SetRelativeLocation(FVector(0.2f, 48.4f, -10.6f));
+	//FP_MuzzleLocation = CreateDefaultSubobject<USceneComponent>(TEXT("MuzzleLocation"));
+	//FP_MuzzleLocation->SetupAttachment(FP_Gun);
+	//FP_MuzzleLocation->SetRelativeLocation(FVector(0.2f, 48.4f, -10.6f));
 
-	// Default offset from the character location for projectiles to spawn
-	GunOffset = FVector(100.0f, 0.0f, 10.0f);
+	//// Default offset from the character location for projectiles to spawn
+	//GunOffset = FVector(100.0f, 0.0f, 10.0f);
 
 	// Note: The ProjectileClass and the skeletal mesh/anim blueprints for Mesh1P, FP_Gun, and VR_Gun 
 	// are set in the derived blueprint asset named MyCharacter to avoid direct content references in C++.
 
-	// Create VR Controllers.
-	R_MotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("R_MotionController"));
-	R_MotionController->MotionSource = FXRMotionControllerBase::RightHandSourceId;
-	R_MotionController->SetupAttachment(RootComponent);
-	L_MotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("L_MotionController"));
-	L_MotionController->SetupAttachment(RootComponent);
 
-	// Create a gun and attach it to the right-hand VR controller.
-	// Create a gun mesh component
-	VR_Gun = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("VR_Gun"));
-	VR_Gun->SetOnlyOwnerSee(false);			// otherwise won't be visible in the multiplayer
-	VR_Gun->bCastDynamicShadow = false;
-	VR_Gun->CastShadow = false;
-	VR_Gun->SetupAttachment(R_MotionController);
-	VR_Gun->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
+	//
 
-	VR_MuzzleLocation = CreateDefaultSubobject<USceneComponent>(TEXT("VR_MuzzleLocation"));
-	VR_MuzzleLocation->SetupAttachment(VR_Gun);
-	VR_MuzzleLocation->SetRelativeLocation(FVector(0.000004, 53.999992, 10.000000));
-	VR_MuzzleLocation->SetRelativeRotation(FRotator(0.0f, 90.0f, 0.0f));		// Counteract the rotation of the VR gun model.
+	WeaponIndex = 0;
 
-	// Uncomment the following line to turn motion controllers on by default:
-	//bUsingMotionControllers = true;
 }
 
 void ATFM_G1Character::BeginPlay()
@@ -89,20 +71,37 @@ void ATFM_G1Character::BeginPlay()
 	// Call the base class  
 	Super::BeginPlay();
 
-	//Attach gun mesh component to Skeleton, doing it here because the skeleton is not yet created in the constructor
-	FP_Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
+	//Spawn the weapon using StartingWeaponClass and attach weapon to arm socket GripPoint
+	/*if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(StartingWeaponClass))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Spawned and attempted to attach weapon to hand"));
+		Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
+	}*/
 
-	// Show or hide the two versions of the gun based on whether or not we're using motion controllers.
-	if (bUsingMotionControllers)
+	//Spawn Weapon using StartingWeaponClass
+
+	CurrentWeapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(StartingWeaponClass);
+	if (CurrentWeapon)
 	{
-		VR_Gun->SetHiddenInGame(false, true);
-		Mesh1P->SetHiddenInGame(true, true);
+		UE_LOG(LogTemp, Warning, TEXT("Spawned and attempted to attach weapon to hand"));
+		WeaponArray.Add(CurrentWeapon);
+		CurrentWeapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
 	}
-	else
+	if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(SecondWeaponClass))
 	{
-		VR_Gun->SetHiddenInGame(true, true);
-		Mesh1P->SetHiddenInGame(false, true);
+		Weapon->GetWeaponMesh()->SetHiddenInGame(true);
+		WeaponArray.Add(Weapon);
+		Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
 	}
+	if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(ThirdWeaponClass))
+	{
+		Weapon->GetWeaponMesh()->SetHiddenInGame(true);
+		WeaponArray.Add(Weapon);
+		Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
+	}
+
+	//Attach gun mesh component to Skeleton, doing it here because the skeleton is not yet created in the constructor
+	//FP_Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -119,6 +118,15 @@ void ATFM_G1Character::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 
 	// Bind fire event
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ATFM_G1Character::OnFire);
+	PlayerInputComponent->BindAction("Fire", IE_Released, this, &ATFM_G1Character::OnFireStop);
+
+	// Bind fire2 event
+	PlayerInputComponent->BindAction("Fire2", IE_Pressed, this, &ATFM_G1Character::OnFireSecondary);
+	PlayerInputComponent->BindAction("Fire2", IE_Released, this, &ATFM_G1Character::OnFireStop);
+
+	// Bind chage weapon event
+	PlayerInputComponent->BindAction("SwitchNextWeapon", IE_Pressed, this, &ATFM_G1Character::SwitchNextWeapon);
+	PlayerInputComponent->BindAction("SwitchPreviousWeapon", IE_Pressed, this, &ATFM_G1Character::SwitchPreviousWeapon);
 
 	// Enable touchscreen input
 	EnableTouchscreenMovement(PlayerInputComponent);
@@ -140,50 +148,93 @@ void ATFM_G1Character::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 
 void ATFM_G1Character::OnFire()
 {
-	// try and fire a projectile
-	if (ProjectileClass != nullptr)
+	//// try and fire a projectile
+	//if (ProjectileClass != nullptr)
+	//{
+	//	UWorld* const World = GetWorld();
+	//	if (World != nullptr)
+	//	{
+	//		if (bUsingMotionControllers)
+	//		{
+	//			const FRotator SpawnRotation = VR_MuzzleLocation->GetComponentRotation();
+	//			const FVector SpawnLocation = VR_MuzzleLocation->GetComponentLocation();
+	//			World->SpawnActor<ATFM_G1Projectile>(ProjectileClass, SpawnLocation, SpawnRotation);
+	//		}
+	//		else
+	//		{
+	//			const FRotator SpawnRotation = GetControlRotation();
+	//			// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
+	//			const FVector SpawnLocation = ((FP_MuzzleLocation != nullptr) ? FP_MuzzleLocation->GetComponentLocation() : GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
+
+	//			//Set Spawn Collision Handling Override
+	//			FActorSpawnParameters ActorSpawnParams;
+	//			ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+
+	//			// spawn the projectile at the muzzle
+	//			World->SpawnActor<ATFM_G1Projectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+	//		}
+	//	}
+	//}
+
+	//// try and play a firing animation if specified
+	//if (FireAnimation != nullptr)
+	//{
+	//	// Get the animation object for the arms mesh
+	//	UAnimInstance* AnimInstance = Mesh1P->GetAnimInstance();
+	//	if (AnimInstance != nullptr)
+	//	{
+	//		AnimInstance->Montage_Play(FireAnimation, 1.f);
+	//	}
+	//}
+	CurrentWeapon->Shoot();
+}
+
+void ATFM_G1Character::OnFireStop()
+{
+	CurrentWeapon->StopShooting();
+}
+
+
+void ATFM_G1Character::OnFireSecondary()
+{
+	CurrentWeapon->ShootSecondary();
+}
+
+void ATFM_G1Character::SwitchNextWeapon()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Switching To Next Weapon"));
+	if (CurrentWeapon)
 	{
-		UWorld* const World = GetWorld();
-		if (World != nullptr)
+		if (WeaponArray.Num() > WeaponIndex + 1)
 		{
-			if (bUsingMotionControllers)
+			++WeaponIndex;
+			if (ATFM_WeaponBase* NextWeapon = WeaponArray[WeaponIndex])
 			{
-				const FRotator SpawnRotation = VR_MuzzleLocation->GetComponentRotation();
-				const FVector SpawnLocation = VR_MuzzleLocation->GetComponentLocation();
-				World->SpawnActor<ATFM_G1Projectile>(ProjectileClass, SpawnLocation, SpawnRotation);
+				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(true);
+				CurrentWeapon = NextWeapon;
+				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
 			}
-			else
+		}
+	}
+}
+
+void ATFM_G1Character::SwitchPreviousWeapon()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Switching To Previous Weapon"));
+	if (CurrentWeapon)
+	{
+		if (WeaponIndex - 1 >= 0)
+		{
+			--WeaponIndex;
+			if (ATFM_WeaponBase* NextWeapon = WeaponArray[WeaponIndex])
 			{
-				const FRotator SpawnRotation = GetControlRotation();
-				// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
-				const FVector SpawnLocation = ((FP_MuzzleLocation != nullptr) ? FP_MuzzleLocation->GetComponentLocation() : GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
-
-				//Set Spawn Collision Handling Override
-				FActorSpawnParameters ActorSpawnParams;
-				ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
-
-				// spawn the projectile at the muzzle
-				World->SpawnActor<ATFM_G1Projectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(true);
+				CurrentWeapon = NextWeapon;
+				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
 			}
 		}
 	}
 
-	// try and play the sound if specified
-	if (FireSound != nullptr)
-	{
-		UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
-	}
-
-	// try and play a firing animation if specified
-	if (FireAnimation != nullptr)
-	{
-		// Get the animation object for the arms mesh
-		UAnimInstance* AnimInstance = Mesh1P->GetAnimInstance();
-		if (AnimInstance != nullptr)
-		{
-			AnimInstance->Montage_Play(FireAnimation, 1.f);
-		}
-	}
 }
 
 void ATFM_G1Character::OnResetVR()
