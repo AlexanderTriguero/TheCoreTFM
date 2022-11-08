@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Actors/TFM_ActorBase.h"
 #include "GameFramework/Actor.h"
 #include "TFM_BubbleBase.generated.h"
 
@@ -15,7 +16,7 @@ enum EBubbleSize
 };
 
 UCLASS()
-class TFM_G1_API ATFM_BubbleBase : public AActor
+class TFM_G1_API ATFM_BubbleBase : public ATFM_ActorBase
 {
 	GENERATED_BODY()
 public:	

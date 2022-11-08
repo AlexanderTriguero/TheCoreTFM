@@ -16,9 +16,6 @@ class TFM_G1_API ATFM_BubbleHeavy : public ATFM_BubbleBase
 public:
 	ATFM_BubbleHeavy();
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mesh")
-	UStaticMeshComponent* Mesh = nullptr;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Collider")
 	UBoxComponent* BoxCollider = nullptr;
 };
