@@ -121,6 +121,7 @@ void ATFM_G1Character::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 
 	// Bind chage weapon event
 	PlayerInputComponent->BindAction("SwitchNextWeapon", IE_Pressed, this, &ATFM_G1Character::SwitchNextWeapon);
+	PlayerInputComponent->BindAction("SwitchPreviousWeapon", IE_Pressed, this, &ATFM_G1Character::SwitchPreviousWeapon);
 
 	// Enable touchscreen input
 	EnableTouchscreenMovement(PlayerInputComponent);
@@ -196,12 +197,27 @@ void ATFM_G1Character::SwitchNextWeapon()
 				CurrentWeapon = NextWeapon;
 				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
 			}
-			if (WeaponIndex + 1 >= WeaponArray.Num())
+		}
+	}
+}
+
+void ATFM_G1Character::SwitchPreviousWeapon()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Switching To Previous Weapon"));
+	if (CurrentWeapon)
+	{
+		if (WeaponIndex - 1 >= 0)
+		{
+			--WeaponIndex;
+			if (ATFM_WeaponBase* NextWeapon = WeaponArray[WeaponIndex])
 			{
-				WeaponIndex = -1;
+				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(true);
+				CurrentWeapon = NextWeapon;
+				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
 			}
 		}
 	}
+
 }
 
 void ATFM_G1Character::OnResetVR()
