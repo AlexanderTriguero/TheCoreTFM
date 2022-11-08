@@ -37,6 +37,7 @@ void ATFM_AirGun::Tick(float DeltaTime)
 		FVector Start = GetActorLocation();
 		FVector Direction;
 		FVector End;
+		FCollisionQueryParams CollisionParams;
 
 		for (AActor* OtherActor : OverlappingActors)
 		{
@@ -44,12 +45,13 @@ void ATFM_AirGun::Tick(float DeltaTime)
 			if (ActorBase && ActorBase->IsMovable())
 			{
 				End = ActorBase->GetMesh()->GetComponentLocation();
-				UKismetSystemLibrary::LineTraceSingle(this, Start, End, TraceTypeQuery_MAX, true, {}, EDrawDebugTrace::ForDuration, OutHit, true);
-				Direction = UKismetMathLibrary::GetDirectionUnitVector(Start, End);
-				if (ActorBase == OutHit.Actor)
-				{
-					ActorBase->GetMesh()->AddForce(Direction * Force * PushAttracValue);
-				}
+				UKismetSystemLibrary::LineTraceSingle(this, Start, End, TraceTypeQuery1, true, {}, EDrawDebugTrace::ForDuration, OutHit, true);
+
+				Direction = UKismetMathLibrary::GetDirectionUnitVector(Start, End);				
+					if (ActorBase == OutHit.Actor) 
+					{
+						ActorBase->GetMesh()->AddForce(Direction * Force * PushAttracValue);
+					}			
 			}
 		}
 	}
@@ -63,6 +65,11 @@ void ATFM_AirGun::Shoot()
 		PushAttracValue = 1;
 	}
 }
+
+void ATFM_AirGun::StopShooting()
+{
+	bIsShooting = false;
+}
 void ATFM_AirGun::ShootSecondary()
 {
 	if (!bIsShooting)
@@ -70,9 +77,4 @@ void ATFM_AirGun::ShootSecondary()
 		bIsShooting = true;
 		PushAttracValue = -1;
 	}
-}
-
-void ATFM_AirGun::StopShooting()
-{
-	bIsShooting = false;
 }

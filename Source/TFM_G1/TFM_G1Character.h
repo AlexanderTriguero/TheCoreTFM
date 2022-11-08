@@ -97,6 +97,12 @@ protected:
 	/** Fires a projectile. */
 	void OnFire();
 
+	/** Fire Stops. */
+	void OnFireStop();
+
+	/** Fires Secondary. */
+	void OnFireSecondary();
+
 	/** Resets HMD orientation and position in VR. */
 	void OnResetVR();
 

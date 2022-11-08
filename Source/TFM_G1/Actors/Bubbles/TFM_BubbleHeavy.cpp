@@ -5,10 +5,10 @@
 
 #include "Components/BoxComponent.h"
 
-ATFM_BubbleHeavy::ATFM_BubbleHeavy()
+ATFM_BubbleHeavy::ATFM_BubbleHeavy() : Super()
 {
-	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	Mesh->SetupAttachment(RootComponent);
+	/*Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	Mesh->SetupAttachment(RootComponent);*/
 	BoxCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Component"));
 	BoxCollider->SetupAttachment(Mesh);
 }

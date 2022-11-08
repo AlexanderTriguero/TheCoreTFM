@@ -15,21 +15,18 @@ class TFM_G1_API ATFM_AirGun : public ATFM_WeaponBase
 public:
 	ATFM_AirGun();
 	virtual void Tick(float DeltaTime) override;
+	virtual void BeginPlay() override;
+	virtual void Shoot() override;
+	virtual void StopShooting() override;
+	virtual void ShootSecondary() override;
 
 private:
+	//PushAttracValue controlls if the weapon is pushing or pulling
 	int PushAttracValue = 1;
 	bool bIsShooting = false;
 protected:
 	UPROPERTY(EditAnywhere, Category="AirGun")
 		UCapsuleComponent* VacuumCollision=nullptr;
-
 	UPROPERTY(EditAnywhere, Category="AirGun")
 		float Force= 3000000.f;
-
-	virtual void BeginPlay() override;
-	virtual void Shoot() override;
-	virtual void ShootSecondary() override;
-
-	virtual void StopShooting();
-
 };

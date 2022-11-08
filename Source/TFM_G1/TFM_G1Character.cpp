@@ -118,6 +118,11 @@ void ATFM_G1Character::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 
 	// Bind fire event
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ATFM_G1Character::OnFire);
+	PlayerInputComponent->BindAction("Fire", IE_Released, this, &ATFM_G1Character::OnFireStop);
+
+	// Bind fire2 event
+	PlayerInputComponent->BindAction("Fire2", IE_Pressed, this, &ATFM_G1Character::OnFireSecondary);
+	PlayerInputComponent->BindAction("Fire2", IE_Released, this, &ATFM_G1Character::OnFireStop);
 
 	// Bind chage weapon event
 	PlayerInputComponent->BindAction("SwitchNextWeapon", IE_Pressed, this, &ATFM_G1Character::SwitchNextWeapon);
@@ -181,6 +186,17 @@ void ATFM_G1Character::OnFire()
 	//	}
 	//}
 	CurrentWeapon->Shoot();
+}
+
+void ATFM_G1Character::OnFireStop()
+{
+	CurrentWeapon->StopShooting();
+}
+
+
+void ATFM_G1Character::OnFireSecondary()
+{
+	CurrentWeapon->ShootSecondary();
 }
 
 void ATFM_G1Character::SwitchNextWeapon()

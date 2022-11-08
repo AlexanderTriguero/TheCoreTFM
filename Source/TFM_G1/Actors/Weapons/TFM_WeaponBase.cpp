@@ -30,6 +30,10 @@ void ATFM_WeaponBase::Shoot()
 	}
 }
 
+void ATFM_WeaponBase::StopShooting()
+{
+}
+
 void ATFM_WeaponBase::ShootSecondary()
 {
 }

@@ -22,7 +22,7 @@ public:
 protected:
 	UPROPERTY(EditAnywhere, Category= "Mobility")
 		bool bMovable = false;
-	UPROPERTY(EditAnywhere, Category = "Mobility")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mesh")
 		UStaticMeshComponent* Mesh =nullptr;
 
 	virtual void BeginPlay() override;
