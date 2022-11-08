@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Actors/TFM_ActorBase.h"
-#include "GameFramework/Actor.h"
 #include "TFM_BubbleBase.generated.h"
 
 class UBoxComponent;

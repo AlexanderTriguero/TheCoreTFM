@@ -32,6 +32,7 @@ public:
 	float ChargePercent = 1.f;
 	class USkeletalMeshComponent* GetWeaponMesh() { return WeaponMesh; }
 	virtual void Shoot();
+	virtual void StopShooting();
 	virtual void ShootSecondary();
 	virtual void Reload();
 

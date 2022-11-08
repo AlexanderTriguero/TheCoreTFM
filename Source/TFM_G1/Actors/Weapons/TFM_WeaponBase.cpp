@@ -1,11 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "TFM_WeaponBase.h"
 #include "Actors/Bubbles/TFM_BubbleBase.h"
 #include "Components/SphereComponent.h"
 
-// Sets default values
 ATFM_WeaponBase::ATFM_WeaponBase()
 {
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
@@ -16,11 +12,11 @@ ATFM_WeaponBase::ATFM_WeaponBase()
 	ProjectilePosition->SetupAttachment(WeaponMesh);
 }
 
-// Called when the game starts or when spawned
+// Called when the game starts or when spawned 
 void ATFM_WeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 void ATFM_WeaponBase::Shoot()
@@ -32,6 +28,10 @@ void ATFM_WeaponBase::Shoot()
 	{
 		GetWorld()->SpawnActor<ATFM_BubbleBase>(BubbleToSpawn, ProjectilePosition->GetComponentTransform(), Params);
 	}
+}
+
+void ATFM_WeaponBase::StopShooting()
+{
 }
 
 void ATFM_WeaponBase::ShootSecondary()
