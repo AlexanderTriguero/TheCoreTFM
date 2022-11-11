@@ -24,9 +24,11 @@ void ATFM_WeaponBase::Shoot()
 	FActorSpawnParameters Params;
 	Params.Owner = this;
 	Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	ATFM_BubbleBase* SpawnedBubble;
 	if(BubbleToSpawn != nullptr)
 	{
-		GetWorld()->SpawnActor<ATFM_BubbleBase>(BubbleToSpawn, ProjectilePosition->GetComponentTransform(), Params);
+		SpawnedBubble=GetWorld()->SpawnActor<ATFM_BubbleBase>(BubbleToSpawn, ProjectilePosition->GetComponentTransform(), Params);
+		SpawnedBubbles.Add(SpawnedBubble);
 	}
 }
 

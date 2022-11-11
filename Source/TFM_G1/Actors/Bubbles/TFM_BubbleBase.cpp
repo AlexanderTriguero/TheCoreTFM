@@ -6,8 +6,9 @@
 // Sets default values
 ATFM_BubbleBase::ATFM_BubbleBase() :Super()
 {
-
-
+	bMovable = true;
+	Mesh->SetSimulatePhysics(true);
+	Mesh->SetMobility(EComponentMobility::Movable);
 }
 
 void ATFM_BubbleBase::Explode()

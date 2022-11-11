@@ -47,7 +47,9 @@ void ATFM_AirGun::Tick(float DeltaTime)
 				End = ActorBase->GetMesh()->GetComponentLocation();
 				UKismetSystemLibrary::LineTraceSingle(this, Start, End, TraceTypeQuery1, true, {}, EDrawDebugTrace::ForDuration, OutHit, true);
 
-				Direction = UKismetMathLibrary::GetDirectionUnitVector(Start, End);				
+				Direction = UKismetMathLibrary::GetDirectionUnitVector(Start, End);	
+				//When pushing/pulling the height of the actor will not change
+				Direction.Z = 0.0f;
 					if (ActorBase == OutHit.Actor) 
 					{
 						ActorBase->GetMesh()->AddForce(Direction * Force * PushAttracValue);
