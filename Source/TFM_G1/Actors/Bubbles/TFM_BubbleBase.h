@@ -20,7 +20,7 @@ class TFM_G1_API ATFM_BubbleBase : public ATFM_ActorBase
 	GENERATED_BODY()
 public:	
 	ATFM_BubbleBase();
-	
+	virtual void ApplyForce(FVector Direction, float Force, int PushAttracValue) override;
 	void Explode();
 	void Resize(TEnumAsByte<EBubbleSize> NewSize);
 

@@ -24,6 +24,8 @@ private:
 	//PushAttracValue controlls if the weapon is pushing or pulling
 	int PushAttracValue = 1;
 	bool bIsShooting = false;
+	void onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	void onEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 protected:
 	UPROPERTY(EditAnywhere, Category="AirGun")
 		UCapsuleComponent* VacuumCollision=nullptr;

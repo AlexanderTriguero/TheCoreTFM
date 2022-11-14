@@ -27,7 +27,9 @@ void ATFM_WeaponBase::Shoot()
 	ATFM_BubbleBase* SpawnedBubble;
 	if(BubbleToSpawn != nullptr)
 	{
-		SpawnedBubble=GetWorld()->SpawnActor<ATFM_BubbleBase>(BubbleToSpawn, ProjectilePosition->GetComponentTransform(), Params);
+		FTransform ProjectileTransform = ProjectilePosition->GetComponentTransform();
+		ProjectileTransform.SetRotation(FQuat());
+		SpawnedBubble=GetWorld()->SpawnActor<ATFM_BubbleBase>(BubbleToSpawn, ProjectileTransform, Params);
 		SpawnedBubbles.Add(SpawnedBubble);
 	}
 }

@@ -27,6 +27,21 @@ UStaticMeshComponent* ATFM_ActorBase::GetMesh()
 {
 	return Mesh;
 }
+
+void ATFM_ActorBase::ApplyForce(FVector Direction, float Force, int PushAttracValue)
+{
+	Mesh->AddForce(Direction * Force * PushAttracValue);
+}
+
+void ATFM_ActorBase::EnablePhysics()
+{
+	Mesh->SetSimulatePhysics(true);
+}
+void ATFM_ActorBase::DisablePhysics()
+{
+	Mesh->SetSimulatePhysics(false);
+}
+
 bool ATFM_ActorBase::IsMovable()
 {
 	return bMovable;

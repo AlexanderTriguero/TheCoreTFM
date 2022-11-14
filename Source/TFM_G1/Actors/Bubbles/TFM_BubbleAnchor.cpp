@@ -10,5 +10,25 @@ ATFM_BubbleAnchor::ATFM_BubbleAnchor()
 
 	BoxCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Collider"));
 	BoxCollider->SetupAttachment(RootComponent);
+	BoxCollider->SetSimulatePhysics(false);
+
+	BoxCollider->BodyInstance.bLockZTranslation = true;
+	BoxCollider->BodyInstance.bLockRotation = true;
+
+
 	Mesh->SetupAttachment(BoxCollider);
+}
+
+void ATFM_BubbleAnchor::ApplyForce(FVector Direction, float Force, int PushAttracValue)
+{
+	BoxCollider->AddForce(Direction * Force * PushAttracValue);
+}
+
+void ATFM_BubbleAnchor::EnablePhysics()
+{
+	BoxCollider->SetSimulatePhysics(true);
+}
+void ATFM_BubbleAnchor::DisablePhysics()
+{
+	BoxCollider->SetSimulatePhysics(false);
 }

@@ -14,7 +14,9 @@ class TFM_G1_API ATFM_BubbleAnchor : public ATFM_BubbleBase
 	
 public:
 	ATFM_BubbleAnchor();
-
+	virtual void ApplyForce(FVector Direction, float Force, int PushAttracValue) override;
+	virtual void EnablePhysics() override;
+	virtual void DisablePhysics() override;
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Collider")
 		UBoxComponent* BoxCollider = nullptr;

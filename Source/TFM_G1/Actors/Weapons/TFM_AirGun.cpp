@@ -21,6 +21,8 @@ ATFM_AirGun::ATFM_AirGun() : Super()
 void ATFM_AirGun::BeginPlay()
 {
 	Super::BeginPlay();
+	VacuumCollision->OnComponentBeginOverlap.AddUniqueDynamic(this, &ATFM_AirGun::onBeginOverlap);
+	VacuumCollision->OnComponentEndOverlap.AddUniqueDynamic(this, &ATFM_AirGun::onEndOverlap);
 
 }
 
@@ -52,7 +54,7 @@ void ATFM_AirGun::Tick(float DeltaTime)
 				Direction.Z = 0.0f;
 					if (ActorBase == OutHit.Actor) 
 					{
-						ActorBase->GetMesh()->AddForce(Direction * Force * PushAttracValue);
+						ActorBase->ApplyForce(Direction, Force, PushAttracValue);
 					}			
 			}
 		}
@@ -80,3 +82,21 @@ void ATFM_AirGun::ShootSecondary()
 		PushAttracValue = -1;
 	}
 }
+
+void ATFM_AirGun::onBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (ATFM_ActorBase* Actor = Cast<ATFM_ActorBase>(OtherActor))
+	{
+		Actor->EnablePhysics();
+	}
+}
+
+void ATFM_AirGun::onEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (ATFM_ActorBase* Actor = Cast<ATFM_ActorBase>(OtherActor))
+	{
+		Actor->DisablePhysics();
+	}
+}
+
+

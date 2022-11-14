@@ -7,8 +7,15 @@
 ATFM_BubbleBase::ATFM_BubbleBase() :Super()
 {
 	bMovable = true;
-	Mesh->SetSimulatePhysics(true);
+	Mesh->SetSimulatePhysics(false);
 	Mesh->SetMobility(EComponentMobility::Movable);
+	Mesh->BodyInstance.bLockRotation = true;
+}
+
+void ATFM_BubbleBase::ApplyForce(FVector Direction, float Force, int PushAttracValue)
+{
+	Mesh->AddForce(Direction * Force * PushAttracValue);
+
 }
 
 void ATFM_BubbleBase::Explode()

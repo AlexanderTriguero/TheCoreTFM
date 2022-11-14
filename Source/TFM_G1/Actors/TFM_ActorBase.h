@@ -16,6 +16,9 @@ public:
 
 	bool IsMovable();
 	UStaticMeshComponent* GetMesh();
+	virtual void ApplyForce(FVector Direction,float Force, int PushAttracValue);
+	virtual void EnablePhysics();
+	virtual void DisablePhysics();
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "Mobility")
