@@ -35,7 +35,10 @@ void ATFM_ActorBase::ApplyForce(FVector Direction, float Force, int PushAttracVa
 
 void ATFM_ActorBase::EnablePhysics()
 {
-	Mesh->SetSimulatePhysics(true);
+	if (!Mesh->IsSimulatingPhysics())
+	{
+		Mesh->SetSimulatePhysics(true);
+	}
 }
 void ATFM_ActorBase::DisablePhysics()
 {
@@ -53,3 +56,15 @@ void ATFM_ActorBase::Tick(float DeltaTime)
 
 }
 
+
+bool ATFM_ActorBase::GetIsIsMoving()
+{
+	return IsMoving;
+}
+void ATFM_ActorBase::SetIsMoving(bool NewIsMoving)
+{
+	if (NewIsMoving!= IsMoving)
+	{
+		IsMoving = NewIsMoving;
+	}
+}

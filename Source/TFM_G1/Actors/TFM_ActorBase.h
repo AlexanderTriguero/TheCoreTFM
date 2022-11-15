@@ -20,11 +20,16 @@ public:
 	virtual void EnablePhysics();
 	virtual void DisablePhysics();
 
+	virtual bool GetIsIsMoving();
+	virtual void SetIsMoving(bool NewIsMoving);
+
 protected:
 	UPROPERTY(EditAnywhere, Category = "Mobility")
 		bool bMovable = false;
 	UPROPERTY(EditAnywhere, Category = "Mobility")
 		UStaticMeshComponent* Mesh = nullptr;
+
+	bool IsMoving=false;
 
 	virtual void BeginPlay() override;
 };
