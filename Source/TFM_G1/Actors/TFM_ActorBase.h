@@ -16,12 +16,20 @@ public:
 	
 	bool IsMovable();
 	UStaticMeshComponent* GetMesh();
+	virtual void ApplyForce(FVector Direction,float Force, int PushAttracValue);
+	virtual void EnablePhysics();
+	virtual void DisablePhysics();
+
+	virtual bool GetIsIsMoving();
+	virtual void SetIsMoving(bool NewIsMoving);
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "Mobility")
 		bool bMovable = false;
 	UPROPERTY(EditAnywhere, Category = "Mesh")
 		UStaticMeshComponent* Mesh = nullptr;
+
+	bool IsMoving=false;
 
 	virtual void BeginPlay() override;
 };

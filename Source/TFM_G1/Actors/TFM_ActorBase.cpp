@@ -30,6 +30,23 @@ UStaticMeshComponent* ATFM_ActorBase::GetMesh()
 	return Mesh;
 }
 
+void ATFM_ActorBase::ApplyForce(FVector Direction, float Force, int PushAttracValue)
+{
+	Mesh->AddForce(Direction * Force * PushAttracValue);
+}
+
+void ATFM_ActorBase::EnablePhysics()
+{
+	if (!Mesh->IsSimulatingPhysics())
+	{
+		Mesh->SetSimulatePhysics(true);
+	}
+}
+void ATFM_ActorBase::DisablePhysics()
+{
+	Mesh->SetSimulatePhysics(false);
+}
+
 bool ATFM_ActorBase::IsMovable()
 {
 	return bMovable;
@@ -37,4 +54,14 @@ bool ATFM_ActorBase::IsMovable()
 
 
 
-
+bool ATFM_ActorBase::GetIsIsMoving()
+{
+	return IsMoving;
+}
+void ATFM_ActorBase::SetIsMoving(bool NewIsMoving)
+{
+	if (NewIsMoving!= IsMoving)
+	{
+		IsMoving = NewIsMoving;
+	}
+}

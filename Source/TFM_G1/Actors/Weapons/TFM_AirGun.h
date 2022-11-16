@@ -21,12 +21,15 @@ public:
 	virtual void ShootSecondary() override;
 
 private:
-	//PushAttracValue controlls if the weapon is pushing or pulling
 	int PushAttracValue = 1;
 	bool bIsShooting = false;
+
 protected:
 	UPROPERTY(EditAnywhere, Category="AirGun")
 		UCapsuleComponent* VacuumCollision=nullptr;
 	UPROPERTY(EditAnywhere, Category="AirGun")
 		float Force= 3000000.f;
+
+	UFUNCTION()
+		void onEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 };
