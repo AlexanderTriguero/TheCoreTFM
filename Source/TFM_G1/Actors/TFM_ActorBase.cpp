@@ -2,6 +2,8 @@
 
 #include "TFM_ActorBase.h"
 
+#include "LevelObjects/TFM_SwitchFloor.h"
+
 // Sets default values
 ATFM_ActorBase::ATFM_ActorBase()
 {
@@ -27,14 +29,12 @@ UStaticMeshComponent* ATFM_ActorBase::GetMesh()
 {
 	return Mesh;
 }
+
 bool ATFM_ActorBase::IsMovable()
 {
 	return bMovable;
 }
-// Called every frame
-void ATFM_ActorBase::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 
-}
+
+
 
