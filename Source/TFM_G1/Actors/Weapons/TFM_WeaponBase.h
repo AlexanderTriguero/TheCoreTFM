@@ -37,5 +37,7 @@ public:
 	virtual void Reload();
 
 protected:
+	UPROPERTY()
+		TArray<ATFM_BubbleBase*> SpawnedBubbles;
 	virtual void BeginPlay() override;
 };

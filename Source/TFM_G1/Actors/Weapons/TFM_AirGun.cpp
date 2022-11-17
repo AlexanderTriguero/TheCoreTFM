@@ -4,6 +4,7 @@
 #include "Actors/Weapons/TFM_AirGun.h"
 #include "Components/CapsuleComponent.h"
 #include "Actors/TFM_ActorBase.h"
+#include "Actors/Bubbles/TFM_BubbleAnchor.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -21,6 +22,7 @@ ATFM_AirGun::ATFM_AirGun() : Super()
 void ATFM_AirGun::BeginPlay()
 {
 	Super::BeginPlay();
+	VacuumCollision->OnComponentEndOverlap.AddUniqueDynamic(this, &ATFM_AirGun::onEndOverlap);
 
 }
 
@@ -38,6 +40,7 @@ void ATFM_AirGun::Tick(float DeltaTime)
 		FVector Direction;
 		FVector End;
 		FCollisionQueryParams CollisionParams;
+		TArray<AActor*> AttachedActors;
 
 		for (AActor* OtherActor : OverlappingActors)
 		{
@@ -47,11 +50,17 @@ void ATFM_AirGun::Tick(float DeltaTime)
 				End = ActorBase->GetMesh()->GetComponentLocation();
 				UKismetSystemLibrary::LineTraceSingle(this, Start, End, TraceTypeQuery1, true, {}, EDrawDebugTrace::ForDuration, OutHit, true);
 
-				Direction = UKismetMathLibrary::GetDirectionUnitVector(Start, End);				
-					if (ActorBase == OutHit.Actor) 
-					{
-						ActorBase->GetMesh()->AddForce(Direction * Force * PushAttracValue);
-					}			
+				Direction = UKismetMathLibrary::GetDirectionUnitVector(Start, End);	
+				//When pushing/pulling the height of the actor will not change
+				Direction.Z = 0.0f;
+				if (ActorBase == OutHit.Actor) 
+				{
+						//Mientras se este empujando o atrayendo al actor, se estará moviendo, de manera que aunque haga hit con el suelo las fisicas estarán activas
+						ActorBase->SetIsMoving(true);
+						ActorBase->EnablePhysics();
+						ActorBase->ApplyForce(Direction, Force, PushAttracValue);
+						ActorBase->GetAttachedActors(AttachedActors,false);		
+				}			
 			}
 		}
 	}
@@ -78,3 +87,20 @@ void ATFM_AirGun::ShootSecondary()
 		PushAttracValue = -1;
 	}
 }
+
+void ATFM_AirGun::onEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (ATFM_ActorBase* Actor = Cast<ATFM_ActorBase>(OtherActor))
+	{
+		//Como no está en el collider de empujar, deja de moverse, de está manera, el suelo podrá detener sus físicas
+		Actor->SetIsMoving(false);
+
+		//Cuando sea una AnchorBubble, se desactivan las fisicas para que la burbuja no se siga moviendo hasta el infinito
+		if (ATFM_BubbleAnchor* Anchor= Cast<ATFM_BubbleAnchor>(Actor))
+		{
+			Anchor->DisablePhysics();
+		}
+	}
+}
+
+
