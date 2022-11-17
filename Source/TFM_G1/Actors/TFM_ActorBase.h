@@ -4,6 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "TFM_ActorBase.generated.h"
 
+class ATFM_SwitchFloor;
 class UStaticMeshComponent;
 UCLASS()
 class TFM_G1_API ATFM_ActorBase : public AActor
@@ -12,8 +13,7 @@ class TFM_G1_API ATFM_ActorBase : public AActor
 
 public:
 	ATFM_ActorBase();
-	virtual void Tick(float DeltaTime) override;
-
+	
 	bool IsMovable();
 	UStaticMeshComponent* GetMesh();
 	virtual void ApplyForce(FVector Direction,float Force, int PushAttracValue);
@@ -26,7 +26,7 @@ public:
 protected:
 	UPROPERTY(EditAnywhere, Category = "Mobility")
 		bool bMovable = false;
-	UPROPERTY(EditAnywhere, Category = "Mobility")
+	UPROPERTY(EditAnywhere, Category = "Mesh")
 		UStaticMeshComponent* Mesh = nullptr;
 
 	bool IsMoving=false;

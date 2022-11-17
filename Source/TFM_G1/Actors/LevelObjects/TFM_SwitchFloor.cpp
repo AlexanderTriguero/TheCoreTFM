@@ -2,7 +2,7 @@
 
 
 #include "Actors/LevelObjects/TFM_SwitchFloor.h"
-
+#include "Actors/TFM_SkeletalActor.h"
 #include "Components/BoxComponent.h"
 
 ATFM_SwitchFloor::ATFM_SwitchFloor() : Super()
@@ -27,10 +27,17 @@ void ATFM_SwitchFloor::OnComponentEndOverlapOnSwitch(UPrimitiveComponent* Overla
 void ATFM_SwitchFloor::ActivateButton()
 {
 	IsActive = true;
+	if(RelatedActor)
+	{
+		RelatedActor->TryActivate();
+	}
 }
 
 void ATFM_SwitchFloor::DeactivateButton()
 {
 	IsActive = false;
+	if(RelatedActor)
+	{
+		RelatedActor->Deactivate();
+	}
 }
-
