@@ -24,14 +24,16 @@ public:
 
 protected:
 	void Activate();
-	UPROPERTY(EditAnywhere, Category = "Open State")
+	/*UPROPERTY(EditAnywhere, Category = "Open State")
 		UAnimMontage* AnimStateOpen = nullptr;
 	UPROPERTY(EditAnywhere, Category = "Close State")
-		UAnimMontage* AnimStateClose = nullptr;
+		UAnimMontage* AnimStateClose = nullptr;*/
 	UPROPERTY(EditAnywhere, Category = "Switchable")
 		bool bIsSwitchable = false;
 	UPROPERTY(EditAnywhere, Category = "Switchable")
 		bool bIsActive = false;
-	UPROPERTY(EditAnywhere, Category = "Mesh")
-		USkeletalMeshComponent* Mesh = nullptr;
+	UPROPERTY(EditAnywhere, Category = "Frame")
+		UStaticMeshComponent* Frame = nullptr;
+	UPROPERTY(EditAnywhere, Category = "Door")
+		UStaticMeshComponent* Door = nullptr;
 };
