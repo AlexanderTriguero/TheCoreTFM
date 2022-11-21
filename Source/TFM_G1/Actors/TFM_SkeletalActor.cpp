@@ -10,8 +10,10 @@ ATFM_SkeletalActor::ATFM_SkeletalActor()
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 
-	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMesh"));
-	Mesh->SetupAttachment(RootComponent);
+	Frame = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Frame"));
+	Frame->SetupAttachment(RootComponent);
+	Door = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Door"));
+	Door->SetupAttachment(Frame);
 
 }
 
@@ -36,7 +38,9 @@ void ATFM_SkeletalActor::Activate()
 	if (bIsSwitchable)
 	{
 		bIsActive = true;
-		Mesh->PlayAnimation(AnimStateOpen, false);
+		Door->SetHiddenInGame(true);
+		Door->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		//Mesh->PlayAnimation(AnimStateOpen, false);
 	}
 }
 
@@ -45,6 +49,9 @@ void ATFM_SkeletalActor::Deactivate()
 	if (bIsSwitchable)
 	{
 		bIsActive = false;
-		Mesh->PlayAnimation(AnimStateClose, false);
+		Door->SetHiddenInGame(false);
+		Door->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
+		//Mesh->PlayAnimation(AnimStateClose, false);
 	}
 }
