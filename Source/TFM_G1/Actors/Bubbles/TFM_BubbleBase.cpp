@@ -17,6 +17,20 @@ ATFM_BubbleBase::ATFM_BubbleBase() :Super()
 	TopDetection->SetupAttachment(Mesh);
 }
 
+void ATFM_BubbleBase::Tick(float DeltaTime)
+{
+	if (IsFalling)
+	{
+		TSet<AActor*> OverlappingActors;
+		TopDetection->GetOverlappingActors(OverlappingActors);
+		if (OverlappingActors.Num()<1)
+		{
+			IsFalling = false;
+		}
+	}
+}
+
+
 void ATFM_BubbleBase::ApplyForce(FVector Direction, float Force, int PushAttracValue)
 {
 	Mesh->AddForce(Direction * Force * PushAttracValue);
@@ -26,14 +40,20 @@ void ATFM_BubbleBase::ApplyForce(FVector Direction, float Force, int PushAttracV
 void ATFM_BubbleBase::Explode()
 {
 	TSet<AActor*> OverlappingActors;
-	TopDetection->GetOverlappingActors(OverlappingActors);
-	for (AActor* Actor :OverlappingActors)
-	{
-		if (ATFM_BubbleBase* Bubble=Cast<ATFM_BubbleBase>(Actor)) {
-			Bubble->EnablePhysics();
+	//aveces da error porque this es nullptr, entonces nos aseguramos de que no pase esto
+	if (this) {
+		TopDetection->GetOverlappingActors(OverlappingActors);
+
+		for (AActor* Actor : OverlappingActors)
+		{
+			if (ATFM_BubbleBase* Bubble = Cast<ATFM_BubbleBase>(Actor)) {
+				Bubble->IsFalling =true;
+				Bubble->EnablePhysics();
+			}
 		}
+		Destroy();
 	}
-	Destroy();
+	
 }
 
 void ATFM_BubbleBase::Resize(TEnumAsByte<EBubbleSize> NewSize)
@@ -41,20 +61,54 @@ void ATFM_BubbleBase::Resize(TEnumAsByte<EBubbleSize> NewSize)
 	Size = NewSize;
 }
 
+FVector ATFM_BubbleBase::GetPointToSpawn()
+{
+	return TopDetection->GetComponentLocation();
+}
+
+bool ATFM_BubbleBase::HasSomethingOnTop()
+{
+	TSet<AActor*> OverlappingActors;
+	TopDetection->GetOverlappingActors(OverlappingActors);
+
+	for (AActor* Actor: OverlappingActors)
+	{
+		if (Actor->IsA<ATFM_BubbleBase>())
+		{
+			return true;
+		}
+	}
+	return false;
+	
+
+}
+
+
+
 // Called when the game starts or when spawned
 void ATFM_BubbleBase::BeginPlay()
 {
 	Super::BeginPlay();
 
 	Mesh->OnComponentHit.AddUniqueDynamic(this, &ATFM_BubbleBase::OnHit);
+	TopDetection->OnComponentEndOverlap.AddUniqueDynamic(this, &ATFM_BubbleBase::OnComponentEndOverlap);
 	
 }
 
 void ATFM_BubbleBase::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	if (!IsMoving)
+	if (!IsMoving && !IsFalling)
 	{
 		DisablePhysics();
+	}
+}
+
+void ATFM_BubbleBase::OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (ATFM_BubbleBase* BubbleBase=Cast<ATFM_BubbleBase>(OtherActor))
+	{
+		BubbleBase->IsFalling = true;
+		BubbleBase->EnablePhysics();
 	}
 }
 
