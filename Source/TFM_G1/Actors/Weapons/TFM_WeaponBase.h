@@ -18,7 +18,6 @@ class TFM_G1_API ATFM_WeaponBase : public AActor
 public:	
 	
 public:	
-	ATFM_WeaponBase();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Mesh")
 		USkeletalMeshComponent* WeaponMesh = nullptr;
@@ -30,6 +29,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bubble Class")
 		TSubclassOf<ATFM_BubbleBase> BubbleToSpawn = nullptr;
 	float ChargePercent = 1.f;
+
+	ATFM_WeaponBase();
 	class USkeletalMeshComponent* GetWeaponMesh() { return WeaponMesh; }
 	virtual void Shoot();
 	virtual void StopShooting();
