@@ -22,36 +22,39 @@ void ATFM_WeaponBase::BeginPlay()
 
 void ATFM_WeaponBase::Shoot()
 {
-	FActorSpawnParameters Params;
-	Params.Owner = this;
-	Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	ATFM_BubbleBase* SpawnedBubble;
-	bool bSpawnBubble = true;
-
-	if(BubbleToSpawn != nullptr)
+	if (SpawnedBubbles.Num()< MaxSpawnedBubbles)
 	{
-		FTransform ProjectileTransform = ProjectilePosition->GetComponentTransform();
-		FVector SpawnPosition = ProjectilePosition->GetComponentLocation();
-		ProjectileTransform.SetRotation(FQuat(0,0,0,0));
-		FHitResult OutHit;
-		FVector Direction;
-		FVector Start = ((ProjectilePosition->GetRightVector() * -100.f) + SpawnPosition);
-		FVector End = ((ProjectilePosition->GetRightVector() * 100.f) + SpawnPosition);
-		FCollisionQueryParams CollisionParams;
-		UKismetSystemLibrary::LineTraceSingle(this, Start, End, TraceTypeQuery1, true, {}, EDrawDebugTrace::ForDuration, OutHit, true);
+		FActorSpawnParameters Params;
+		Params.Owner = this;
+		Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		ATFM_BubbleBase* SpawnedBubble;
+		bool bSpawnBubble = true;
 
-		if (ATFM_BubbleBase* BubbleBase=Cast<ATFM_BubbleBase>(OutHit.GetActor()))
+		if (BubbleToSpawn != nullptr)
 		{
-			bSpawnBubble = !BubbleBase->HasSomethingOnTop();
-			ProjectileTransform.SetLocation(BubbleBase->GetPointToSpawn());
-		}
+			FTransform ProjectileTransform = ProjectilePosition->GetComponentTransform();
+			FVector SpawnPosition = ProjectilePosition->GetComponentLocation();
+			ProjectileTransform.SetRotation(FQuat(0, 0, 0, 0));
+			FHitResult OutHit;
+			FVector Direction;
+			FVector Start = ((ProjectilePosition->GetRightVector() * -100.f) + SpawnPosition);
+			FVector End = ((ProjectilePosition->GetRightVector() * 100.f) + SpawnPosition);
+			FCollisionQueryParams CollisionParams;
+			UKismetSystemLibrary::LineTraceSingle(this, Start, End, TraceTypeQuery1, true, {}, EDrawDebugTrace::ForDuration, OutHit, true);
 
-		if (bSpawnBubble)
-		{
-			SpawnedBubble = GetWorld()->SpawnActor<ATFM_BubbleBase>(BubbleToSpawn, ProjectileTransform, Params);
+			if (ATFM_BubbleBase* BubbleBase = Cast<ATFM_BubbleBase>(OutHit.GetActor()))
+			{
+				bSpawnBubble = !BubbleBase->HasSomethingOnTop();
+				ProjectileTransform.SetLocation(BubbleBase->GetPointToSpawn());
+			}
+
+			if (bSpawnBubble)
+			{
+				SpawnedBubble = GetWorld()->SpawnActor<ATFM_BubbleBase>(BubbleToSpawn, ProjectileTransform, Params);
+			}
+
+			SpawnedBubbles.Add(SpawnedBubble);
 		}
-		
-		SpawnedBubbles.Add(SpawnedBubble);
 	}
 }
 
@@ -61,6 +64,21 @@ void ATFM_WeaponBase::StopShooting()
 
 void ATFM_WeaponBase::ShootSecondary()
 {
+	//Provisional, para poder explotar las HeavyBubbles
+	/*for (ATFM_BubbleBase* CurrentBubble : SpawnedBubbles)
+	{
+		CurrentBubble->Explode();
+	}
+	SpawnedBubbles.Empty();
+	*/
+	if (SpawnedBubbles.Num()>0)
+	{
+		ATFM_BubbleBase* CurrentBubble = SpawnedBubbles.Last();
+		SpawnedBubbles.Remove(CurrentBubble);
+		CurrentBubble->Destroy();
+	}
+	
+	
 }
 
 void ATFM_WeaponBase::Reload()
