@@ -17,11 +17,16 @@ public:
 	bool IsMovable();
 	UStaticMeshComponent* GetMesh();
 	virtual void ApplyForce(FVector Direction,float Force, int PushAttracValue);
+	
+
 	virtual void EnablePhysics();
 	virtual void DisablePhysics();
 
+
+	/* Metodos para modificar fisicas
 	virtual bool GetIsIsMoving();
 	virtual void SetIsMoving(bool NewIsMoving);
+	*/
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "Mobility")
@@ -29,8 +34,10 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Mesh")
 		UStaticMeshComponent* Mesh = nullptr;
 
+	/* Variables utilizadas para modifcar las fisicas
 	bool IsMoving=false;
 	bool IsFalling = false;
+	*/
 
 	virtual void BeginPlay() override;
 };

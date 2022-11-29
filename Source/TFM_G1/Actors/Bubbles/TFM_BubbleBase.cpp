@@ -17,6 +17,7 @@ ATFM_BubbleBase::ATFM_BubbleBase() :Super()
 	TopDetection->SetupAttachment(Mesh);
 }
 
+/* No hace falta implementarlo si no se van a modificar las físicas
 void ATFM_BubbleBase::Tick(float DeltaTime)
 {
 	if (IsFalling)
@@ -29,6 +30,7 @@ void ATFM_BubbleBase::Tick(float DeltaTime)
 		}
 	}
 }
+*/
 
 
 void ATFM_BubbleBase::ApplyForce(FVector Direction, float Force, int PushAttracValue)
@@ -42,6 +44,7 @@ void ATFM_BubbleBase::Explode()
 	TSet<AActor*> OverlappingActors;
 	//aveces da error porque this es nullptr, entonces nos aseguramos de que no pase esto
 	if (this) {
+		/* Se seleccionaban los objetos encima de la busbuja para devolverles las fisicas
 		TopDetection->GetOverlappingActors(OverlappingActors);
 
 		for (AActor* Actor : OverlappingActors)
@@ -50,7 +53,7 @@ void ATFM_BubbleBase::Explode()
 				Bubble->IsFalling =true;
 				Bubble->EnablePhysics();
 			}
-		}
+		}*/
 		Destroy();
 	}
 	
@@ -90,11 +93,13 @@ void ATFM_BubbleBase::BeginPlay()
 {
 	Super::BeginPlay();
 
+	/* Eventos utilizados para manejo de físicas
 	Mesh->OnComponentHit.AddUniqueDynamic(this, &ATFM_BubbleBase::OnHit);
 	TopDetection->OnComponentEndOverlap.AddUniqueDynamic(this, &ATFM_BubbleBase::OnComponentEndOverlap);
+	*/
 	
 }
-
+/* Metodos para menajo de físicas
 void ATFM_BubbleBase::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	if (!IsMoving && !IsFalling)
@@ -111,4 +116,5 @@ void ATFM_BubbleBase::OnComponentEndOverlap(UPrimitiveComponent* OverlappedCompo
 		BubbleBase->EnablePhysics();
 	}
 }
+*/
 
