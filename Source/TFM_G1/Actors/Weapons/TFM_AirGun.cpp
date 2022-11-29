@@ -22,6 +22,7 @@ ATFM_AirGun::ATFM_AirGun() : Super()
 void ATFM_AirGun::BeginPlay()
 {
 	Super::BeginPlay();
+	
 	VacuumCollision->OnComponentEndOverlap.AddUniqueDynamic(this, &ATFM_AirGun::onEndOverlap);
 
 }
@@ -40,7 +41,6 @@ void ATFM_AirGun::Tick(float DeltaTime)
 		FVector Direction;
 		FVector End;
 		FCollisionQueryParams CollisionParams;
-		TArray<AActor*> AttachedActors;
 
 		for (AActor* OtherActor : OverlappingActors)
 		{
@@ -56,10 +56,11 @@ void ATFM_AirGun::Tick(float DeltaTime)
 				if (ActorBase == OutHit.Actor) 
 				{
 						//Mientras se este empujando o atrayendo al actor, se estará moviendo, de manera que aunque haga hit con el suelo las fisicas estarán activas
-						ActorBase->SetIsMoving(true);
-						ActorBase->EnablePhysics();
+						/*ActorBase->SetIsMoving(true);*/
+					if (ActorBase->IsA<ATFM_BubbleAnchor>()) {
+						ActorBase->EnablePhysics();	
+					}
 						ActorBase->ApplyForce(Direction, Force, PushAttracValue);
-						ActorBase->GetAttachedActors(AttachedActors,false);		
 				}			
 			}
 		}
@@ -88,8 +89,10 @@ void ATFM_AirGun::ShootSecondary()
 	}
 }
 
+
 void ATFM_AirGun::onEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
+	/*Para que funcione con todos los actores
 	if (ATFM_ActorBase* Actor = Cast<ATFM_ActorBase>(OtherActor))
 	{
 		//Como no está en el collider de empujar, deja de moverse, de está manera, el suelo podrá detener sus físicas
@@ -101,6 +104,14 @@ void ATFM_AirGun::onEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 			Anchor->DisablePhysics();
 		}
 	}
+	*/
+
+	// Para que funcione con los anchorBubble
+	if (ATFM_BubbleAnchor* Anchor = Cast<ATFM_BubbleAnchor>(OtherActor))
+	{
+		Anchor->DisablePhysics();	
+	}
 }
+
 
 

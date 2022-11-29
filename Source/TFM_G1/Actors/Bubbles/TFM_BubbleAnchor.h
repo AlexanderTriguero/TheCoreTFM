@@ -17,6 +17,7 @@ public:
 	ATFM_BubbleAnchor();
 
 	virtual void ApplyForce(FVector Direction, float Force, int PushAttracValue) override;
+	
 	virtual void EnablePhysics() override;
 	virtual void DisablePhysics() override;
 	
