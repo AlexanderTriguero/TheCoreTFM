@@ -20,9 +20,14 @@ class TFM_G1_API ATFM_BubbleBase : public ATFM_ActorBase
 	GENERATED_BODY()
 public:	
 	ATFM_BubbleBase();
+	virtual void Tick(float DeltaTime) override;
 	virtual void ApplyForce(FVector Direction, float Force, int PushAttracValue) override;
 	void Explode();
 	void Resize(TEnumAsByte<EBubbleSize> NewSize);
+	UFUNCTION()
+		FVector GetPointToSpawn();
+	UFUNCTION()
+		bool HasSomethingOnTop();
 
 protected:
 	TEnumAsByte<EBubbleSize> Size;
@@ -33,5 +38,6 @@ protected:
 	virtual void BeginPlay() override;
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
-
+	UFUNCTION()
+		void OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 };

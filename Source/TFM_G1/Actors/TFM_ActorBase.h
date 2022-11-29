@@ -30,6 +30,7 @@ protected:
 		UStaticMeshComponent* Mesh = nullptr;
 
 	bool IsMoving=false;
+	bool IsFalling = false;
 
 	virtual void BeginPlay() override;
 };
