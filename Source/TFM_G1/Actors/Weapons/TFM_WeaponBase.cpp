@@ -1,7 +1,10 @@
 #include "TFM_WeaponBase.h"
 #include "Actors/Bubbles/TFM_BubbleBase.h"
+#include "Actors/SwingingSoap/TFM_SwingingSoap.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Components/SphereComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "PhysicsEngine/PhysicsConstraintComponent.h"
 
 ATFM_WeaponBase::ATFM_WeaponBase()
 {
@@ -71,18 +74,44 @@ void ATFM_WeaponBase::ShootSecondary()
 	}
 	SpawnedBubbles.Empty();
 	*/
-	if (SpawnedBubbles.Num()>0)
+	FVector SpawnPosition = ProjectilePosition->GetComponentLocation();
+	FVector Start = ((ProjectilePosition->GetRightVector() * -100.f) + SpawnPosition);
+	FVector End = ((ProjectilePosition->GetRightVector() * 1000.f) + SpawnPosition);
+	FHitResult OutHit;
+	UKismetSystemLibrary::LineTraceSingle(this, Start, End, TraceTypeQuery1, true, {}, EDrawDebugTrace::ForDuration, OutHit, true);
+	ATFM_BubbleBase* BubbleBase = Cast<ATFM_BubbleBase>(OutHit.GetActor());
+	if (BubbleBase)
 	{
-		ATFM_BubbleBase* CurrentBubble = SpawnedBubbles.Last();
-		SpawnedBubbles.Remove(CurrentBubble);
-		CurrentBubble->Destroy();
+		TArray<AActor*> FoundConstraints;
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), UPhysicsConstraintComponent::StaticClass(), FoundConstraints);
+		for (AActor* Actor : FoundConstraints)
+		{
+			UPhysicsConstraintComponent* ConstComp = Cast<UPhysicsConstraintComponent>(Actor);
+			if (ConstComp->ConstraintActor1 == BubbleBase || ConstComp->ConstraintActor2 == BubbleBase)
+			{
+				ConstComp->BreakConstraint();
+				ConstComp->BeginDestroy();
+			}
+		}
+		TArray<AActor*> FoundSwingingSoaps;
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATFM_SwingingSoap::StaticClass(), FoundSwingingSoaps);
+		for (AActor* Actor : FoundSwingingSoaps)
+		{
+			ATFM_SwingingSoap* SwingingSoap = Cast<ATFM_SwingingSoap>(Actor);
+			if (SwingingSoap->AttachEnd == BubbleBase || SwingingSoap->AttachStart == BubbleBase)
+			{
+				SwingingSoap->Destroy();
+			}
+		}
+		SpawnedBubbles.Remove(BubbleBase);
+		BubbleBase->Destroy();
 	}
-	
-	
+
 }
 
 void ATFM_WeaponBase::Reload()
 {
 	ChargePercent = 1.f;
 }
+
 

@@ -19,9 +19,9 @@ public:
 	virtual void Shoot() override;
 	virtual void ShootSecondary() override;
 	UPROPERTY(EditAnywhere)
-		TSubclassOf<ATFM_BubbleHeavy> BubbleToGrabOnto = nullptr;
+		TSubclassOf<ATFM_BubbleBase> BubbleToGrabOnto = nullptr;
 	UPROPERTY(EditAnywhere)
-		TSubclassOf<ATFM_BubbleHeavy> BubbleToReleaseTo = nullptr;
+		TSubclassOf<ATFM_BubbleBase> BubbleToReleaseTo = nullptr;
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<ATFM_SwingingSoap> SoapToSpawn = nullptr;
 

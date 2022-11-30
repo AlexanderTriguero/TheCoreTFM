@@ -40,7 +40,7 @@ public:
 protected:
 	UPROPERTY()
 		TArray<ATFM_BubbleBase*> SpawnedBubbles;
-
+	
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 		int MaxSpawnedBubbles=4;
 	virtual void BeginPlay() override;

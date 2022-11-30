@@ -7,6 +7,7 @@
 #include "Actors/SwingingSoap/TFM_SwingingSoap.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "PhysicsEngine/PhysicsConstraintComponent.h"
 
 void ATFM_SwingingSoapWeapon::Shoot()
 {
@@ -33,6 +34,14 @@ void ATFM_SwingingSoapWeapon::Shoot()
 
 void ATFM_SwingingSoapWeapon::ShootSecondary()
 {
+	TArray<AActor*> FoundConstraints;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), UPhysicsConstraintComponent::StaticClass(), FoundConstraints);
+	for (AActor* Actor : FoundConstraints)
+	{
+		UPhysicsConstraintComponent* ConstComp = Cast<UPhysicsConstraintComponent>(Actor);
+		ConstComp->BreakConstraint();
+		ConstComp->BeginDestroy();
+	}
 	if(SoapSpawned)
 	{
 		SoapSpawned->Destroy();

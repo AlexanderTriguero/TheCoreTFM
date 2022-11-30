@@ -22,11 +22,14 @@ public:
 		AActor* AttachStart = nullptr;
 	UPROPERTY(EditDefaultsOnly)
 		UCableComponent* Cable = nullptr;
-	UPROPERTY(EditDefaultsOnly)
-		UPhysicsConstraintComponent* Constraint = nullptr;
+	//UPROPERTY(EditDefaultsOnly)
+		//UPhysicsConstraintComponent* Constraint = nullptr;
 	void SwitchEnd(AActor* newAttachEnd, FName ComponentName);
 
 protected:
 	virtual void BeginPlay() override;
+
+private:
+	void SetConstraints();
 
 };
