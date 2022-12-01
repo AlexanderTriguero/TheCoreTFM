@@ -36,6 +36,7 @@ void ATFM_BubbleAnchor::EnablePhysics()
 		BoxCollider->SetSimulatePhysics(true);
 	}
 }
+
 void ATFM_BubbleAnchor::DisablePhysics()
 {
 	BoxCollider->SetSimulatePhysics(false);

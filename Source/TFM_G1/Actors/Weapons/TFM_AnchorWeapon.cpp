@@ -6,8 +6,17 @@
 
 void ATFM_AnchorWeapon::ShootSecondary()
 {
-	for (ATFM_BubbleBase* CurrentBubble : SpawnedBubbles)
+	/*for (ATFM_BubbleBase* CurrentBubble : SpawnedBubbles)
 	{
 		CurrentBubble->Explode();
+	}
+	SpawnedBubbles.Empty();
+	*/
+
+	if (SpawnedBubbles.Num() > 0)
+	{
+		ATFM_BubbleBase* CurrentBubble = SpawnedBubbles.Last();
+		SpawnedBubbles.Remove(CurrentBubble);
+		CurrentBubble->Destroy();
 	}
 }

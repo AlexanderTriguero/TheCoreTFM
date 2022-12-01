@@ -30,6 +30,8 @@ protected:
 	UPROPERTY(EditAnywhere, Category="AirGun")
 		float Force= 3000000.f;
 
+	
 	UFUNCTION()
 		void onEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	
 };
