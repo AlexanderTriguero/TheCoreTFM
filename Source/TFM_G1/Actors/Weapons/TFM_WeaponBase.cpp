@@ -82,17 +82,6 @@ void ATFM_WeaponBase::ShootSecondary()
 	ATFM_BubbleBase* BubbleBase = Cast<ATFM_BubbleBase>(OutHit.GetActor());
 	if (BubbleBase)
 	{
-		TArray<AActor*> FoundConstraints;
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), UPhysicsConstraintComponent::StaticClass(), FoundConstraints);
-		for (AActor* Actor : FoundConstraints)
-		{
-			UPhysicsConstraintComponent* ConstComp = Cast<UPhysicsConstraintComponent>(Actor);
-			if (ConstComp->ConstraintActor1 == BubbleBase || ConstComp->ConstraintActor2 == BubbleBase)
-			{
-				ConstComp->BreakConstraint();
-				ConstComp->DestroyComponent();
-			}
-		}
 		TArray<AActor*> FoundSwingingSoaps;
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATFM_SwingingSoap::StaticClass(), FoundSwingingSoaps);
 		for (AActor* Actor : FoundSwingingSoaps)
@@ -100,6 +89,8 @@ void ATFM_WeaponBase::ShootSecondary()
 			ATFM_SwingingSoap* SwingingSoap = Cast<ATFM_SwingingSoap>(Actor);
 			if (SwingingSoap->AttachEnd == BubbleBase || SwingingSoap->AttachStart == BubbleBase)
 			{
+				SwingingSoap->Constraint->BreakConstraint();
+				SwingingSoap->Constraint->TermComponentConstraint();
 				SwingingSoap->Destroy();
 			}
 		}

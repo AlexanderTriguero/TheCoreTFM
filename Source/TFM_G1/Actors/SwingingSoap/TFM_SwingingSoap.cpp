@@ -12,9 +12,8 @@ ATFM_SwingingSoap::ATFM_SwingingSoap() : Super()
 {
 	Cable = CreateDefaultSubobject<UCableComponent>(TEXT("Cable"));
 	Cable->SetupAttachment(RootComponent);
-	//Constraint = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("Constraint"));
-	//Constraint->SetupAttachment(Cable);
-
+	Constraint = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("Constraint"));
+	Constraint->SetupAttachment(Cable);
 	Cable->bAttachStart = true;
 	Cable->bAttachEnd = true;
 }
@@ -39,11 +38,11 @@ void ATFM_SwingingSoap::BeginPlay()
 
 void ATFM_SwingingSoap::SetConstraints()
 {
-	UPhysicsConstraintComponent* ConstraintComp = NewObject<UPhysicsConstraintComponent>(AttachStart);
-	ConstraintComp->ConstraintActor1 = AttachStart;
-	ConstraintComp->ConstraintActor2 = AttachEnd;
-	ConstraintComp->SetLinearXLimit(ELinearConstraintMotion::LCM_Limited, Cable->CableLength);
-	ConstraintComp->SetLinearYLimit(ELinearConstraintMotion::LCM_Limited, Cable->CableLength);
-	ConstraintComp->SetLinearZLimit(ELinearConstraintMotion::LCM_Limited, Cable->CableLength);
-	ConstraintComp->InitComponentConstraint();
+	Constraint = NewObject<UPhysicsConstraintComponent>(AttachStart);
+	Constraint->ConstraintActor1 = AttachStart;
+	Constraint->ConstraintActor2 = AttachEnd;
+	Constraint->SetLinearXLimit(ELinearConstraintMotion::LCM_Limited, Cable->CableLength);
+	Constraint->SetLinearYLimit(ELinearConstraintMotion::LCM_Limited, Cable->CableLength);
+	Constraint->SetLinearZLimit(ELinearConstraintMotion::LCM_Limited, Cable->CableLength);
+	Constraint->InitComponentConstraint();
 }

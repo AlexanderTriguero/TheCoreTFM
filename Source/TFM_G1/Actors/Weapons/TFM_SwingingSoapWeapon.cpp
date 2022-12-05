@@ -14,9 +14,8 @@ void ATFM_SwingingSoapWeapon::Shoot()
 	FHitResult OutHit;
 	const FVector EndLocation = ProjectilePosition->GetComponentLocation() + ProjectilePosition->GetForwardVector() * 10000.f;
 	UKismetSystemLibrary::LineTraceSingle(this, ProjectilePosition->GetComponentLocation(), EndLocation, TraceTypeQuery1, true, {}, EDrawDebugTrace::ForDuration, OutHit, true);
-	if(OutHit.GetActor()->IsA(BubbleToGrabOnto) && !bSoapShot)
+	if(OutHit.GetActor()->IsA(BubbleToGrabOnto) && CanShoot())
 	{
-		bSoapShot = true;
 		FActorSpawnParameters Params;
 		Params.Owner = this;
 		Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
@@ -26,7 +25,7 @@ void ATFM_SwingingSoapWeapon::Shoot()
 		UGameplayStatics::FinishSpawningActor(SwingingSoap, OutHit.GetActor()->GetActorTransform());
 		SoapSpawned = SwingingSoap;
 	}
-	else if(OutHit.GetActor()->IsA(BubbleToReleaseTo) && bSoapShot)
+	else if(OutHit.GetActor()->IsA(BubbleToReleaseTo) && !CanShoot())
 	{
 		SoapSpawned->SwitchEnd(OutHit.GetActor(), FName("Mesh"));
 	}
@@ -34,17 +33,18 @@ void ATFM_SwingingSoapWeapon::Shoot()
 
 void ATFM_SwingingSoapWeapon::ShootSecondary()
 {
-	TArray<AActor*> FoundConstraints;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), UPhysicsConstraintComponent::StaticClass(), FoundConstraints);
-	for (AActor* Actor : FoundConstraints)
-	{
-		UPhysicsConstraintComponent* ConstComp = Cast<UPhysicsConstraintComponent>(Actor);
-		ConstComp->TermComponentConstraint();
-		ConstComp->DestroyComponent();
-	}
 	if(SoapSpawned)
 	{
+		SoapSpawned->Constraint->BreakConstraint();
+		SoapSpawned->Constraint->TermComponentConstraint();
 		SoapSpawned->Destroy();
-		bSoapShot = false;
 	}
+}
+
+bool ATFM_SwingingSoapWeapon::CanShoot()
+{
+	TArray<AActor*> FoundSwingingSoaps;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATFM_SwingingSoap::StaticClass(), FoundSwingingSoaps);
+	bSoapShot = FoundSwingingSoaps.Num() == 0;
+	return(bSoapShot);
 }

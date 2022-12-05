@@ -26,6 +26,7 @@ public:
 		TSubclassOf<ATFM_SwingingSoap> SoapToSpawn = nullptr;
 
 private:
+	bool CanShoot();
 	bool bSoapShot = false;
 	ATFM_SwingingSoap* SoapSpawned = nullptr;
 };
