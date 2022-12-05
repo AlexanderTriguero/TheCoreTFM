@@ -104,7 +104,8 @@ void ATFM_BubbleBase::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActo
 {
 	if (!IsMoving && !IsFalling)
 	{
-		DisablePhysics();
+		//DisablePhysics();
+		//ESTA DISABLED 
 	}
 }
 
