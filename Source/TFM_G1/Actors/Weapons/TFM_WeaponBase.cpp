@@ -90,7 +90,7 @@ void ATFM_WeaponBase::ShootSecondary()
 			if (ConstComp->ConstraintActor1 == BubbleBase || ConstComp->ConstraintActor2 == BubbleBase)
 			{
 				ConstComp->BreakConstraint();
-				ConstComp->BeginDestroy();
+				ConstComp->DestroyComponent();
 			}
 		}
 		TArray<AActor*> FoundSwingingSoaps;

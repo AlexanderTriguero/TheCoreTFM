@@ -39,8 +39,8 @@ void ATFM_SwingingSoapWeapon::ShootSecondary()
 	for (AActor* Actor : FoundConstraints)
 	{
 		UPhysicsConstraintComponent* ConstComp = Cast<UPhysicsConstraintComponent>(Actor);
-		ConstComp->BreakConstraint();
-		ConstComp->BeginDestroy();
+		ConstComp->TermComponentConstraint();
+		ConstComp->DestroyComponent();
 	}
 	if(SoapSpawned)
 	{
