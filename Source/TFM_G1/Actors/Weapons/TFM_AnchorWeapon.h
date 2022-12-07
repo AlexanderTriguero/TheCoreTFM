@@ -11,7 +11,5 @@ class TFM_G1_API ATFM_AnchorWeapon : public ATFM_WeaponBase
 {
 	GENERATED_BODY()
 
-public:
-	virtual void ShootSecondary() override;
 
 };

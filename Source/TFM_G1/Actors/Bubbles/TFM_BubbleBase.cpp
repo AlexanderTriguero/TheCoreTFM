@@ -17,7 +17,7 @@ ATFM_BubbleBase::ATFM_BubbleBase() :Super()
 	TopDetection->SetupAttachment(Mesh);
 }
 
-/* No hace falta implementarlo si no se van a modificar las físicas
+/* No hace falta implementarlo si no se van a modificar las fï¿½sicas
 void ATFM_BubbleBase::Tick(float DeltaTime)
 {
 	if (IsFalling)
@@ -93,18 +93,19 @@ void ATFM_BubbleBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	/* Eventos utilizados para manejo de físicas
+	/* Eventos utilizados para manejo de fï¿½sicas
 	Mesh->OnComponentHit.AddUniqueDynamic(this, &ATFM_BubbleBase::OnHit);
 	TopDetection->OnComponentEndOverlap.AddUniqueDynamic(this, &ATFM_BubbleBase::OnComponentEndOverlap);
 	*/
 	
 }
-/* Metodos para menajo de físicas
+/* Metodos para menajo de fï¿½sicas
 void ATFM_BubbleBase::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	if (!IsMoving && !IsFalling)
 	{
-		DisablePhysics();
+		//DisablePhysics();
+		//ESTA DISABLED 
 	}
 }
 
