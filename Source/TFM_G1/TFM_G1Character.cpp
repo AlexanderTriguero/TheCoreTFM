@@ -66,46 +66,141 @@ ATFM_G1Character::ATFM_G1Character()
 
 }
 
+void ATFM_G1Character::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	
+	if(WeaponArray.Num()==0)
+		Mesh1P->SetHiddenInGame(true);
+
+	if (HeavyOn)
+	{  
+		if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(HeavyGun))
+		{
+			Weapon->isOnCharacter = HeavyOn;
+			Weapon->GetWeaponMesh()->SetHiddenInGame(true);
+			WeaponArray.Add(Weapon);
+			Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
+
+			if (WeaponArray.Num() == 1)
+			{
+				CurrentWeapon = Weapon;
+				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
+				Mesh1P->SetHiddenInGame(false);
+			}
+
+			HeavyOn = false;
+		}
+		
+	}
+	if (AnchorOn)
+	{
+		if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(AnchorGun))
+		{
+			Weapon->isOnCharacter = AnchorOn;
+			Weapon->GetWeaponMesh()->SetHiddenInGame(true);
+			WeaponArray.Add(Weapon);
+			Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
+
+			if (WeaponArray.Num() == 1)
+			{
+				CurrentWeapon = Weapon;
+				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
+				Mesh1P->SetHiddenInGame(false);
+			}
+
+			AnchorOn = false;
+		}
+		
+	}
+	if (AirOn)
+	{
+		if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(AirGun))
+		{
+			Weapon->isOnCharacter = AirOn;
+			Weapon->GetWeaponMesh()->SetHiddenInGame(true);
+			WeaponArray.Add(Weapon);
+			Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
+
+			if (WeaponArray.Num() == 1)
+			{
+				CurrentWeapon = Weapon;
+				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
+				Mesh1P->SetHiddenInGame(false);
+			}
+
+			AirOn = false;
+		}
+		
+	}
+	if (SoapOn)
+	{
+		if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(SoapGun))
+		{
+			Weapon->isOnCharacter = SoapOn;
+			Weapon->GetWeaponMesh()->SetHiddenInGame(true);
+			WeaponArray.Add(Weapon);
+			Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
+
+			if (WeaponArray.Num() == 1)
+			{
+				CurrentWeapon = Weapon;
+				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
+				Mesh1P->SetHiddenInGame(false);
+			}
+
+			SoapOn = false;
+		}
+		
+	}
+
+}
+
 void ATFM_G1Character::BeginPlay()
 {
-	// Call the base class  
 	Super::BeginPlay();
 
-	//Spawn the weapon using StartingWeaponClass and attach weapon to arm socket GripPoint
-	/*if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(StartingWeaponClass))
+	if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(BaseStandardEmptyGun)) 
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Spawned and attempted to attach weapon to hand"));
-		Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
-	}*/
+		CurrentWeapon = Weapon;
+	}
 
-	//Spawn Weapon using StartingWeaponClass
-
-	CurrentWeapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(StartingWeaponClass);
-	if (CurrentWeapon)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Spawned and attempted to attach weapon to hand"));
+	/*
+	if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(HeavyGun))
+	{  //SUPONIENDO QUE LA PRIMERA SIEMPRE SERÁ HEAVYGUN
+		Weapon->isOnCharacter = HeavyOn;
+		CurrentWeapon = Weapon;
+		if (!HeavyOn) 
+		{
+			CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(true);
+		}
 		WeaponArray.Add(CurrentWeapon);
 		CurrentWeapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
 	}
-	if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(SecondWeaponClass))
+	if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(AnchorGun))
 	{
+		Weapon->isOnCharacter = AnchorOn;
 		Weapon->GetWeaponMesh()->SetHiddenInGame(true);
 		WeaponArray.Add(Weapon);
 		Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
 	}
-	if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(ThirdWeaponClass))
+	if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(AirGun))
 	{
+		Weapon->isOnCharacter = AirOn;
 		Weapon->GetWeaponMesh()->SetHiddenInGame(true);
 		WeaponArray.Add(Weapon);
 		Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
 	}
+	if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(SoapGun))
+	{
+		Weapon->isOnCharacter = SoapOn;
+		Weapon->GetWeaponMesh()->SetHiddenInGame(true);
+		WeaponArray.Add(Weapon);
+		Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
+	}
+	*/
 
-	//Attach gun mesh component to Skeleton, doing it here because the skeleton is not yet created in the constructor
-	//FP_Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
 }
-
-//////////////////////////////////////////////////////////////////////////
-// Input
 
 void ATFM_G1Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
@@ -148,71 +243,43 @@ void ATFM_G1Character::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 
 void ATFM_G1Character::OnFire()
 {
-	//// try and fire a projectile
-	//if (ProjectileClass != nullptr)
-	//{
-	//	UWorld* const World = GetWorld();
-	//	if (World != nullptr)
-	//	{
-	//		if (bUsingMotionControllers)
-	//		{
-	//			const FRotator SpawnRotation = VR_MuzzleLocation->GetComponentRotation();
-	//			const FVector SpawnLocation = VR_MuzzleLocation->GetComponentLocation();
-	//			World->SpawnActor<ATFM_G1Projectile>(ProjectileClass, SpawnLocation, SpawnRotation);
-	//		}
-	//		else
-	//		{
-	//			const FRotator SpawnRotation = GetControlRotation();
-	//			// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
-	//			const FVector SpawnLocation = ((FP_MuzzleLocation != nullptr) ? FP_MuzzleLocation->GetComponentLocation() : GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
+	if (!CurrentWeapon->isOnCharacter)
+		return;
 
-	//			//Set Spawn Collision Handling Override
-	//			FActorSpawnParameters ActorSpawnParams;
-	//			ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
-
-	//			// spawn the projectile at the muzzle
-	//			World->SpawnActor<ATFM_G1Projectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
-	//		}
-	//	}
-	//}
-
-	//// try and play a firing animation if specified
-	//if (FireAnimation != nullptr)
-	//{
-	//	// Get the animation object for the arms mesh
-	//	UAnimInstance* AnimInstance = Mesh1P->GetAnimInstance();
-	//	if (AnimInstance != nullptr)
-	//	{
-	//		AnimInstance->Montage_Play(FireAnimation, 1.f);
-	//	}
-	//}
 	CurrentWeapon->Shoot();
 }
 
 void ATFM_G1Character::OnFireStop()
 {
+	if (!CurrentWeapon->isOnCharacter)
+		return;
+
 	CurrentWeapon->StopShooting();
 }
 
-
 void ATFM_G1Character::OnFireSecondary()
 {
+	if (!CurrentWeapon->isOnCharacter)
+		return;
+
 	CurrentWeapon->ShootSecondary();
 }
 
 void ATFM_G1Character::SwitchNextWeapon()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Switching To Next Weapon"));
 	if (CurrentWeapon)
 	{
 		if (WeaponArray.Num() > WeaponIndex + 1)
 		{
 			++WeaponIndex;
-			if (ATFM_WeaponBase* NextWeapon = WeaponArray[WeaponIndex])
+			if (ATFM_WeaponBase* NextWeapon = WeaponArray[WeaponIndex]) 
 			{
-				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(true);
-				CurrentWeapon = NextWeapon;
-				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
+				if(NextWeapon->isOnCharacter)
+				{
+					CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(true);
+					CurrentWeapon = NextWeapon;
+					CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
+				}
 			}
 		}
 	}
@@ -220,17 +287,19 @@ void ATFM_G1Character::SwitchNextWeapon()
 
 void ATFM_G1Character::SwitchPreviousWeapon()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Switching To Previous Weapon"));
-	if (CurrentWeapon)
+	if (CurrentWeapon && CurrentWeapon->isOnCharacter)
 	{
 		if (WeaponIndex - 1 >= 0)
 		{
 			--WeaponIndex;
 			if (ATFM_WeaponBase* NextWeapon = WeaponArray[WeaponIndex])
 			{
-				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(true);
-				CurrentWeapon = NextWeapon;
-				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
+				if (NextWeapon->isOnCharacter) 
+				{
+					CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(true);
+					CurrentWeapon = NextWeapon;
+					CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
+				}
 			}
 		}
 	}
@@ -266,44 +335,6 @@ void ATFM_G1Character::EndTouch(const ETouchIndex::Type FingerIndex, const FVect
 	}
 	TouchItem.bIsPressed = false;
 }
-
-//Commenting this section out to be consistent with FPS BP template.
-//This allows the user to turn without using the right virtual joystick
-
-//void ATFM_G1Character::TouchUpdate(const ETouchIndex::Type FingerIndex, const FVector Location)
-//{
-//	if ((TouchItem.bIsPressed == true) && (TouchItem.FingerIndex == FingerIndex))
-//	{
-//		if (TouchItem.bIsPressed)
-//		{
-//			if (GetWorld() != nullptr)
-//			{
-//				UGameViewportClient* ViewportClient = GetWorld()->GetGameViewport();
-//				if (ViewportClient != nullptr)
-//				{
-//					FVector MoveDelta = Location - TouchItem.Location;
-//					FVector2D ScreenSize;
-//					ViewportClient->GetViewportSize(ScreenSize);
-//					FVector2D ScaledDelta = FVector2D(MoveDelta.X, MoveDelta.Y) / ScreenSize;
-//					if (FMath::Abs(ScaledDelta.X) >= 4.0 / ScreenSize.X)
-//					{
-//						TouchItem.bMoved = true;
-//						float Value = ScaledDelta.X * BaseTurnRate;
-//						AddControllerYawInput(Value);
-//					}
-//					if (FMath::Abs(ScaledDelta.Y) >= 4.0 / ScreenSize.Y)
-//					{
-//						TouchItem.bMoved = true;
-//						float Value = ScaledDelta.Y * BaseTurnRate;
-//						AddControllerPitchInput(Value);
-//					}
-//					TouchItem.Location = Location;
-//				}
-//				TouchItem.Location = Location;
-//			}
-//		}
-//	}
-//}
 
 void ATFM_G1Character::MoveForward(float Value)
 {
