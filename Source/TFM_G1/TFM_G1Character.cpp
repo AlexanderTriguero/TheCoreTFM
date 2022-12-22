@@ -105,6 +105,12 @@ void ATFM_G1Character::BeginPlay()
 		WeaponArray.Add(Weapon);
 		Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
 	}
+	if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(FifthWeaponClass))
+	{
+		Weapon->GetWeaponMesh()->SetHiddenInGame(true);
+		WeaponArray.Add(Weapon);
+		Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
+	}
 
 	//Attach gun mesh component to Skeleton, doing it here because the skeleton is not yet created in the constructor
 	//FP_Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));

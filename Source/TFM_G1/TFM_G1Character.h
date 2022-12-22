@@ -87,6 +87,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
 		TSubclassOf<class ATFM_WeaponBase> FourthWeaponClass;
 
+	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
+		TSubclassOf<class ATFM_WeaponBase> FifthWeaponClass;
+
 
 	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
 		class ATFM_WeaponBase* CurrentWeapon;
