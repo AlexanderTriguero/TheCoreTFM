@@ -7,7 +7,7 @@
 #include "Engine/EngineTypes.h"
 
 
-ATFM_BubbleAnchor::ATFM_BubbleAnchor()
+ATFM_BubbleAnchor::ATFM_BubbleAnchor() : Super()
 {
 	Mesh->SetEnableGravity(false);
 
