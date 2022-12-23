@@ -29,6 +29,8 @@ public:
 		bool AirOnPickUp;
 	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
 		bool SoapOnPickUp;
+	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
+		bool MagneticOnPickUp;
 
 	UFUNCTION()
 		void BeginOverlap(UPrimitiveComponent* OverlappedComponent,

@@ -175,7 +175,7 @@ void ATFM_G1Character::Tick(float DeltaTime)
 
 	}
 
-}soda
+}
 
 void ATFM_G1Character::BeginPlay()
 {
@@ -220,7 +220,7 @@ void ATFM_G1Character::BeginPlay()
 		Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
 	}
 	*/
-	if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(FourthWeaponClass))
+	/*if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(FourthWeaponClass))
 	{
 		Weapon->GetWeaponMesh()->SetHiddenInGame(true);
 		WeaponArray.Add(Weapon);
@@ -231,7 +231,7 @@ void ATFM_G1Character::BeginPlay()
 		Weapon->GetWeaponMesh()->SetHiddenInGame(true);
 		WeaponArray.Add(Weapon);
 		Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
-	}
+	}*/
 
 }
 

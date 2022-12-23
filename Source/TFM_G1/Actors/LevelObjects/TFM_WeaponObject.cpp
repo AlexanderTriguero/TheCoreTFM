@@ -49,7 +49,10 @@ void ATFM_WeaponObject::BeginOverlap(UPrimitiveComponent* OverlappedComponent,AA
 		{
 			Character->SoapOn = true;
 		}
-
+		else if (SoapOnPickUp)
+		{
+			Character->MagneticOn = true;
+		}
 
 		Destroy();
 	}
