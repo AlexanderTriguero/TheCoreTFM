@@ -128,7 +128,7 @@ void ATFM_G1Character::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 
 	// Bind fire2 event
 	PlayerInputComponent->BindAction("Fire2", IE_Pressed, this, &ATFM_G1Character::OnFireSecondary);
-	PlayerInputComponent->BindAction("Fire2", IE_Released, this, &ATFM_G1Character::OnFireStop);
+	PlayerInputComponent->BindAction("Fire2", IE_Released, this, &ATFM_G1Character::OnFireStopSecondary);
 
 	// Bind chage weapon event
 	PlayerInputComponent->BindAction("SwitchNextWeapon", IE_Pressed, this, &ATFM_G1Character::SwitchNextWeapon);
@@ -206,6 +206,11 @@ void ATFM_G1Character::OnFireSecondary()
 	CurrentWeapon->ShootSecondary();
 }
 
+void ATFM_G1Character::OnFireStopSecondary()
+{
+	CurrentWeapon->StopShootingSecondary();
+}
+
 void ATFM_G1Character::SwitchNextWeapon()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Switching To Next Weapon"));
@@ -216,6 +221,7 @@ void ATFM_G1Character::SwitchNextWeapon()
 			++WeaponIndex;
 			if (ATFM_WeaponBase* NextWeapon = WeaponArray[WeaponIndex])
 			{
+				CurrentWeapon->HideSpawnPreview();
 				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(true);
 				CurrentWeapon = NextWeapon;
 				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);

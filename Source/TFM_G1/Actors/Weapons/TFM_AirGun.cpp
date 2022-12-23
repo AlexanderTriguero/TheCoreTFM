@@ -88,6 +88,10 @@ void ATFM_AirGun::ShootSecondary()
 		PushAttracValue = -1;
 	}
 }
+void ATFM_AirGun::StopShootingSecondary()
+{
+	bIsShooting = false;
+}
 
 
 void ATFM_AirGun::onEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)

@@ -107,6 +107,9 @@ protected:
 	/** Fires Secondary. */
 	void OnFireSecondary();
 
+	/** Fires Stops Secondary. */
+	void OnFireStopSecondary();
+
 	/** Resets HMD orientation and position in VR. */
 	void OnResetVR();
 
