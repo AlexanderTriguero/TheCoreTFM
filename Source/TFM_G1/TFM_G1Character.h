@@ -71,6 +71,9 @@ public:
 		TSubclassOf<class ATFM_WeaponBase> SoapGun;
 
 	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
+		TSubclassOf<class ATFM_WeaponBase> MagneticGun;
+
+	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
 		class ATFM_WeaponBase* CurrentWeapon;
 
 	int32 WeaponIndex;
@@ -84,6 +87,8 @@ public:
 		bool AirOn;
 	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
 		bool SoapOn;
+	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
+		bool MagneticOn;
 
 protected:
 	void SwitchNextWeapon();
