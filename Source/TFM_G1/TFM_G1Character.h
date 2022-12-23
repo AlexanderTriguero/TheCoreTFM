@@ -74,6 +74,13 @@ public:
 		TSubclassOf<class ATFM_WeaponBase> MagneticGun;
 
 	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
+		TSubclassOf<class ATFM_WeaponBase> FourthWeaponClass;
+
+	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
+		TSubclassOf<class ATFM_WeaponBase> FifthWeaponClass;
+
+
+	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
 		class ATFM_WeaponBase* CurrentWeapon;
 
 	int32 WeaponIndex;
@@ -102,6 +109,9 @@ protected:
 
 	/** Fires Secondary. */
 	void OnFireSecondary();
+
+	/** Fires Stops Secondary. */
+	void OnFireStopSecondary();
 
 	/** Resets HMD orientation and position in VR. */
 	void OnResetVR();

@@ -5,6 +5,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Actors/TFM_ActorBase.h"
 #include "Actors/Bubbles/TFM_BubbleAnchor.h"
+#include "Actors/Bubbles/TFM_BubbleElectric.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -57,7 +58,7 @@ void ATFM_AirGun::Tick(float DeltaTime)
 				{
 						//Mientras se este empujando o atrayendo al actor, se estará moviendo, de manera que aunque haga hit con el suelo las fisicas estarán activas
 						/*ActorBase->SetIsMoving(true);*/
-					if (ActorBase->IsA<ATFM_BubbleAnchor>()) {
+					if (ActorBase->IsA<ATFM_BubbleAnchor>() || ActorBase->IsA<ATFM_BubbleElectric>()) {
 						ActorBase->EnablePhysics();	
 					}
 						ActorBase->ApplyForce(Direction, Force, PushAttracValue);
@@ -88,6 +89,10 @@ void ATFM_AirGun::ShootSecondary()
 		PushAttracValue = -1;
 	}
 }
+void ATFM_AirGun::StopShootingSecondary()
+{
+	bIsShooting = false;
+}
 
 
 void ATFM_AirGun::onEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
@@ -110,6 +115,10 @@ void ATFM_AirGun::onEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	if (ATFM_BubbleAnchor* Anchor = Cast<ATFM_BubbleAnchor>(OtherActor))
 	{
 		Anchor->DisablePhysics();	
+	}
+	if (ATFM_BubbleElectric* Electric = Cast<ATFM_BubbleElectric>(OtherActor))
+	{
+		Electric->DisablePhysics();
 	}
 }
 

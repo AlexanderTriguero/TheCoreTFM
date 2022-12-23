@@ -188,7 +188,7 @@ void ATFM_G1Character::BeginPlay()
 
 	/*
 	if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(HeavyGun))
-	{  //SUPONIENDO QUE LA PRIMERA SIEMPRE SERÁ HEAVYGUN
+	{  //SUPONIENDO QUE LA PRIMERA SIEMPRE SERï¿½ HEAVYGUN
 		Weapon->isOnCharacter = HeavyOn;
 		CurrentWeapon = Weapon;
 		if (!HeavyOn) 
@@ -220,6 +220,18 @@ void ATFM_G1Character::BeginPlay()
 		Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
 	}
 	*/
+	if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(FourthWeaponClass))
+	{
+		Weapon->GetWeaponMesh()->SetHiddenInGame(true);
+		WeaponArray.Add(Weapon);
+		Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
+	}
+	if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(FifthWeaponClass))
+	{
+		Weapon->GetWeaponMesh()->SetHiddenInGame(true);
+		WeaponArray.Add(Weapon);
+		Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
+	}
 
 }
 
@@ -238,7 +250,7 @@ void ATFM_G1Character::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 
 	// Bind fire2 event
 	PlayerInputComponent->BindAction("Fire2", IE_Pressed, this, &ATFM_G1Character::OnFireSecondary);
-	PlayerInputComponent->BindAction("Fire2", IE_Released, this, &ATFM_G1Character::OnFireStop);
+	PlayerInputComponent->BindAction("Fire2", IE_Released, this, &ATFM_G1Character::OnFireStopSecondary);
 
 	// Bind chage weapon event
 	PlayerInputComponent->BindAction("SwitchNextWeapon", IE_Pressed, this, &ATFM_G1Character::SwitchNextWeapon);
@@ -286,6 +298,11 @@ void ATFM_G1Character::OnFireSecondary()
 	CurrentWeapon->ShootSecondary();
 }
 
+void ATFM_G1Character::OnFireStopSecondary()
+{
+	CurrentWeapon->StopShootingSecondary();
+}
+
 void ATFM_G1Character::SwitchNextWeapon()
 {
 	if (CurrentWeapon)
@@ -301,6 +318,10 @@ void ATFM_G1Character::SwitchNextWeapon()
 					CurrentWeapon = NextWeapon;
 					CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
 				}
+				CurrentWeapon->HideSpawnPreview();
+				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(true);
+				CurrentWeapon = NextWeapon;
+				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
 			}
 		}
 	}

@@ -19,6 +19,8 @@ public:
 	virtual void Shoot() override;
 	virtual void StopShooting() override;
 	virtual void ShootSecondary() override;
+	virtual void StopShootingSecondary() override;
+
 
 private:
 	int PushAttracValue = 1;

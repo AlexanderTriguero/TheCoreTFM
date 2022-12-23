@@ -21,7 +21,7 @@ class TFM_G1_API ATFM_BubbleBase : public ATFM_ActorBase
 public:	
 	ATFM_BubbleBase();
 
-	/*No hace falta implementarlo si no se van a modificar las físicas
+	/*No hace falta implementarlo si no se van a modificar las fï¿½sicas
 	virtual void Tick(float DeltaTime) override;*/
 	virtual void ApplyForce(FVector Direction, float Force, int PushAttracValue) override;
 	void Explode();
@@ -33,7 +33,7 @@ public:
 
 protected:
 	TEnumAsByte<EBubbleSize> Size;
-	//Collider para detectar que hay una burbuja encima, de está manera, al explotar se pueden añadir fisicas al objeto que tiene encima, para que este caiga
+	//Collider para detectar que hay una burbuja encima, de estï¿½ manera, al explotar se pueden aï¿½adir fisicas al objeto que tiene encima, para que este caiga
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Anchor")
 		UBoxComponent* TopDetection = nullptr;
 
