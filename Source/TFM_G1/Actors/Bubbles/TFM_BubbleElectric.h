@@ -7,6 +7,7 @@
 #include "Components/SphereComponent.h"
 #include "TFM_BubbleElectric.generated.h"
 
+class UCableComponent;
 /**
  * 
  */
@@ -28,6 +29,8 @@ public:
 		UMaterial* DisconnectedMaterial = nullptr;
 	UPROPERTY(EditDefaultsOnly)
 		USphereComponent* ConductionSphere = nullptr;
+	UPROPERTY(EditDefaultsOnly)
+		UCableComponent* ConductionVisual = nullptr;
 	UPROPERTY(EditAnywhere)
 		float ConductionRadius;
 	UPROPERTY(EditAnywhere)
@@ -36,6 +39,11 @@ public:
 		bool bIsConnectedToSource = false;
 
 protected:
+	void ConnectVisual(AActor* bubbleToConnectTo);
+	void DisconnectVisual();
+	void CheckConnection();
+	void PowerActorsOn();
 	virtual void Tick(float DeltaSeconds) override;
 	TArray<ATFM_BubbleElectric*> ConnectedBubbles;
+
 };
