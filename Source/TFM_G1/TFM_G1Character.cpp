@@ -75,108 +75,7 @@ void ATFM_G1Character::Tick(float DeltaTime)
 	if(WeaponArray.Num()==0)
 		Mesh1P->SetHiddenInGame(true);
 
-	if (HeavyOn)
-	{  
-		if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(HeavyGun))
-		{
-			Weapon->isOnCharacter = HeavyOn;
-			Weapon->GetWeaponMesh()->SetHiddenInGame(true);
-			WeaponArray.Add(Weapon);
-			Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
-
-			if (WeaponArray.Num() == 1)
-			{
-				CurrentWeapon = Weapon;
-				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
-				Mesh1P->SetHiddenInGame(false);
-			}
-
-			HeavyOn = false;
-		}
-		
-	}
-	if (AnchorOn)
-	{
-		if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(AnchorGun))
-		{
-			Weapon->isOnCharacter = AnchorOn;
-			Weapon->GetWeaponMesh()->SetHiddenInGame(true);
-			WeaponArray.Add(Weapon);
-			Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
-
-			if (WeaponArray.Num() == 1)
-			{
-				CurrentWeapon = Weapon;
-				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
-				Mesh1P->SetHiddenInGame(false);
-			}
-
-			AnchorOn = false;
-		}
-		
-	}
-	if (AirOn)
-	{
-		if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(AirGun))
-		{
-			Weapon->isOnCharacter = AirOn;
-			Weapon->GetWeaponMesh()->SetHiddenInGame(true);
-			WeaponArray.Add(Weapon);
-			Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
-
-			if (WeaponArray.Num() == 1)
-			{
-				CurrentWeapon = Weapon;
-				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
-				Mesh1P->SetHiddenInGame(false);
-			}
-
-			AirOn = false;
-		}
-		
-	}
-	if (SoapOn)
-	{
-		if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(SoapGun))
-		{
-			Weapon->isOnCharacter = SoapOn;
-			Weapon->GetWeaponMesh()->SetHiddenInGame(true);
-			WeaponArray.Add(Weapon);
-			Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
-
-			if (WeaponArray.Num() == 1)
-			{
-				CurrentWeapon = Weapon;
-				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
-				Mesh1P->SetHiddenInGame(false);
-			}
-
-			SoapOn = false;
-		}
-		
-	}
-
-	if (MagneticOn)
-	{
-		if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(MagneticGun))
-		{
-			Weapon->isOnCharacter = MagneticOn;
-			Weapon->GetWeaponMesh()->SetHiddenInGame(true);
-			WeaponArray.Add(Weapon);
-			Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
-
-			if (WeaponArray.Num() == 1)
-			{
-				CurrentWeapon = Weapon;
-				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
-				Mesh1P->SetHiddenInGame(false);
-			}
-
-			MagneticOn = false;
-		}
-
-	}
-
+	CheckWeapons();
 }
 
 void ATFM_G1Character::BeginPlay()
@@ -367,6 +266,113 @@ void ATFM_G1Character::SwitchPreviousWeapon()
 
 }
 
+void ATFM_G1Character::CheckWeapons()
+{
+	if (HeavyOn)
+	{
+		if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(HeavyGun))
+		{
+			Weapon->isOnCharacter = HeavyOn;
+			Weapon->GetWeaponMesh()->SetHiddenInGame(true);
+			WeaponArray.Add(Weapon);
+			Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
+
+			if (WeaponArray.Num() == 1)
+			{
+				CurrentWeapon = Weapon;
+				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
+				Mesh1P->SetHiddenInGame(false);
+			}
+			GameInstanceRef->SetHeavyOn(HeavyOn);
+			HeavyOn = false;
+		}
+
+	}
+	if (AnchorOn)
+	{
+		if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(AnchorGun))
+		{
+			Weapon->isOnCharacter = AnchorOn;
+			Weapon->GetWeaponMesh()->SetHiddenInGame(true);
+			WeaponArray.Add(Weapon);
+			Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
+
+			if (WeaponArray.Num() == 1)
+			{
+				CurrentWeapon = Weapon;
+				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
+				Mesh1P->SetHiddenInGame(false);
+			}
+
+			GameInstanceRef->SetAnchorOn(AnchorOn);
+			AnchorOn = false;
+		}
+
+	}
+	if (AirOn)
+	{
+		if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(AirGun))
+		{
+			Weapon->isOnCharacter = AirOn;
+			Weapon->GetWeaponMesh()->SetHiddenInGame(true);
+			WeaponArray.Add(Weapon);
+			Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
+
+			if (WeaponArray.Num() == 1)
+			{
+				CurrentWeapon = Weapon;
+				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
+				Mesh1P->SetHiddenInGame(false);
+			}
+
+			GameInstanceRef->SetAirOn(AirOn);
+			AirOn = false;
+		}
+
+	}
+	if (SoapOn)
+	{
+		if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(SoapGun))
+		{
+			Weapon->isOnCharacter = SoapOn;
+			Weapon->GetWeaponMesh()->SetHiddenInGame(true);
+			WeaponArray.Add(Weapon);
+			Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
+
+			if (WeaponArray.Num() == 1)
+			{
+				CurrentWeapon = Weapon;
+				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
+				Mesh1P->SetHiddenInGame(false);
+			}
+			GameInstanceRef->SetSoapOn(SoapOn);
+			SoapOn = false;
+		}
+
+	}
+
+	if (MagneticOn)
+	{
+		if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(MagneticGun))
+		{
+			Weapon->isOnCharacter = MagneticOn;
+			Weapon->GetWeaponMesh()->SetHiddenInGame(true);
+			WeaponArray.Add(Weapon);
+			Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
+
+			if (WeaponArray.Num() == 1)
+			{
+				CurrentWeapon = Weapon;
+				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
+				Mesh1P->SetHiddenInGame(false);
+			}
+			GameInstanceRef->SetMagneticOn(MagneticOn);
+			MagneticOn = false;
+		}
+
+	}
+}
+
 void ATFM_G1Character::OnResetVR()
 {
 	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
@@ -444,6 +450,22 @@ bool ATFM_G1Character::EnableTouchscreenMovement(class UInputComponent* PlayerIn
 
 void ATFM_G1Character::LoadGameInstanceInfo() {
 	WeaponIndex=GameInstanceRef->GetCurrentWeaponIndex();
+	HeavyOn = GameInstanceRef->GetHeavyOn();
+	AnchorOn = GameInstanceRef->GetAnchorOn();
+	AirOn = GameInstanceRef->GetAirOn();
+	SoapOn = GameInstanceRef->GetSoapOn();
+	MagneticOn = GameInstanceRef->GetMagneticOn();
+	CheckWeapons();
+
+	if (ATFM_WeaponBase* NextWeapon = WeaponArray[WeaponIndex])
+	{
+		if (NextWeapon->isOnCharacter)
+		{
+			CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(true);
+			CurrentWeapon = NextWeapon;
+			CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
+		}
+	}
 
 }
 void ATFM_G1Character::SaveGameInstanceInfo() {

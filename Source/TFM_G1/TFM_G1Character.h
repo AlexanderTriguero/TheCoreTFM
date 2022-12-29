@@ -101,6 +101,7 @@ public:
 protected:
 	void SwitchNextWeapon();
 	void SwitchPreviousWeapon();
+	void CheckWeapons();
 
 	/** Fires a projectile. */
 	void OnFire();
