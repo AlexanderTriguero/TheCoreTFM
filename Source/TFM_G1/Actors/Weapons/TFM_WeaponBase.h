@@ -30,6 +30,9 @@ public:
 		TSubclassOf<ATFM_BubbleBase> BubbleToSpawn = nullptr;
 	float ChargePercent = 1.f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bubble Class")
+		bool isOnCharacter;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawn Preview")
 		UStaticMeshComponent* PositionToSpawnBubble = nullptr;

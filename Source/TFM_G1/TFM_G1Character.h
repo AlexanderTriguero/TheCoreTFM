@@ -27,14 +27,6 @@ class ATFM_G1Character : public ACharacter
 	UPROPERTY(VisibleDefaultsOnly, Category=Mesh)
 	USkeletalMeshComponent* Mesh1P;
 
-	/** Gun mesh: 1st person view (seen only by self) */
-	//UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-	//USkeletalMeshComponent* FP_Gun;
-
-	/** Location on gun mesh where projectiles should spawn. */
-	//UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-	//USceneComponent* FP_MuzzleLocation;
-
 	/** First person camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FirstPersonCameraComponent;
@@ -69,33 +61,24 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
-	/** Gun muzzle's offset from the characters location */
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Gameplay)
-	//FVector GunOffset;
-
-	/** Projectile class to spawn */
-	//UPROPERTY(EditDefaultsOnly, Category=Projectile)
-	//TSubclassOf<class ATFM_G1Projectile> ProjectileClass;
-
-	/** AnimMontage to play each time we fire */
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-	//UAnimMontage* FireAnimation;
-
 	//
 	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
-		TSubclassOf<class ATFM_WeaponBase> StartingWeaponClass;
+		TSubclassOf<class ATFM_WeaponBase> BaseStandardEmptyGun;
 
 	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
-		TSubclassOf<class ATFM_WeaponBase> SecondWeaponClass;
+		TSubclassOf<class ATFM_WeaponBase> HeavyGun;
 
 	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
-		TSubclassOf<class ATFM_WeaponBase> ThirdWeaponClass;
+		TSubclassOf<class ATFM_WeaponBase> AnchorGun;
 
 	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
-		TSubclassOf<class ATFM_WeaponBase> FourthWeaponClass;
+		TSubclassOf<class ATFM_WeaponBase> AirGun;
 
 	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
-		TSubclassOf<class ATFM_WeaponBase> FifthWeaponClass;
+		TSubclassOf<class ATFM_WeaponBase> SoapGun;
+
+	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
+		TSubclassOf<class ATFM_WeaponBase> MagneticGun;
 
 
 	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
@@ -103,6 +86,17 @@ public:
 
 	int32 WeaponIndex;
 	TArray<ATFM_WeaponBase*> WeaponArray;
+
+	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
+		bool HeavyOn;
+	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
+		bool AnchorOn;
+	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
+		bool AirOn;
+	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
+		bool SoapOn;
+	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
+		bool MagneticOn;
 
 protected:
 	void SwitchNextWeapon();
@@ -129,16 +123,8 @@ protected:
 	/** Handles stafing movement, left and right */
 	void MoveRight(float Val);
 
-	/**
-	 * Called via input to turn at a given rate.
-	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
-	 */
 	void TurnAtRate(float Rate);
 
-	/**
-	 * Called via input to turn look up/down at a given rate.
-	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
-	 */
 	void LookUpAtRate(float Rate);
 
 	struct TouchData
@@ -172,5 +158,8 @@ public:
 	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
 	/** Returns FirstPersonCameraComponent subobject **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
+
+	virtual void Tick(float DeltaTime) override;
+
 };
 
