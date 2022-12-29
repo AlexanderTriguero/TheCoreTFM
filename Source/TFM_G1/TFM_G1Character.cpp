@@ -160,7 +160,7 @@ void ATFM_G1Character::Tick(float DeltaTime)
 	{
 		if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(MagneticGun))
 		{
-			Weapon->isOnCharacter = SoapOn;
+			Weapon->isOnCharacter = MagneticOn;
 			Weapon->GetWeaponMesh()->SetHiddenInGame(true);
 			WeaponArray.Add(Weapon);
 			Weapon->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("GripPoint"));
@@ -242,7 +242,7 @@ void ATFM_G1Character::BeginPlay()
 	GameInstanceRef=Cast<UTFM_GameInstance>(GetWorld()->GetGameInstance());
 	LoadGameInstanceInfo();
 
-	if (CurrentWeapon)
+	/*if (CurrentWeapon)
 	{
 		if (ATFM_WeaponBase* NextWeapon = WeaponArray[WeaponIndex])
 		{
@@ -251,7 +251,7 @@ void ATFM_G1Character::BeginPlay()
 			CurrentWeapon = NextWeapon;
 			CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
 		}
-	}
+	}*/
 }
 
 void ATFM_G1Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
