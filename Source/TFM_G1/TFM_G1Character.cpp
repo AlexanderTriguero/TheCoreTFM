@@ -11,6 +11,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "MotionControllerComponent.h"
 #include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
+#include "GameInstances/TFM_GameInstance.h"
+
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -114,6 +116,21 @@ void ATFM_G1Character::BeginPlay()
 
 	//Attach gun mesh component to Skeleton, doing it here because the skeleton is not yet created in the constructor
 	//FP_Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
+
+
+	GameInstanceRef=Cast<UTFM_GameInstance>(GetWorld()->GetGameInstance());
+	LoadGameInstanceInfo();
+
+	if (CurrentWeapon)
+	{
+		if (ATFM_WeaponBase* NextWeapon = WeaponArray[WeaponIndex])
+		{
+			CurrentWeapon->HideSpawnPreview();
+			CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(true);
+			CurrentWeapon = NextWeapon;
+			CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
+		}
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -366,4 +383,12 @@ bool ATFM_G1Character::EnableTouchscreenMovement(class UInputComponent* PlayerIn
 	}
 	
 	return false;
+}
+
+void ATFM_G1Character::LoadGameInstanceInfo() {
+	WeaponIndex=GameInstanceRef->GetCurrentWeaponIndex();
+
+}
+void ATFM_G1Character::SaveGameInstanceInfo() {
+	GameInstanceRef->SetCurrentWeaponIndex(WeaponIndex);
 }

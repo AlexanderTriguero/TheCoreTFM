@@ -15,7 +15,7 @@ class UCameraComponent;
 class UMotionControllerComponent;
 class UAnimMontage;
 class USoundBase;
-
+class UTFM_GameInstance;
 class ATFM_WeaponBase;
 
 UCLASS(config=Game)
@@ -50,6 +50,13 @@ class ATFM_G1Character : public ACharacter
 public:
 	ATFM_G1Character();
 
+
+	UPROPERTY()
+		UTFM_GameInstance* GameInstanceRef=nullptr;
+	UFUNCTION()
+		void LoadGameInstanceInfo();
+	UFUNCTION()
+		void SaveGameInstanceInfo();
 protected:
 	virtual void BeginPlay();
 
@@ -165,6 +172,5 @@ public:
 	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
 	/** Returns FirstPersonCameraComponent subobject **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
-
 };
 
