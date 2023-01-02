@@ -22,8 +22,8 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 		USphereComponent* ConnectionSphere = nullptr;
 	UFUNCTION()
-		void OnComponentBeginOverlapOnPowerSource(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-	UFUNCTION()
 		void OnComponentEndOverlapOnPowerSource(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
+
 };

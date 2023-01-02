@@ -7,6 +7,7 @@
 #include "Components/SphereComponent.h"
 #include "TFM_BubbleElectric.generated.h"
 
+class ATFM_PowerSource;
 class UCableComponent;
 /**
  * 
@@ -36,14 +37,18 @@ public:
 	UPROPERTY(EditAnywhere)
 		bool bIsConnected = false;
 	UPROPERTY(EditAnywhere)
-		bool bIsConnectedToSource = false;
+		bool bFirstToSource = false; 
+	void ConnectToSource(ATFM_PowerSource* ExternalSource, bool SetToConnect);
 
 protected:
+	UPROPERTY(EditAnywhere)
+		bool bIsConnectedToSource = false;
 	void ConnectVisual(AActor* bubbleToConnectTo);
 	void DisconnectVisual();
 	void CheckConnection();
 	void PowerActorsOn();
 	virtual void Tick(float DeltaSeconds) override;
 	TArray<ATFM_BubbleElectric*> ConnectedBubbles;
-
+	ATFM_BubbleElectric* BubbleConnection = nullptr;
+	ATFM_PowerSource* PowerSource = nullptr;
 };
