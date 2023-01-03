@@ -8,25 +8,13 @@
 
 ATFM_PowerSource::ATFM_PowerSource()
 {
+	PrimaryActorTick.bCanEverTick = true;
 	ConnectionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Connection Radius"));
 	ConnectionSphere->SetSphereRadius(ConnectionRadius);
 	ConnectionSphere->SetupAttachment(Mesh);
 	
 }
 
-void ATFM_PowerSource::OnComponentBeginOverlapOnPowerSource(UPrimitiveComponent* OverlappedComponent,
-	AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
-	const FHitResult& SweepResult)
-{
-	if(ATFM_BubbleElectric* ElectricBubble = Cast<ATFM_BubbleElectric>(OtherActor))
-	{
-		if (!ElectricBubble->bIsConnected)
-		{
-			ElectricBubble->Connect(this);
-			ElectricBubble->bIsConnectedToSource = true;
-		}
-	}
-}
 
 void ATFM_PowerSource::OnComponentEndOverlapOnPowerSource(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
@@ -36,7 +24,7 @@ void ATFM_PowerSource::OnComponentEndOverlapOnPowerSource(UPrimitiveComponent* O
 		if (ElectricBubble->bIsConnected)
 		{
 			ElectricBubble->Disconnect();
-			ElectricBubble->bIsConnectedToSource = false;
+			ElectricBubble->ConnectToSource(this, false);
 		}
 	}
 }
@@ -44,19 +32,26 @@ void ATFM_PowerSource::OnComponentEndOverlapOnPowerSource(UPrimitiveComponent* O
 void ATFM_PowerSource::BeginPlay()
 {
 	Super::BeginPlay();
+	ConnectionSphere->OnComponentEndOverlap.AddDynamic(this, &ATFM_PowerSource::OnComponentEndOverlapOnPowerSource);
+}
+
+void ATFM_PowerSource::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
 	TArray<AActor*> Result;
 	GetOverlappingActors(Result, ATFM_BubbleElectric::StaticClass());
-	for (AActor* Actor : Result)
+	if (Result.Num() != 0)
 	{
-		if (ATFM_BubbleElectric* ElectricBubble = Cast<ATFM_BubbleElectric>(Actor))
+		if (ATFM_BubbleElectric* ElectricBubble = Cast<ATFM_BubbleElectric>(Result[0]))
 		{
 			if (!ElectricBubble->bIsConnected)
 			{
 				ElectricBubble->Connect(this);
-				ElectricBubble->bIsConnectedToSource = true;
+				ElectricBubble->ConnectToSource(this, true);
+				return;
 			}
 		}
 	}
-	ConnectionSphere->OnComponentBeginOverlap.AddDynamic(this, &ATFM_PowerSource::OnComponentBeginOverlapOnPowerSource);
-	ConnectionSphere->OnComponentEndOverlap.AddDynamic(this, &ATFM_PowerSource::OnComponentEndOverlapOnPowerSource);
 }
+
+

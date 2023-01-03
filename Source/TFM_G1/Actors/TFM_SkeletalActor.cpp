@@ -2,14 +2,15 @@
 
 
 #include "Actors/TFM_SkeletalActor.h"
+
+#include "Bubbles/TFM_BubbleElectric.h"
 #include "LevelObjects/TFM_SwitchFloor.h"
 
 // Sets default values
 ATFM_SkeletalActor::ATFM_SkeletalActor()
 {
-
+	PrimaryActorTick.bCanEverTick = true;
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
-
 	Frame = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Frame"));
 	Frame->SetupAttachment(RootComponent);
 	Door = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Door"));
@@ -35,7 +36,7 @@ void ATFM_SkeletalActor::TryActivate()
 
 void ATFM_SkeletalActor::Activate()
 {
-	if (bIsSwitchable)
+	if (bIsSwitchable || bIsElectric)
 	{
 		bIsActive = true;
 		Door->SetHiddenInGame(true);
@@ -44,14 +45,36 @@ void ATFM_SkeletalActor::Activate()
 	}
 }
 
+void ATFM_SkeletalActor::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	Deactivate();
+}
+
+bool ATFM_SkeletalActor::IsConnected()
+{
+	TArray<AActor*> Result;
+	GetOverlappingActors(Result, ATFM_BubbleElectric::StaticClass());
+	for (AActor* Actor : Result)
+	{
+		if (ATFM_BubbleElectric* ElectricBubble = Cast<ATFM_BubbleElectric>(Actor))
+		{
+			if(ElectricBubble->bIsConnected)
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 void ATFM_SkeletalActor::Deactivate()
 {
-	if (bIsSwitchable)
+	if (bIsSwitchable || (bIsElectric && !IsConnected()))
 	{
 		bIsActive = false;
 		Door->SetHiddenInGame(false);
 		Door->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-
 		//Mesh->PlayAnimation(AnimStateClose, false);
 	}
 }

@@ -2,6 +2,9 @@
 
 
 #include "Actors/Bubbles/TFM_BubbleElectric.h"
+#include "CableComponent.h"
+#include "Actors/TFM_SkeletalActor.h"
+#include "Actors/LevelObjects/TFM_PowerSource.h"
 
 ATFM_BubbleElectric::ATFM_BubbleElectric() : Super()
 {
@@ -12,6 +15,11 @@ ATFM_BubbleElectric::ATFM_BubbleElectric() : Super()
 	Mesh->SetMaterial(0, DisconnectedMaterial);
 	Mesh->BodyInstance.bLockZTranslation = true;
 	Mesh->BodyInstance.bLockRotation = true;
+	ConductionVisual = CreateDefaultSubobject<UCableComponent>(TEXT("Cable"));
+	ConductionVisual->SetupAttachment(RootComponent);
+	ConductionVisual->bAttachStart = true;
+	ConductionVisual->bAttachEnd = true;
+	ConductionVisual->SetHiddenInGame(true);
 }
 
 void ATFM_BubbleElectric::Connect(ATFM_ActorBase* ConnectTo)
@@ -24,39 +32,98 @@ void ATFM_BubbleElectric::Connect(ATFM_ActorBase* ConnectTo)
 void ATFM_BubbleElectric::Disconnect()
 {
 	//TODO: Show Animation for disconnection
+	DisconnectVisual();
+	bFirstToSource = false;
 	bIsConnected = false;
 	Mesh->SetMaterial(0, DisconnectedMaterial);
 }
 
 void ATFM_BubbleElectric::Tick(float DeltaSeconds)
 {
+	CheckConnection();
+	if (bIsConnected)
+		PowerActorsOn();
+}
+
+
+void ATFM_BubbleElectric::ConnectToSource(ATFM_PowerSource* ExternalSource, bool SetToConnect)
+{
+	bIsConnectedToSource = SetToConnect;
+	if (SetToConnect)
+		PowerSource = ExternalSource;
+	else
+		DisconnectVisual();
+}
+
+void ATFM_BubbleElectric::ConnectVisual(AActor* actorToConnectTo)
+{
+	ConductionVisual->SetHiddenInGame(false);
+	AActor* AttachEnd = actorToConnectTo;
+	ConductionVisual->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
+	ConductionVisual->CableLength = (AttachEnd->GetActorLocation() - GetActorLocation()).Size() - 100.f;
+	ConductionVisual->SetAttachEndTo(AttachEnd, FName("Mesh"));
+}
+
+void ATFM_BubbleElectric::DisconnectVisual()
+{
+	ConductionVisual->SetHiddenInGame(true);
+	ConductionVisual->CableLength = 0.f;
+	ConductionVisual->SetAttachEndTo(this, FName("Mesh"));
+}
+
+void ATFM_BubbleElectric::CheckConnection()
+{
 	ConnectedBubbles.Empty();
-	if(bIsConnectedToSource)
-		return;
 	TArray<AActor*> Result;
 	GetOverlappingActors(Result, ATFM_BubbleElectric::StaticClass());
-	for (AActor* Actor : Result)
+	if (Result.Num() != 0)
 	{
-		if (ATFM_BubbleElectric* ElectricBubble = Cast<ATFM_BubbleElectric>(Actor))
+		for (AActor* Actor : Result)
 		{
-			ConnectedBubbles.Add(ElectricBubble);
-			for(ATFM_BubbleElectric* Bubble : ElectricBubble->ConnectedBubbles)
+			if (ATFM_BubbleElectric* ElectricBubble = Cast<ATFM_BubbleElectric>(Actor))
 			{
-				if (!ConnectedBubbles.Contains(Bubble))
-					ConnectedBubbles.Add(Bubble);
-			}
-			if (!bIsConnected)
-			{
-				if (ElectricBubble->bIsConnected)
-					Connect(ElectricBubble);
+				ConnectedBubbles.Add(ElectricBubble);
+				for (ATFM_BubbleElectric* Bubble : ElectricBubble->ConnectedBubbles)
+				{
+					if (!ConnectedBubbles.Contains(Bubble))
+						ConnectedBubbles.Add(Bubble);
+				}
+				if (!bIsConnected)
+				{
+					if (ElectricBubble->bIsConnected && ElectricBubble->BubbleConnection != this)
+						BubbleConnection = ElectricBubble;
+						Connect(ElectricBubble);
+				}
 			}
 		}
+		if(!bFirstToSource && BubbleConnection)
+			ConnectVisual(BubbleConnection);
+			
+	} 
+	if (bIsConnectedToSource)
+	{
+		ConnectVisual(PowerSource);
+		bFirstToSource = true;
+		return;
 	}
-	for(ATFM_BubbleElectric* Bubble : ConnectedBubbles)
+	for (ATFM_BubbleElectric* Bubble : ConnectedBubbles)
 	{
 		if (Bubble->bIsConnectedToSource)
 			return;
 	}
-	if(!bIsConnectedToSource)
+	if (!bIsConnectedToSource)
 		Disconnect();
+}
+
+void ATFM_BubbleElectric::PowerActorsOn()
+{
+	TArray<AActor*> Result;
+	GetOverlappingActors(Result, ATFM_SkeletalActor::StaticClass());
+	for (AActor* Actor : Result)
+	{
+		if (ATFM_SkeletalActor* PowerableActor = Cast<ATFM_SkeletalActor>(Actor))
+		{
+			PowerableActor->Activate();
+		}
+	}
 }

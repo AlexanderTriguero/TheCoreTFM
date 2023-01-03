@@ -18,12 +18,13 @@ public:
 
 	void TryActivate();
 	void Deactivate();
+	void Activate();
 	USkeletalMeshComponent* GetMesh();
 	UPROPERTY(EditAnywhere, Category = "Switches")
 		TArray<ATFM_SwitchFloor*> SwitchList;
 
 protected:
-	void Activate();
+	virtual void Tick(float DeltaSeconds) override;
 	/*UPROPERTY(EditAnywhere, Category = "Open State")
 		UAnimMontage* AnimStateOpen = nullptr;
 	UPROPERTY(EditAnywhere, Category = "Close State")
@@ -32,8 +33,12 @@ protected:
 		bool bIsSwitchable = false;
 	UPROPERTY(EditAnywhere, Category = "Switchable")
 		bool bIsActive = false;
+	UPROPERTY(EditAnywhere, Category = "Electric")
+		bool bIsElectric = false;
 	UPROPERTY(EditAnywhere, Category = "Frame")
 		UStaticMeshComponent* Frame = nullptr;
 	UPROPERTY(EditAnywhere, Category = "Door")
 		UStaticMeshComponent* Door = nullptr;
+private:
+	bool IsConnected();
 };

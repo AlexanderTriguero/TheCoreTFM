@@ -15,7 +15,7 @@ class UCameraComponent;
 class UMotionControllerComponent;
 class UAnimMontage;
 class USoundBase;
-
+class UTFM_GameInstance;
 class ATFM_WeaponBase;
 
 UCLASS(config=Game)
@@ -42,6 +42,13 @@ class ATFM_G1Character : public ACharacter
 public:
 	ATFM_G1Character();
 
+
+	UPROPERTY()
+		UTFM_GameInstance* GameInstanceRef=nullptr;
+	UFUNCTION()
+		void LoadGameInstanceInfo();
+	UFUNCTION()
+		void SaveGameInstanceInfo();
 protected:
 	virtual void BeginPlay();
 
@@ -94,6 +101,7 @@ public:
 protected:
 	void SwitchNextWeapon();
 	void SwitchPreviousWeapon();
+	void CheckWeapons();
 
 	/** Fires a projectile. */
 	void OnFire();
