@@ -4,6 +4,7 @@
 #include "TFM_SwingingSoap.h"
 #include "Actors/SwingingSoap/TFM_SwingingSoap.h"
 #include "CableComponent.h"
+#include "Actors/Bubbles/TFM_BubbleHeavy.h"
 #include "PhysicsEngine/PhysicsConstraintComponent.h"
 #include "PhysicsField/PhysicsFieldComponent.h"
 
@@ -30,7 +31,14 @@ void ATFM_SwingingSoap::SwitchEnd(AActor* newAttachEnd, FName ComponentName)
 void ATFM_SwingingSoap::BeginPlay()
 {
 	Super::BeginPlay();
-	Cable->SetAttachEndTo(AttachEnd, FName("ProjectilePosition"));
+	FName ComponentName;
+	if (ATFM_BubbleHeavy* HeavyToAttachTo = Cast<ATFM_BubbleHeavy>(AttachEnd))
+	{
+		ComponentName = FName("GrabPoint");
+	}
+	else
+		ComponentName = FName("ProjectilePosition");
+	Cable->SetAttachEndTo(AttachEnd, ComponentName);
 	Cable->AttachToComponent(AttachStart->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
 	Cable->CableLength = (AttachEnd->GetActorLocation() - GetActorLocation()).Size() - 100.f;
 	
@@ -38,11 +46,11 @@ void ATFM_SwingingSoap::BeginPlay()
 
 void ATFM_SwingingSoap::SetConstraints()
 {
-	Constraint = NewObject<UPhysicsConstraintComponent>(AttachStart);
+	Constraint = NewObject<UPhysicsConstraintComponent>(AttachStart, FName("Constraint"));
 	Constraint->ConstraintActor1 = AttachStart;
 	Constraint->ConstraintActor2 = AttachEnd;
 	Constraint->SetLinearXLimit(ELinearConstraintMotion::LCM_Limited, Cable->CableLength);
 	Constraint->SetLinearYLimit(ELinearConstraintMotion::LCM_Limited, Cable->CableLength);
 	Constraint->SetLinearZLimit(ELinearConstraintMotion::LCM_Limited, Cable->CableLength);
-	Constraint->InitComponentConstraint();
+	//Constraint->InitComponentConstraint();
 }

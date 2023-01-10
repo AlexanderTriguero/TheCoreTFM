@@ -27,6 +27,11 @@ void ATFM_SwingingSoapWeapon::Shoot()
 	}
 	else if(OutHit.GetActor()->IsA(BubbleToReleaseTo) && !CanShoot())
 	{
+		if(ATFM_BubbleHeavy* BubbleHeavy = Cast<ATFM_BubbleHeavy>(OutHit.GetActor()))
+		{
+			if (!BubbleHeavy->bLevelBox)
+				return;
+		}
 		SoapSpawned->SwitchEnd(OutHit.GetActor(), FName("Mesh"));
 	}
 }
@@ -43,8 +48,17 @@ void ATFM_SwingingSoapWeapon::ShootSecondary()
 
 bool ATFM_SwingingSoapWeapon::CanShoot()
 {
-	TArray<AActor*> FoundSwingingSoaps;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATFM_SwingingSoap::StaticClass(), FoundSwingingSoaps);
-	bSoapShot = FoundSwingingSoaps.Num() == 0;
+	TArray<AActor*> FoundSwingingSoapsActors;
+	TArray<ATFM_SwingingSoap*> SwingingSoaps;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATFM_SwingingSoap::StaticClass(), FoundSwingingSoapsActors);
+	for(AActor* FoundSoapActor : FoundSwingingSoapsActors)
+	{
+		if(ATFM_SwingingSoap* FoundSoap = Cast<ATFM_SwingingSoap>(FoundSoapActor))
+		{
+			if (!FoundSoap->bLevelSoap)
+				SwingingSoaps.Add(FoundSoap);
+		}
+	}
+	bSoapShot = SwingingSoaps.Num() == 0;
 	return(bSoapShot);
 }

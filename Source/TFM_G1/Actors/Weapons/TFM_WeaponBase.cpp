@@ -116,7 +116,7 @@ void ATFM_WeaponBase::ShootSecondary()
 	FHitResult OutHit;
 	UKismetSystemLibrary::LineTraceSingle(this, Start, End, TraceTypeQuery1, true, {}, EDrawDebugTrace::ForDuration, OutHit, true);
 	ATFM_BubbleBase* BubbleBase = Cast<ATFM_BubbleBase>(OutHit.GetActor());
-	if (BubbleBase)
+	if (BubbleBase && !BubbleBase->bLevelAsset)
 	{
 		TArray<AActor*> FoundSwingingSoaps;
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATFM_SwingingSoap::StaticClass(), FoundSwingingSoaps);
