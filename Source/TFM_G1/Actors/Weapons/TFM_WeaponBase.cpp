@@ -144,10 +144,13 @@ void ATFM_WeaponBase::ShootSecondary()
 			}
 		}
 		SpawnedBubbles.Remove(BubbleBase);
-		if(BubbleBase->canBeDestroyed)
+		BubbleBase->Destroy();
+
+		/*if (BubbleBase->canBeDestroyed)
 		{
 			BubbleBase->Destroy();
 		}
+		*/
 	}
 
 }

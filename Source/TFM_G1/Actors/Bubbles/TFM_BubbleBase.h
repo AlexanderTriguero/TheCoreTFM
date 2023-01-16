@@ -31,8 +31,8 @@ public:
 	UFUNCTION()
 		bool HasSomethingOnTop();
 
-	UPROPERTY(EditAnywhere, Category = "Bubble Properties")
-			bool canBeDestroyed = true;
+	//UPROPERTY(EditAnywhere, Category = "Bubble Properties")
+			//bool canBeDestroyed = true;
 protected:
 	TEnumAsByte<EBubbleSize> Size;
 	//Collider para detectar que hay una burbuja encima, de est� manera, al explotar se pueden a�adir fisicas al objeto que tiene encima, para que este caiga
