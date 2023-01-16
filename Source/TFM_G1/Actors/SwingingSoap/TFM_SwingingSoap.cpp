@@ -40,17 +40,20 @@ void ATFM_SwingingSoap::BeginPlay()
 		ComponentName = FName("ProjectilePosition");
 	Cable->SetAttachEndTo(AttachEnd, ComponentName);
 	Cable->AttachToComponent(AttachStart->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
-	Cable->CableLength = (AttachEnd->GetActorLocation() - GetActorLocation()).Size() - 100.f;
+	Cable->CableLength = (AttachEnd->GetActorLocation() - GetActorLocation()).Size();
 	
 }
 
+
 void ATFM_SwingingSoap::SetConstraints()
 {
+	Constraint->ConstraintActor1 = AttachEnd;
+	Constraint->ConstraintActor2 = AttachStart;
 	Constraint = NewObject<UPhysicsConstraintComponent>(AttachStart, FName("Constraint"));
-	Constraint->ConstraintActor1 = AttachStart;
-	Constraint->ConstraintActor2 = AttachEnd;
+	Constraint->ConstraintActor1 = AttachEnd;
+	Constraint->ConstraintActor2 = AttachStart;
 	Constraint->SetLinearXLimit(ELinearConstraintMotion::LCM_Limited, Cable->CableLength);
 	Constraint->SetLinearYLimit(ELinearConstraintMotion::LCM_Limited, Cable->CableLength);
 	Constraint->SetLinearZLimit(ELinearConstraintMotion::LCM_Limited, Cable->CableLength);
-	//Constraint->InitComponentConstraint();
+	Constraint->InitComponentConstraint();
 }

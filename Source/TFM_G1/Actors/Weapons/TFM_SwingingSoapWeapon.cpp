@@ -32,7 +32,7 @@ void ATFM_SwingingSoapWeapon::Shoot()
 			if (!BubbleHeavy->bLevelBox)
 				return;
 		}
-		SoapSpawned->SwitchEnd(OutHit.GetActor(), FName("Mesh"));
+		SoapSpawned->SwitchEnd(OutHit.GetActor(), FName("GrabPoint"));
 	}
 }
 
