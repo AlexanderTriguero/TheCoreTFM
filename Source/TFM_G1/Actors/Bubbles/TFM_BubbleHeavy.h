@@ -17,5 +17,7 @@ public:
 	ATFM_BubbleHeavy();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Collider")
-	UBoxComponent* BoxCollider = nullptr;
+		UBoxComponent* BoxCollider = nullptr;
+	UPROPERTY(EditAnywhere, Category = "Level Actor")
+		bool bLevelBox = false;
 };

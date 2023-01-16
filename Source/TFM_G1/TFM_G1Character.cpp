@@ -456,17 +456,17 @@ void ATFM_G1Character::LoadGameInstanceInfo() {
 	SoapOn = GameInstanceRef->GetSoapOn();
 	MagneticOn = GameInstanceRef->GetMagneticOn();
 	CheckWeapons();
-
-	if (ATFM_WeaponBase* NextWeapon = WeaponArray[WeaponIndex])
-	{
-		if (NextWeapon->isOnCharacter)
+	if (WeaponArray.Num()>0) {
+		if (ATFM_WeaponBase* NextWeapon = WeaponArray[WeaponIndex])
 		{
-			CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(true);
-			CurrentWeapon = NextWeapon;
-			CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
+			if (NextWeapon->isOnCharacter)
+			{
+				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(true);
+				CurrentWeapon = NextWeapon;
+				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
+			}
 		}
 	}
-
 }
 void ATFM_G1Character::SaveGameInstanceInfo() {
 	GameInstanceRef->SetCurrentWeaponIndex(WeaponIndex);

@@ -16,15 +16,17 @@ class TFM_G1_API ATFM_SwingingSoap : public AActor
 	
 public:	
 	ATFM_SwingingSoap();
-	UPROPERTY(BlueprintReadOnly)
-		AActor* AttachEnd = nullptr;
-	UPROPERTY(BlueprintReadOnly)
-		AActor* AttachStart = nullptr;
+	UPROPERTY(EditAnywhere)
+		bool bLevelSoap = false;
 	UPROPERTY(EditDefaultsOnly)
 		UCableComponent* Cable = nullptr;
 	UPROPERTY(EditDefaultsOnly)
 		UPhysicsConstraintComponent* Constraint = nullptr;
 	void SwitchEnd(AActor* newAttachEnd, FName ComponentName);
+	UPROPERTY(EditAnywhere)
+		AActor* AttachEnd = nullptr;
+	UPROPERTY(EditAnywhere)
+		AActor* AttachStart = nullptr;
 
 protected:
 	virtual void BeginPlay() override;

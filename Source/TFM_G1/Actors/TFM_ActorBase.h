@@ -18,6 +18,8 @@ public:
 	UStaticMeshComponent* GetMesh();
 	virtual void ApplyForce(FVector Direction,float Force, int PushAttracValue);
 	
+	UPROPERTY(EditAnywhere, Category = "Mobility")
+		bool bLevelAsset = false;
 
 	virtual void EnablePhysics();
 	virtual void DisablePhysics();
