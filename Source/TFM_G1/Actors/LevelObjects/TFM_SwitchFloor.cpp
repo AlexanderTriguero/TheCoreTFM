@@ -27,9 +27,21 @@ void ATFM_SwitchFloor::OnComponentBeginOverlapOnSwitch(UPrimitiveComponent* Over
 
 void ATFM_SwitchFloor::OnComponentEndOverlapOnSwitch(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
+	bool bPressingSwitch = false;
 	if (Cast<ATFM_ActorBase>(OtherActor) || Cast<ATFM_G1Character>(OtherActor))
 	{
-		DeactivateButton();
+		TSet<AActor*> OverlappingActors;
+		BoxCollider->GetOverlappingActors(OverlappingActors);
+
+		for (AActor* Actor: OverlappingActors) {
+			if ((Actor->IsA<ATFM_ActorBase>() || Actor->IsA<ATFM_G1Character>()) && !Actor->IsA<ATFM_SwitchFloor>()) {
+				bPressingSwitch = true;
+				break;
+			}
+		}
+		if (!bPressingSwitch) {
+			DeactivateButton();
+		}
 	}
 
 }

@@ -48,7 +48,10 @@ void ATFM_SkeletalActor::Activate()
 void ATFM_SkeletalActor::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	Deactivate();
+	if (bIsElectric) {
+
+		Deactivate();
+	}
 }
 
 bool ATFM_SkeletalActor::IsConnected()
