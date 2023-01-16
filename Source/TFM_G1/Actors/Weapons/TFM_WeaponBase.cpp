@@ -27,6 +27,7 @@ ATFM_WeaponBase::ATFM_WeaponBase()
 	PositionToSpawnBubble->SetupAttachment(ProjectilePosition);
 	PositionToSpawnBubble->SetVisibility(false);
 	PositionToSpawnBubble->SetGenerateOverlapEvents(true);
+	PositionToSpawnBubble->bReceivesDecals = false;
 }
 
 // Called when the game starts or when spawned 
