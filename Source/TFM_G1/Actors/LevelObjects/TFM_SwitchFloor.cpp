@@ -49,17 +49,19 @@ void ATFM_SwitchFloor::OnComponentEndOverlapOnSwitch(UPrimitiveComponent* Overla
 void ATFM_SwitchFloor::ActivateButton()
 {
 	IsActive = true;
-	if(RelatedActor)
+	if(RelatedActors.Num()>0)
 	{
-		RelatedActor->TryActivate();
+		for(ATFM_SkeletalActor* RelatedActor : RelatedActors)
+			RelatedActor->TryActivate();
 	}
 }
 
 void ATFM_SwitchFloor::DeactivateButton()
 {
 	IsActive = false;
-	if(RelatedActor)
+	if (RelatedActors.Num() > 0)
 	{
-		RelatedActor->Deactivate();
+		for (ATFM_SkeletalActor* RelatedActor : RelatedActors)
+			RelatedActor->Deactivate();
 	}
 }
