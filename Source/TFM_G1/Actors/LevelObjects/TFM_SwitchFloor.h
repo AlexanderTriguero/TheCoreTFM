@@ -24,7 +24,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Collider")
 		bool IsActive;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Related Objects")
-		ATFM_SkeletalActor* RelatedActor = nullptr;
+		TArray<ATFM_SkeletalActor*> RelatedActors;
 	UFUNCTION()
 		void OnComponentBeginOverlapOnSwitch(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	UFUNCTION()

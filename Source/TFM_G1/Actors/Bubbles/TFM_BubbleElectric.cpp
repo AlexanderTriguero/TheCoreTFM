@@ -2,9 +2,9 @@
 
 
 #include "Actors/Bubbles/TFM_BubbleElectric.h"
-
 #include "CableComponent.h"
 #include "Actors/TFM_SkeletalActor.h"
+#include "Actors/LevelObjects/TFM_PowerSource.h"
 
 ATFM_BubbleElectric::ATFM_BubbleElectric() : Super()
 {
@@ -32,6 +32,8 @@ void ATFM_BubbleElectric::Connect(ATFM_ActorBase* ConnectTo)
 void ATFM_BubbleElectric::Disconnect()
 {
 	//TODO: Show Animation for disconnection
+	DisconnectVisual();
+	bFirstToSource = false;
 	bIsConnected = false;
 	Mesh->SetMaterial(0, DisconnectedMaterial);
 }
@@ -44,10 +46,19 @@ void ATFM_BubbleElectric::Tick(float DeltaSeconds)
 }
 
 
-void ATFM_BubbleElectric::ConnectVisual(AActor* bubbleToConnectTo)
+void ATFM_BubbleElectric::ConnectToSource(ATFM_PowerSource* ExternalSource, bool SetToConnect)
+{
+	bIsConnectedToSource = SetToConnect;
+	if (SetToConnect)
+		PowerSource = ExternalSource;
+	else
+		DisconnectVisual();
+}
+
+void ATFM_BubbleElectric::ConnectVisual(AActor* actorToConnectTo)
 {
 	ConductionVisual->SetHiddenInGame(false);
-	AActor* AttachEnd = bubbleToConnectTo;
+	AActor* AttachEnd = actorToConnectTo;
 	ConductionVisual->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
 	ConductionVisual->CableLength = (AttachEnd->GetActorLocation() - GetActorLocation()).Size() - 100.f;
 	ConductionVisual->SetAttachEndTo(AttachEnd, FName("Mesh"));
@@ -79,18 +90,22 @@ void ATFM_BubbleElectric::CheckConnection()
 				}
 				if (!bIsConnected)
 				{
-					if (ElectricBubble->bIsConnected)
+					if (ElectricBubble->bIsConnected && ElectricBubble->BubbleConnection != this)
+						BubbleConnection = ElectricBubble;
 						Connect(ElectricBubble);
 				}
 			}
 		}
-		ConnectVisual(ConnectedBubbles[0]);
-	} else
-	{
-		DisconnectVisual();
-	}
+		if(!bFirstToSource && BubbleConnection)
+			ConnectVisual(BubbleConnection);
+			
+	} 
 	if (bIsConnectedToSource)
+	{
+		ConnectVisual(PowerSource);
+		bFirstToSource = true;
 		return;
+	}
 	for (ATFM_BubbleElectric* Bubble : ConnectedBubbles)
 	{
 		if (Bubble->bIsConnectedToSource)

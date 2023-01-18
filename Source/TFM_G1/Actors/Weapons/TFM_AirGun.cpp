@@ -6,6 +6,7 @@
 #include "Actors/TFM_ActorBase.h"
 #include "Actors/Bubbles/TFM_BubbleAnchor.h"
 #include "Actors/Bubbles/TFM_BubbleElectric.h"
+#include "Actors/Bubbles/TFM_BubbleHeavy.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -45,6 +46,11 @@ void ATFM_AirGun::Tick(float DeltaTime)
 
 		for (AActor* OtherActor : OverlappingActors)
 		{
+			if (ATFM_BubbleHeavy* BubbleHeavy = Cast<ATFM_BubbleHeavy>(OtherActor))
+			{
+				if (BubbleHeavy->bLevelBox)
+					continue;
+			}
 			ATFM_ActorBase* ActorBase = Cast<ATFM_ActorBase>(OtherActor);
 			if (ActorBase && ActorBase->IsMovable())
 			{

@@ -10,6 +10,7 @@
 #include "PhysicsEngine/PhysicsConstraintComponent.h"
 
 
+
 ATFM_WeaponBase::ATFM_WeaponBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -64,6 +65,17 @@ void ATFM_WeaponBase::Tick(float DeltaTime)
 		}
 	}
 	
+
+	for (int i = 0; i < SpawnedBubbles.Num(); i++)
+	{
+		if (SpawnedBubbles[i]->GetDistanceTo(this) >= BubbleDestroyDistance) 
+		{
+			ATFM_BubbleBase* ArrayBubble = Cast<ATFM_BubbleBase>(SpawnedBubbles[i]);
+			SpawnedBubbles.Remove(ArrayBubble);
+			ArrayBubble->Destroy();
+		}
+	}
+
 }
 
 
@@ -117,7 +129,7 @@ void ATFM_WeaponBase::ShootSecondary()
 	FHitResult OutHit;
 	UKismetSystemLibrary::LineTraceSingle(this, Start, End, TraceTypeQuery1, true, {}, EDrawDebugTrace::ForDuration, OutHit, true);
 	ATFM_BubbleBase* BubbleBase = Cast<ATFM_BubbleBase>(OutHit.GetActor());
-	if (BubbleBase)
+	if (BubbleBase && !BubbleBase->bLevelAsset)
 	{
 		TArray<AActor*> FoundSwingingSoaps;
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATFM_SwingingSoap::StaticClass(), FoundSwingingSoaps);
@@ -133,6 +145,12 @@ void ATFM_WeaponBase::ShootSecondary()
 		}
 		SpawnedBubbles.Remove(BubbleBase);
 		BubbleBase->Destroy();
+
+		/*if (BubbleBase->canBeDestroyed)
+		{
+			BubbleBase->Destroy();
+		}
+		*/
 	}
 
 }

@@ -58,6 +58,9 @@ protected:
 	
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 		int MaxSpawnedBubbles=4;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+		int BubbleDestroyDistance = 1500;
 	virtual void BeginPlay() override;
 	virtual void CheckIfCanSpawnBubble();
 
