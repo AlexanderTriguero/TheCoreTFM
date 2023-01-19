@@ -9,7 +9,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "PhysicsEngine/PhysicsConstraintComponent.h"
 
-void ATFM_SwingingSoapWeapon::Shoot()
+void ATFM_SwingingSoapWeapon::Shoot(ATFM_G1Character* CurrentCharacter)
 {
 	FHitResult OutHit;
 	const FVector EndLocation = ProjectilePosition->GetComponentLocation() + ProjectilePosition->GetForwardVector() * 10000.f;
@@ -36,7 +36,7 @@ void ATFM_SwingingSoapWeapon::Shoot()
 	}
 }
 
-void ATFM_SwingingSoapWeapon::ShootSecondary()
+void ATFM_SwingingSoapWeapon::ShootSecondary(ATFM_G1Character* CurrentCharacter)
 {
 	if(SoapSpawned)
 	{

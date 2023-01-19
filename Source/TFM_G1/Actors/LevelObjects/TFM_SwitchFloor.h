@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Actors/TFM_ActorBase.h"
+#include "Engine/Light.h"
 #include "TFM_SwitchFloor.generated.h"
 
 class ATFM_SkeletalActor;
@@ -25,6 +26,8 @@ public:
 		bool IsActive;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Related Objects")
 		TArray<ATFM_SkeletalActor*> RelatedActors;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Lights")
+		ALight* LightIndicator = nullptr;
 	UFUNCTION()
 		void OnComponentBeginOverlapOnSwitch(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	UFUNCTION()

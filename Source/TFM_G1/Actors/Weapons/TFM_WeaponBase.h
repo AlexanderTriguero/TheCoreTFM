@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "TFM_WeaponBase.generated.h"
 
+class ATFM_G1Character;
 class ATFM_BubbleBase;
 class USphereComponent;
 class UStaticMeshComponent;
@@ -45,16 +46,14 @@ public:
 	ATFM_WeaponBase();
 	class USkeletalMeshComponent* GetWeaponMesh() { return WeaponMesh; }
 	virtual void Tick(float DeltaTime) override;
-	virtual void Shoot();
-	virtual void StopShooting();
-	virtual void ShootSecondary();
+	virtual void Shoot(ATFM_G1Character* CurrentCharacter);
+	virtual void StopShooting(ATFM_G1Character* CurrentCharacter);
+	virtual void ShootSecondary(ATFM_G1Character* CurrentCharacter);
 	virtual void StopShootingSecondary();
 	virtual void Reload();
 	virtual void HideSpawnPreview();
 
 protected:
-	UPROPERTY()
-		TArray<ATFM_BubbleBase*> SpawnedBubbles;
 	
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 		int MaxSpawnedBubbles=4;
