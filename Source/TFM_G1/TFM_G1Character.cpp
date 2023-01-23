@@ -285,6 +285,7 @@ void ATFM_G1Character::CheckWeapons()
 			}
 			GameInstanceRef->SetHeavyOn(HeavyOn);
 			HeavyOn = false;
+			bHeavyEquiped = true;
 		}
 
 	}
@@ -306,6 +307,7 @@ void ATFM_G1Character::CheckWeapons()
 
 			GameInstanceRef->SetAnchorOn(AnchorOn);
 			AnchorOn = false;
+			bAnchorEquiped = true;
 		}
 
 	}
@@ -327,6 +329,7 @@ void ATFM_G1Character::CheckWeapons()
 
 			GameInstanceRef->SetAirOn(AirOn);
 			AirOn = false;
+			bAirEquiped = true;
 		}
 
 	}
@@ -347,6 +350,7 @@ void ATFM_G1Character::CheckWeapons()
 			}
 			GameInstanceRef->SetSoapOn(SoapOn);
 			SoapOn = false;
+			bSoapEquiped = true;
 		}
 
 	}
@@ -368,6 +372,7 @@ void ATFM_G1Character::CheckWeapons()
 			}
 			GameInstanceRef->SetMagneticOn(MagneticOn);
 			MagneticOn = false;
+			bMagneticEquiped = true;
 		}
 
 	}
@@ -471,3 +476,25 @@ void ATFM_G1Character::LoadGameInstanceInfo() {
 void ATFM_G1Character::SaveGameInstanceInfo() {
 	GameInstanceRef->SetCurrentWeaponIndex(WeaponIndex);
 }
+
+bool ATFM_G1Character::IsHeavyEquiped() const
+{
+	return bHeavyEquiped;
+}
+bool ATFM_G1Character::IsAnchorEquiped() const
+{
+	return bAnchorEquiped;
+}
+bool ATFM_G1Character::IsAirEquiped() const
+{
+	return bAirEquiped;
+}
+bool ATFM_G1Character::IsSoapEquiped() const
+{
+	return bSoapEquiped;
+}
+bool ATFM_G1Character::IsMagneticEquiped() const
+{
+	return bMagneticEquiped;
+}
+
