@@ -96,7 +96,7 @@ void ATFM_WeaponBase::Shoot(ATFM_G1Character* CurrentCharacter)
 
 void ATFM_WeaponBase::StopShooting(ATFM_G1Character* CurrentCharacter)
 {
-	if (CurrentCharacter->SpawnedBubbles.Find(BubbleToSpawn)->Num() < MaxSpawnedBubbles)
+	if (CurrentCharacter->SpawnedBubbles.Find(BubbleToSpawn) && CurrentCharacter->SpawnedBubbles.Find(BubbleToSpawn)->Num() < MaxSpawnedBubbles)
 	{
 		FActorSpawnParameters Params;
 		Params.Owner = this;
