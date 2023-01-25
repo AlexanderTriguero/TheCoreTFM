@@ -5,6 +5,8 @@
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "TFM_G1Character.h"
+#include "Actors/SwingingSoap/TFM_SwingingSoap.h"
+#include "PhysicsEngine/PhysicsConstraintComponent.h"
 
 
 // Sets default values
@@ -31,6 +33,15 @@ void ATFM_EndOfLevel::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedCom
 	if (ATFM_G1Character* Character= Cast<ATFM_G1Character>(OtherActor)) {
 		if (LevelToLoad!="") {
 			Character->SaveGameInstanceInfo();
+			TArray<AActor*> FoundSwingingSoaps;
+			UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATFM_SwingingSoap::StaticClass(), FoundSwingingSoaps);
+			for (AActor* Actor : FoundSwingingSoaps)
+			{
+				ATFM_SwingingSoap* SwingingSoap = Cast<ATFM_SwingingSoap>(Actor);
+				SwingingSoap->Constraint->BreakConstraint();
+				SwingingSoap->Constraint->TermComponentConstraint();
+				SwingingSoap->Destroy();
+			}
 			UGameplayStatics::OpenLevel(this,LevelToLoad);
 		}
 	}

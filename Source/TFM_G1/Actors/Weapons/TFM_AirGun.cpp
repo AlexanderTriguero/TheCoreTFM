@@ -74,7 +74,7 @@ void ATFM_AirGun::Tick(float DeltaTime)
 	}
 }
 
-void ATFM_AirGun::Shoot()
+void ATFM_AirGun::Shoot(ATFM_G1Character* CurrentCharacter)
 {
 	if (!bIsShooting)
 	{
@@ -83,11 +83,11 @@ void ATFM_AirGun::Shoot()
 	}
 }
 
-void ATFM_AirGun::StopShooting()
+void ATFM_AirGun::StopShooting(ATFM_G1Character* CurrentCharacter)
 {
 	bIsShooting = false;
 }
-void ATFM_AirGun::ShootSecondary()
+void ATFM_AirGun::ShootSecondary(ATFM_G1Character* CurrentCharacter)
 {
 	if (!bIsShooting)
 	{

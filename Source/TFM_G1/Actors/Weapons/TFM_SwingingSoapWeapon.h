@@ -16,8 +16,8 @@ class TFM_G1_API ATFM_SwingingSoapWeapon : public ATFM_WeaponBase
 	GENERATED_BODY()
 
 public:
-	virtual void Shoot() override;
-	virtual void ShootSecondary() override;
+	virtual void Shoot(ATFM_G1Character* CurrentCharacter) override;
+	virtual void ShootSecondary(ATFM_G1Character* CurrentCharacter) override;
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<ATFM_BubbleBase> BubbleToGrabOnto = nullptr;
 	UPROPERTY(EditAnywhere)

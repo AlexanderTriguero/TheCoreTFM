@@ -49,6 +49,8 @@ void ATFM_SwitchFloor::OnComponentEndOverlapOnSwitch(UPrimitiveComponent* Overla
 void ATFM_SwitchFloor::ActivateButton()
 {
 	IsActive = true;
+	if (LightIndicator)
+		LightIndicator->SetEnabled(true);
 	if(RelatedActors.Num()>0)
 	{
 		for(ATFM_SkeletalActor* RelatedActor : RelatedActors)
@@ -59,6 +61,8 @@ void ATFM_SwitchFloor::ActivateButton()
 void ATFM_SwitchFloor::DeactivateButton()
 {
 	IsActive = false;
+	if (LightIndicator)
+		LightIndicator->SetEnabled(false);
 	if (RelatedActors.Num() > 0)
 	{
 		for (ATFM_SkeletalActor* RelatedActor : RelatedActors)

@@ -1,4 +1,6 @@
 #include "TFM_WeaponBase.h"
+
+#include "TFM_G1Character.h"
 #include "Actors/Bubbles/TFM_BubbleBase.h"
 #include "Actors/SwingingSoap/TFM_SwingingSoap.h"
 #include "Materials/MaterialInterface.h"
@@ -45,12 +47,12 @@ void ATFM_WeaponBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (bSpawningBubble) {		
+	if (bSpawningBubble) {
 		FVector SpawnPosition = ProjectilePosition->GetComponentLocation();
 		FVector Start = ((ProjectilePosition->GetRightVector() * -100.f) + SpawnPosition);
 		FVector End = ((ProjectilePosition->GetRightVector() * 100.f) + SpawnPosition);
 		FHitResult OutHit;
-		
+
 		CheckIfCanSpawnBubble();
 
 		UKismetSystemLibrary::LineTraceSingle(this, Start, End, TraceTypeQuery1, true, {}, EDrawDebugTrace::ForDuration, OutHit, true);
@@ -64,32 +66,37 @@ void ATFM_WeaponBase::Tick(float DeltaTime)
 			PositionToSpawnBubble->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
 		}
 	}
-	
 
+	/*
 	for (int i = 0; i < SpawnedBubbles.Num(); i++)
 	{
-		if (SpawnedBubbles[i]->GetDistanceTo(this) >= BubbleDestroyDistance) 
+		if (SpawnedBubbles[i]->GetDistanceTo(this) >= BubbleDestroyDistance)
 		{
 			ATFM_BubbleBase* ArrayBubble = Cast<ATFM_BubbleBase>(SpawnedBubbles[i]);
 			SpawnedBubbles.Remove(ArrayBubble);
 			ArrayBubble->Destroy();
 		}
-	}
+	}*/
 
 }
 
 
-void ATFM_WeaponBase::Shoot()
+void ATFM_WeaponBase::Shoot(ATFM_G1Character* CurrentCharacter)
 {
-	if (PositionToSpawnBubble && SpawnedBubbles.Num() < MaxSpawnedBubbles) {
+	if(!CurrentCharacter->SpawnedBubbles.Find(BubbleToSpawn))
+	{
+		TArray<ATFM_BubbleBase*> SpawnedBubbleList;
+		CurrentCharacter->SpawnedBubbles.Add(BubbleToSpawn, SpawnedBubbleList);
+	}
+	if (PositionToSpawnBubble && CurrentCharacter->SpawnedBubbles.Find(BubbleToSpawn)->Num() < MaxSpawnedBubbles) {
 		PositionToSpawnBubble->SetVisibility(true);
 		bSpawningBubble = true;
 	}
 }
 
-void ATFM_WeaponBase::StopShooting()
+void ATFM_WeaponBase::StopShooting(ATFM_G1Character* CurrentCharacter)
 {
-	if (SpawnedBubbles.Num() < MaxSpawnedBubbles)
+	if (CurrentCharacter->SpawnedBubbles.Find(BubbleToSpawn) && CurrentCharacter->SpawnedBubbles.Find(BubbleToSpawn)->Num() < MaxSpawnedBubbles)
 	{
 		FActorSpawnParameters Params;
 		Params.Owner = this;
@@ -105,14 +112,14 @@ void ATFM_WeaponBase::StopShooting()
 
 			SpawnedBubble = GetWorld()->SpawnActor<ATFM_BubbleBase>(BubbleToSpawn, ProjectileTransform, Params);
 			if (SpawnedBubble) {
-				SpawnedBubbles.Add(SpawnedBubble);
+				CurrentCharacter->SpawnedBubbles.Find(BubbleToSpawn)->Add(SpawnedBubble);
 			}
 		}
 	}
 	HideSpawnPreview();
 }
 
-void ATFM_WeaponBase::ShootSecondary()
+void ATFM_WeaponBase::ShootSecondary(ATFM_G1Character* CurrentCharacter)
 {
 	//Provisional, para poder explotar las HeavyBubbles
 	/*for (ATFM_BubbleBase* CurrentBubble : SpawnedBubbles)
@@ -143,7 +150,7 @@ void ATFM_WeaponBase::ShootSecondary()
 				SwingingSoap->Destroy();
 			}
 		}
-		SpawnedBubbles.Remove(BubbleBase);
+		CurrentCharacter->SpawnedBubbles.Find(OutHit.GetActor()->GetClass())->Remove(BubbleBase);
 		BubbleBase->Destroy();
 
 		/*if (BubbleBase->canBeDestroyed)

@@ -16,9 +16,9 @@ public:
 	ATFM_AirGun();
 	virtual void Tick(float DeltaTime) override;
 	virtual void BeginPlay() override;
-	virtual void Shoot() override;
-	virtual void StopShooting() override;
-	virtual void ShootSecondary() override;
+	virtual void Shoot(ATFM_G1Character* CurrentCharacter) override;
+	virtual void StopShooting(ATFM_G1Character* CurrentCharacter) override;
+	virtual void ShootSecondary(ATFM_G1Character* CurrentCharacter) override;
 	virtual void StopShootingSecondary() override;
 
 

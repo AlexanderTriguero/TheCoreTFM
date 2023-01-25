@@ -197,7 +197,7 @@ void ATFM_G1Character::OnFire()
 	if (!CurrentWeapon->isOnCharacter)
 		return;
 
-	CurrentWeapon->Shoot();
+	CurrentWeapon->Shoot(this);
 }
 
 void ATFM_G1Character::OnFireStop()
@@ -205,7 +205,7 @@ void ATFM_G1Character::OnFireStop()
 	if (!CurrentWeapon->isOnCharacter)
 		return;
 
-	CurrentWeapon->StopShooting();
+	CurrentWeapon->StopShooting(this);
 }
 
 void ATFM_G1Character::OnFireSecondary()
@@ -213,7 +213,7 @@ void ATFM_G1Character::OnFireSecondary()
 	if (!CurrentWeapon->isOnCharacter)
 		return;
 
-	CurrentWeapon->ShootSecondary();
+	CurrentWeapon->ShootSecondary(this);
 }
 
 void ATFM_G1Character::OnFireStopSecondary()

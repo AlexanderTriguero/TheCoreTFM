@@ -17,6 +17,7 @@ class UAnimMontage;
 class USoundBase;
 class UTFM_GameInstance;
 class ATFM_WeaponBase;
+class ATFM_BubbleBase;
 
 UCLASS(config=Game)
 class ATFM_G1Character : public ACharacter
@@ -80,6 +81,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
 		TSubclassOf<class ATFM_WeaponBase> MagneticGun;
 
+	TMap<TSubclassOf<ATFM_BubbleBase>, TArray<ATFM_BubbleBase*>> SpawnedBubbles;
 
 	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
 		class ATFM_WeaponBase* CurrentWeapon;
