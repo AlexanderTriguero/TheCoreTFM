@@ -3,6 +3,7 @@
 #include "TFM_G1Character.h"
 #include "TFM_G1Projectile.h"
 #include "Animation/AnimInstance.h"
+#include "Blueprint/UserWidget.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
@@ -174,6 +175,9 @@ void ATFM_G1Character::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 	PlayerInputComponent->BindAction("SwitchNextWeapon", IE_Pressed, this, &ATFM_G1Character::SwitchNextWeapon);
 	PlayerInputComponent->BindAction("SwitchPreviousWeapon", IE_Pressed, this, &ATFM_G1Character::SwitchPreviousWeapon);
 
+	// Bind pause game event
+	PlayerInputComponent->BindAction("PauseGame", IE_Released, this, &ATFM_G1Character::PauseGame);
+
 	// Enable touchscreen input
 	EnableTouchscreenMovement(PlayerInputComponent);
 
@@ -220,6 +224,29 @@ void ATFM_G1Character::OnFireStopSecondary()
 {
 	CurrentWeapon->StopShootingSecondary();
 }
+
+void ATFM_G1Character::PauseGame()
+{
+	if (PauseWidgetClass)
+	{
+		if (!PauseWidget)
+		{
+			PauseWidget = CreateWidget(GetWorld(), PauseWidgetClass);
+			PauseWidget->AddToViewport();
+		}
+		else
+		{
+			PauseWidget->SetVisibility(ESlateVisibility::Visible);
+		}
+		APlayerController* PC = GetWorld()->GetFirstPlayerController();
+		PC->bShowMouseCursor = true;
+		PC->bEnableClickEvents = true;
+		PC->bEnableMouseOverEvents = true;
+		PC->Pause();
+	}
+	
+}
+
 
 void ATFM_G1Character::SwitchNextWeapon()
 {
@@ -268,7 +295,7 @@ void ATFM_G1Character::SwitchPreviousWeapon()
 
 void ATFM_G1Character::CheckWeapons()
 {
-	if (HeavyOn)
+	if (HeavyOn && !bHeavyEquiped)
 	{
 		if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(HeavyGun))
 		{
@@ -283,13 +310,12 @@ void ATFM_G1Character::CheckWeapons()
 				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
 				Mesh1P->SetHiddenInGame(false);
 			}
-			GameInstanceRef->SetHeavyOn(HeavyOn);
 			HeavyOn = false;
 			bHeavyEquiped = true;
 		}
 
 	}
-	if (AnchorOn)
+	if (AnchorOn && !bAnchorEquiped)
 	{
 		if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(AnchorGun))
 		{
@@ -305,13 +331,12 @@ void ATFM_G1Character::CheckWeapons()
 				Mesh1P->SetHiddenInGame(false);
 			}
 
-			GameInstanceRef->SetAnchorOn(AnchorOn);
 			AnchorOn = false;
 			bAnchorEquiped = true;
 		}
 
 	}
-	if (AirOn)
+	if (AirOn && !bAirEquiped)
 	{
 		if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(AirGun))
 		{
@@ -327,13 +352,12 @@ void ATFM_G1Character::CheckWeapons()
 				Mesh1P->SetHiddenInGame(false);
 			}
 
-			GameInstanceRef->SetAirOn(AirOn);
 			AirOn = false;
 			bAirEquiped = true;
 		}
 
 	}
-	if (SoapOn)
+	if (SoapOn && !bSoapEquiped)
 	{
 		if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(SoapGun))
 		{
@@ -348,14 +372,13 @@ void ATFM_G1Character::CheckWeapons()
 				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
 				Mesh1P->SetHiddenInGame(false);
 			}
-			GameInstanceRef->SetSoapOn(SoapOn);
 			SoapOn = false;
 			bSoapEquiped = true;
 		}
 
 	}
 
-	if (MagneticOn)
+	if (MagneticOn && !bMagneticEquiped)
 	{
 		if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(MagneticGun))
 		{
@@ -370,7 +393,6 @@ void ATFM_G1Character::CheckWeapons()
 				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
 				Mesh1P->SetHiddenInGame(false);
 			}
-			GameInstanceRef->SetMagneticOn(MagneticOn);
 			MagneticOn = false;
 			bMagneticEquiped = true;
 		}
@@ -475,6 +497,13 @@ void ATFM_G1Character::LoadGameInstanceInfo() {
 }
 void ATFM_G1Character::SaveGameInstanceInfo() {
 	GameInstanceRef->SetCurrentWeaponIndex(WeaponIndex);
+	GameInstanceRef->SetHeavyOn(bHeavyEquiped);
+	GameInstanceRef->SetAnchorOn(bAnchorEquiped);
+	GameInstanceRef->SetAirOn(bAirEquiped);
+	GameInstanceRef->SetSoapOn(bSoapEquiped);
+	GameInstanceRef->SetMagneticOn(bMagneticEquiped);
+
+
 }
 
 bool ATFM_G1Character::IsHeavyEquiped() const
