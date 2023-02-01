@@ -161,8 +161,19 @@ public:
 	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
 	/** Returns FirstPersonCameraComponent subobject **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
-
 	virtual void Tick(float DeltaTime) override;
 
+	bool IsHeavyEquiped() const;
+	bool IsAnchorEquiped() const;
+	bool IsAirEquiped() const;
+	bool IsSoapEquiped() const;
+	bool IsMagneticEquiped() const;
+
+private:
+	bool bHeavyEquiped = false;
+	bool bAnchorEquiped = false;
+	bool bAirEquiped = false;
+	bool bSoapEquiped = false;
+	bool bMagneticEquiped = false;
 };
 
