@@ -21,6 +21,8 @@ public:
 		float ConnectionRadius;
 	UPROPERTY(EditDefaultsOnly)
 		USphereComponent* ConnectionSphere = nullptr;
+	UPROPERTY(EditAnywhere)
+		USceneComponent* ConnectionPoint = nullptr;
 	UFUNCTION()
 		void OnComponentEndOverlapOnPowerSource(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 	virtual void BeginPlay() override;

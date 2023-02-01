@@ -59,9 +59,16 @@ void ATFM_BubbleElectric::ConnectVisual(AActor* actorToConnectTo)
 {
 	ConductionVisual->SetHiddenInGame(false);
 	AActor* AttachEnd = actorToConnectTo;
+	FName ComponentName;
+	if (ATFM_PowerSource* PowerSourceConnection = Cast<ATFM_PowerSource>(AttachEnd))
+	{
+		ComponentName = FName("ConnectionPoint");
+	}
+	else
+		ComponentName = FName("Mesh");
 	ConductionVisual->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
 	ConductionVisual->CableLength = (AttachEnd->GetActorLocation() - GetActorLocation()).Size() - 100.f;
-	ConductionVisual->SetAttachEndTo(AttachEnd, FName("Mesh"));
+	ConductionVisual->SetAttachEndTo(AttachEnd, ComponentName);
 }
 
 void ATFM_BubbleElectric::DisconnectVisual()
