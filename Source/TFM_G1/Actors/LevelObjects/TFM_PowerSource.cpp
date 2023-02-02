@@ -12,6 +12,8 @@ ATFM_PowerSource::ATFM_PowerSource()
 	ConnectionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Connection Radius"));
 	ConnectionSphere->SetSphereRadius(ConnectionRadius);
 	ConnectionSphere->SetupAttachment(Mesh);
+	ConnectionPoint = CreateDefaultSubobject<USceneComponent>(TEXT("Connection Point"));
+	ConnectionPoint->SetupAttachment(Mesh);
 	
 }
 
