@@ -38,7 +38,7 @@ void ATFM_WeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
 	WeaponMesh->SetMobility(EComponentMobility::Movable);
-	
+
 
 }
 
@@ -83,7 +83,7 @@ void ATFM_WeaponBase::Tick(float DeltaTime)
 
 void ATFM_WeaponBase::Shoot(ATFM_G1Character* CurrentCharacter)
 {
-	if(!CurrentCharacter->SpawnedBubbles.Find(BubbleToSpawn))
+	if (!CurrentCharacter->SpawnedBubbles.Find(BubbleToSpawn))
 	{
 		TArray<ATFM_BubbleBase*> SpawnedBubbleList;
 		CurrentCharacter->SpawnedBubbles.Add(BubbleToSpawn, SpawnedBubbleList);
