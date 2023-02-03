@@ -12,6 +12,7 @@ class USphereComponent;
 class UStaticMeshComponent;
 class UMaterialInterface;
 
+class UTFM_WeaponWidget;
 UCLASS()
 
 class TFM_G1_API ATFM_WeaponBase : public AActor
@@ -52,6 +53,9 @@ public:
 	virtual void StopShootingSecondary();
 	virtual void Reload();
 	virtual void HideSpawnPreview();
+	virtual void HideWeaponWidget();
+	virtual void ShowWeaponWidget();
+	virtual UTFM_WeaponWidget* GetWidget();
 
 protected:
 	
@@ -60,6 +64,12 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 		int BubbleDestroyDistance = 1500;
+
+	UPROPERTY(EditAnywhere, Category = "Widget")
+		TSubclassOf<UTFM_WeaponWidget> WeaponWidgetClass = nullptr;
+	UPROPERTY()
+		UTFM_WeaponWidget* WeaponWidget = nullptr;
+
 	virtual void BeginPlay() override;
 	virtual void CheckIfCanSpawnBubble();
 
