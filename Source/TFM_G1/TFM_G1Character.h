@@ -18,6 +18,7 @@ class USoundBase;
 class UTFM_GameInstance;
 class ATFM_WeaponBase;
 class ATFM_BubbleBase;
+class UUserWidget;
 
 UCLASS(config=Game)
 class ATFM_G1Character : public ACharacter
@@ -100,6 +101,12 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
 		bool MagneticOn;
 
+	UPROPERTY(EditAnywhere, Category = "Pause")
+		TSubclassOf<UUserWidget> PauseWidgetClass = nullptr;
+
+	UPROPERTY()
+		UUserWidget* PauseWidget = nullptr;
+
 protected:
 	void SwitchNextWeapon();
 	void SwitchPreviousWeapon();
@@ -116,6 +123,9 @@ protected:
 
 	/** Fires Stops Secondary. */
 	void OnFireStopSecondary();
+
+	/** Pause the game and show pause menu*/
+	void PauseGame();
 
 	/** Resets HMD orientation and position in VR. */
 	void OnResetVR();
@@ -175,5 +185,6 @@ private:
 	bool bAirEquiped = false;
 	bool bSoapEquiped = false;
 	bool bMagneticEquiped = false;
+
 };
 

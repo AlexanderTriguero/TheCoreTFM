@@ -3,6 +3,7 @@
 #include "TFM_G1Character.h"
 #include "Actors/Bubbles/TFM_BubbleBase.h"
 #include "Actors/SwingingSoap/TFM_SwingingSoap.h"
+#include "Blueprint/UserWidget.h"
 #include "Materials/MaterialInterface.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Components/SphereComponent.h"
@@ -10,6 +11,8 @@
 #include "Components/PrimitiveComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "PhysicsEngine/PhysicsConstraintComponent.h"
+#include "Widget/TFM_WeaponWidget.h"
+
 
 
 
@@ -38,8 +41,12 @@ void ATFM_WeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
 	WeaponMesh->SetMobility(EComponentMobility::Movable);
-	
 
+	if (WeaponWidgetClass) {
+		WeaponWidget = CreateWidget<UTFM_WeaponWidget>(GetWorld(), WeaponWidgetClass);
+		WeaponWidget->AddToViewport();
+		WeaponWidget->SetVisibility(ESlateVisibility::Hidden);
+	}
 }
 
 
@@ -83,7 +90,7 @@ void ATFM_WeaponBase::Tick(float DeltaTime)
 
 void ATFM_WeaponBase::Shoot(ATFM_G1Character* CurrentCharacter)
 {
-	if(!CurrentCharacter->SpawnedBubbles.Find(BubbleToSpawn))
+	if (!CurrentCharacter->SpawnedBubbles.Find(BubbleToSpawn))
 	{
 		TArray<ATFM_BubbleBase*> SpawnedBubbleList;
 		CurrentCharacter->SpawnedBubbles.Add(BubbleToSpawn, SpawnedBubbleList);
@@ -113,6 +120,7 @@ void ATFM_WeaponBase::StopShooting(ATFM_G1Character* CurrentCharacter)
 			SpawnedBubble = GetWorld()->SpawnActor<ATFM_BubbleBase>(BubbleToSpawn, ProjectileTransform, Params);
 			if (SpawnedBubble) {
 				CurrentCharacter->SpawnedBubbles.Find(BubbleToSpawn)->Add(SpawnedBubble);
+				WeaponWidget->CreateBubble();
 			}
 		}
 	}
@@ -151,6 +159,10 @@ void ATFM_WeaponBase::ShootSecondary(ATFM_G1Character* CurrentCharacter)
 			}
 		}
 		CurrentCharacter->SpawnedBubbles.Find(OutHit.GetActor()->GetClass())->Remove(BubbleBase);
+		if (ATFM_WeaponBase* Weapon = Cast<ATFM_WeaponBase>(Bubble->GetOwner()))
+		{
+			Weapon->GetWidget()->DeleteBubble();
+		}
 		BubbleBase->Destroy();
 
 		/*if (BubbleBase->canBeDestroyed)
@@ -201,3 +213,20 @@ void ATFM_WeaponBase::HideSpawnPreview()
 	}
 }
 
+void ATFM_WeaponBase::HideWeaponWidget()
+{
+	if (WeaponWidget) {
+		WeaponWidget->SetVisibility(ESlateVisibility::Hidden);
+	}
+}
+void ATFM_WeaponBase::ShowWeaponWidget()
+{
+	if (WeaponWidget) {
+		WeaponWidget->SetVisibility(ESlateVisibility::Visible);
+	}
+}
+
+UTFM_WeaponWidget* ATFM_WeaponBase::GetWidget()
+{
+	return WeaponWidget;
+}

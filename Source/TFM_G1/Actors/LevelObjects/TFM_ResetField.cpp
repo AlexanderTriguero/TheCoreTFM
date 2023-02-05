@@ -3,6 +3,7 @@
 
 #include "Actors/LevelObjects/TFM_ResetField.h"
 
+#include "TFM_G1Character.h"
 #include "Actors/Bubbles/TFM_BubbleBase.h"
 #include "Components/BoxComponent.h"
 
@@ -18,12 +19,16 @@ void ATFM_ResetField::OnComponentEndOverlapOnField(UPrimitiveComponent* Overlapp
 {
 	TArray<AActor*> OverlappingActors;
 	ResetArea->GetOverlappingActors(OverlappingActors);
-	for (AActor* Actor : OverlappingActors)
+	if(ATFM_G1Character* GameCharacter = Cast<ATFM_G1Character>(OtherActor))
 	{
-		if (ATFM_BubbleBase* Bubble = Cast<ATFM_BubbleBase>(Actor))
+		for (AActor* Actor : OverlappingActors)
 		{
-			if (!Bubble->bLevelAsset)
-				Bubble->Destroy();
+			if (ATFM_BubbleBase* Bubble = Cast<ATFM_BubbleBase>(Actor))
+			{
+				if (!Bubble->bLevelAsset)
+					GameCharacter->SpawnedBubbles.Find(Bubble->GetClass())->Remove(Bubble);
+					Bubble->Destroy();
+			}
 		}
 	}
 }
