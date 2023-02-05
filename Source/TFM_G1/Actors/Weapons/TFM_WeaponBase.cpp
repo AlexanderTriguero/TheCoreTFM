@@ -159,7 +159,7 @@ void ATFM_WeaponBase::ShootSecondary(ATFM_G1Character* CurrentCharacter)
 			}
 		}
 		CurrentCharacter->SpawnedBubbles.Find(OutHit.GetActor()->GetClass())->Remove(BubbleBase);
-		if (ATFM_WeaponBase* Weapon = Cast<ATFM_WeaponBase>(Bubble->GetOwner()))
+		if (ATFM_WeaponBase* Weapon = Cast<ATFM_WeaponBase>(BubbleBase->GetOwner()))
 		{
 			Weapon->GetWidget()->DeleteBubble();
 		}
