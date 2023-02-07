@@ -23,5 +23,6 @@ void ATFM_MenuGameMode::BeginPlay()
 		PC->bShowMouseCursor = true;
 		PC->bEnableClickEvents = true;
 		PC->bEnableMouseOverEvents = true;
+		PC->SetInputMode(FInputModeUIOnly());
 	}
 }

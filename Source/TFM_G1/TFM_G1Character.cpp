@@ -243,6 +243,7 @@ void ATFM_G1Character::PauseGame()
 		PC->bEnableClickEvents = true;
 		PC->bEnableMouseOverEvents = true;
 		PC->Pause();
+		PC->SetInputMode(FInputModeUIOnly());
 	}
 	
 }

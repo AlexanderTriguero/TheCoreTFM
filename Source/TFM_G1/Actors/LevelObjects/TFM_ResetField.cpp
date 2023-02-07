@@ -6,6 +6,8 @@
 #include "TFM_G1Character.h"
 #include "Actors/Bubbles/TFM_BubbleBase.h"
 #include "Components/BoxComponent.h"
+#include "Actors/Weapons/TFM_WeaponBase.h"
+#include "Widget/TFM_WeaponWidget.h"
 
 ATFM_ResetField::ATFM_ResetField()
 {
@@ -27,6 +29,10 @@ void ATFM_ResetField::OnComponentEndOverlapOnField(UPrimitiveComponent* Overlapp
 			{
 				if (!Bubble->bLevelAsset)
 					GameCharacter->SpawnedBubbles.Find(Bubble->GetClass())->Remove(Bubble);
+					if (ATFM_WeaponBase* Weapon = Cast<ATFM_WeaponBase>(Bubble->GetOwner()))
+					{
+						Weapon->GetWidget()->DeleteBubble();
+					}
 					Bubble->Destroy();
 			}
 		}
