@@ -28,6 +28,8 @@ protected:
 		UBoxComponent* BoxCollider = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "DestructibleSurface")
 		UDestructibleComponent* DestructibleComponent = nullptr;
+	UPROPERTY(EditAnywhere, Category = "Audio")
+		USoundBase* ShatterSound = nullptr;
 
 	virtual void BeginPlay() override;
 	UFUNCTION()

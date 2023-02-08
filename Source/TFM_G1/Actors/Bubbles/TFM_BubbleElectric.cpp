@@ -5,6 +5,7 @@
 #include "CableComponent.h"
 #include "Actors/TFM_SkeletalActor.h"
 #include "Actors/LevelObjects/TFM_PowerSource.h"
+#include "Kismet/GameplayStatics.h"
 
 ATFM_BubbleElectric::ATFM_BubbleElectric() : Super()
 {
@@ -24,16 +25,18 @@ ATFM_BubbleElectric::ATFM_BubbleElectric() : Super()
 
 void ATFM_BubbleElectric::Connect(ATFM_ActorBase* ConnectTo)
 {
+	if(ConnectionSound)
+		UGameplayStatics::PlaySoundAtLocation(this, ConnectionSound, GetActorLocation());
 	bIsConnected = true;
 	Mesh->SetMaterial(0, ConnectedMaterial);
-	//TODO: Draw cable between two connected bubbles.
 }
 
 void ATFM_BubbleElectric::Disconnect()
 {
-	//TODO: Show Animation for disconnection
 	DisconnectVisual();
 	bFirstToSource = false;
+	if (bIsConnected && DisconnectionSound)
+		UGameplayStatics::PlaySoundAtLocation(this, DisconnectionSound, GetActorLocation());
 	bIsConnected = false;
 	Mesh->SetMaterial(0, DisconnectedMaterial);
 }

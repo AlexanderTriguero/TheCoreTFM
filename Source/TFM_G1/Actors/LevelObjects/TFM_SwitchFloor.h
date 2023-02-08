@@ -36,4 +36,9 @@ public:
 		void ActivateButton();
 	UFUNCTION(BlueprintCallable)
 		void DeactivateButton();
+protected:
+	UPROPERTY(EditAnywhere, Category = "Audio")
+		USoundBase* SwitchOnSound = nullptr;
+	UPROPERTY(EditAnywhere, Category = "Audio")
+		USoundBase* SwitchOffSound = nullptr;
 };

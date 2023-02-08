@@ -42,9 +42,16 @@ void ATFM_EndOfLevel::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedCom
 				SwingingSoap->Constraint->TermComponentConstraint();
 				SwingingSoap->Destroy();
 			}
-			UGameplayStatics::OpenLevel(this,LevelToLoad);
+			if (WarpSound)
+				UGameplayStatics::PlaySoundAtLocation(this, WarpSound, GetActorLocation());
+			GetWorldTimerManager().SetTimer(WarpTimer, this, &ATFM_EndOfLevel::ChangeLevel, 1.0f, false, WarpSound->Duration);
 		}
 	}
+}
+
+void ATFM_EndOfLevel::ChangeLevel()
+{
+	UGameplayStatics::OpenLevel(this, LevelToLoad);
 }
 
 
