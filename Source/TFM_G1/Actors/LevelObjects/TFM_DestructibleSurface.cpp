@@ -19,7 +19,8 @@ ATFM_DestructibleSurface::ATFM_DestructibleSurface()
 	BoxCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Collider"));
 	BoxCollider->SetupAttachment(Mesh);
 
-
+	DestructibleComponent = CreateDefaultSubobject<UDestructibleComponent>(TEXT("Destructible Component"));
+	DestructibleComponent->SetupAttachment(RootComponent);
 }
 
 void ATFM_DestructibleSurface::DestroySelf()
@@ -49,9 +50,10 @@ void ATFM_DestructibleSurface::OnComponentBeginOverlap(UPrimitiveComponent* Over
 		float Speed = BubbleHeavy->GetMesh()->GetComponentVelocity().Size();
 
 		if (Speed > DestroySpeed)
-		{
-			DestroySelf();
+		{	
+			Mesh->DestroyComponent();
+			FTimerHandle DebrisDeleteTimer;
+			GetWorldTimerManager().SetTimer(DebrisDeleteTimer, this, &ATFM_DestructibleSurface::DestroySelf, 1.0f, false, 2.5f);
 		}
 	}
 }
-

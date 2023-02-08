@@ -260,7 +260,9 @@ void ATFM_G1Character::SwitchNextWeapon()
 				if(NextWeapon->isOnCharacter)
 				{
 					CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(true);
+					CurrentWeapon->HideWeaponWidget();
 					CurrentWeapon = NextWeapon;
+					CurrentWeapon->ShowWeaponWidget();
 					CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
 				}
 				CurrentWeapon->HideSpawnPreview();
@@ -284,7 +286,9 @@ void ATFM_G1Character::SwitchPreviousWeapon()
 				if (NextWeapon->isOnCharacter) 
 				{
 					CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(true);
+					CurrentWeapon->HideWeaponWidget();
 					CurrentWeapon = NextWeapon;
+					CurrentWeapon->ShowWeaponWidget();
 					CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
 				}
 			}
@@ -307,6 +311,7 @@ void ATFM_G1Character::CheckWeapons()
 			if (WeaponArray.Num() == 1)
 			{
 				CurrentWeapon = Weapon;
+				CurrentWeapon->ShowWeaponWidget();
 				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
 				Mesh1P->SetHiddenInGame(false);
 			}
@@ -327,6 +332,7 @@ void ATFM_G1Character::CheckWeapons()
 			if (WeaponArray.Num() == 1)
 			{
 				CurrentWeapon = Weapon;
+				CurrentWeapon->ShowWeaponWidget();
 				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
 				Mesh1P->SetHiddenInGame(false);
 			}
@@ -348,6 +354,7 @@ void ATFM_G1Character::CheckWeapons()
 			if (WeaponArray.Num() == 1)
 			{
 				CurrentWeapon = Weapon;
+				CurrentWeapon->ShowWeaponWidget();
 				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
 				Mesh1P->SetHiddenInGame(false);
 			}
@@ -369,6 +376,7 @@ void ATFM_G1Character::CheckWeapons()
 			if (WeaponArray.Num() == 1)
 			{
 				CurrentWeapon = Weapon;
+				CurrentWeapon->ShowWeaponWidget();
 				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
 				Mesh1P->SetHiddenInGame(false);
 			}
@@ -390,6 +398,7 @@ void ATFM_G1Character::CheckWeapons()
 			if (WeaponArray.Num() == 1)
 			{
 				CurrentWeapon = Weapon;
+				CurrentWeapon->ShowWeaponWidget();
 				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
 				Mesh1P->SetHiddenInGame(false);
 			}
