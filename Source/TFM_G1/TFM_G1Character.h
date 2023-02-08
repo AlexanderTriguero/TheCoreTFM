@@ -107,6 +107,8 @@ public:
 	UPROPERTY()
 		UUserWidget* PauseWidget = nullptr;
 
+	UPROPERTY(EditAnywhere, Category = "Sound")
+		USoundBase* JumpSound = nullptr;
 protected:
 	void SwitchNextWeapon();
 	void SwitchPreviousWeapon();

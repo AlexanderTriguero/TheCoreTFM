@@ -7,9 +7,11 @@
 #include "Actors/Bubbles/TFM_BubbleAnchor.h"
 #include "Actors/Bubbles/TFM_BubbleElectric.h"
 #include "Actors/Bubbles/TFM_BubbleHeavy.h"
+#include "Components/AudioComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/KismetMathLibrary.h"
-
+#include "Sound/SoundCue.h"
 
 
 ATFM_AirGun::ATFM_AirGun() : Super()
@@ -19,12 +21,16 @@ ATFM_AirGun::ATFM_AirGun() : Super()
 	VacuumCollision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Vacuum Collision"));
 	VacuumCollision->SetupAttachment(ProjectilePosition);
 
+	AudioComp = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio Component"));
+	AudioComp->SetupAttachment(WeaponMesh);
+
 }
 
 void ATFM_AirGun::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	if (AirSound)
+		AudioComp->SetSound(AirSound);
 	VacuumCollision->OnComponentEndOverlap.AddUniqueDynamic(this, &ATFM_AirGun::onEndOverlap);
 
 }
@@ -78,6 +84,7 @@ void ATFM_AirGun::Shoot(ATFM_G1Character* CurrentCharacter)
 {
 	if (!bIsShooting)
 	{
+		AudioComp->Play();
 		bIsShooting = true;
 		PushAttracValue = 1;
 	}
@@ -85,18 +92,21 @@ void ATFM_AirGun::Shoot(ATFM_G1Character* CurrentCharacter)
 
 void ATFM_AirGun::StopShooting(ATFM_G1Character* CurrentCharacter)
 {
+	AudioComp->Stop();
 	bIsShooting = false;
 }
 void ATFM_AirGun::ShootSecondary(ATFM_G1Character* CurrentCharacter)
 {
 	if (!bIsShooting)
 	{
+		AudioComp->Play();
 		bIsShooting = true;
 		PushAttracValue = -1;
 	}
 }
 void ATFM_AirGun::StopShootingSecondary()
 {
+	AudioComp->Stop();
 	bIsShooting = false;
 }
 

@@ -25,12 +25,14 @@ public:
 private:
 	int PushAttracValue = 1;
 	bool bIsShooting = false;
-
+	UAudioComponent* AudioComp = nullptr;
 protected:
 	UPROPERTY(EditAnywhere, Category="AirGun")
 		UCapsuleComponent* VacuumCollision=nullptr;
 	UPROPERTY(EditAnywhere, Category="AirGun")
 		float Force= 3000000.f;
+	UPROPERTY(EditAnywhere, Category = "Sound")
+		USoundCue* AirSound = nullptr;
 
 	
 	UFUNCTION()

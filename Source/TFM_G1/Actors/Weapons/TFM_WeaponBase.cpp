@@ -3,6 +3,7 @@
 #include "TFM_G1Character.h"
 #include "Actors/Bubbles/TFM_BubbleBase.h"
 #include "Actors/SwingingSoap/TFM_SwingingSoap.h"
+#include "Components/AudioComponent.h"
 #include "Materials/MaterialInterface.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Components/SphereComponent.h"
@@ -10,7 +11,7 @@
 #include "Components/PrimitiveComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "PhysicsEngine/PhysicsConstraintComponent.h"
-
+#include "Sound/SoundCue.h"
 
 
 ATFM_WeaponBase::ATFM_WeaponBase()
@@ -31,6 +32,7 @@ ATFM_WeaponBase::ATFM_WeaponBase()
 	PositionToSpawnBubble->SetVisibility(false);
 	PositionToSpawnBubble->SetGenerateOverlapEvents(true);
 	PositionToSpawnBubble->bReceivesDecals = false;
+
 }
 
 // Called when the game starts or when spawned 
@@ -109,7 +111,8 @@ void ATFM_WeaponBase::StopShooting(ATFM_G1Character* CurrentCharacter)
 
 			ProjectileTransform.SetLocation(PositionToSpawnBubble->GetComponentLocation());
 			ProjectileTransform.SetRotation(FQuat(0, 0, 0, 0));
-
+			if(ShotAudio)
+				UGameplayStatics::PlaySoundAtLocation(this, ShotAudio, GetActorLocation());
 			SpawnedBubble = GetWorld()->SpawnActor<ATFM_BubbleBase>(BubbleToSpawn, ProjectileTransform, Params);
 			if (SpawnedBubble) {
 				CurrentCharacter->SpawnedBubbles.Find(BubbleToSpawn)->Add(SpawnedBubble);
@@ -151,6 +154,8 @@ void ATFM_WeaponBase::ShootSecondary(ATFM_G1Character* CurrentCharacter)
 			}
 		}
 		CurrentCharacter->SpawnedBubbles.Find(OutHit.GetActor()->GetClass())->Remove(BubbleBase);
+		if (SecondaryShotAudio)
+			UGameplayStatics::PlaySoundAtLocation(this, SecondaryShotAudio, GetActorLocation());
 		BubbleBase->Destroy();
 
 		/*if (BubbleBase->canBeDestroyed)

@@ -23,6 +23,7 @@ void ATFM_SwingingSoapWeapon::Shoot(ATFM_G1Character* CurrentCharacter)
 		SwingingSoap->AttachEnd = this;
 		SwingingSoap->AttachStart = OutHit.GetActor();
 		UGameplayStatics::FinishSpawningActor(SwingingSoap, OutHit.GetActor()->GetActorTransform());
+		UGameplayStatics::PlaySoundAtLocation(this, ShotAudio, GetActorLocation());
 		SoapSpawned = SwingingSoap;
 	}
 	else if(OutHit.GetActor()->IsA(BubbleToReleaseTo) && !CanShoot())
@@ -32,6 +33,7 @@ void ATFM_SwingingSoapWeapon::Shoot(ATFM_G1Character* CurrentCharacter)
 			if (!BubbleHeavy->bLevelBox)
 				return;
 		}
+		UGameplayStatics::PlaySoundAtLocation(this, ShotAudio, GetActorLocation());
 		SoapSpawned->SwitchEnd(OutHit.GetActor(), FName("GrabPoint"));
 	}
 }
@@ -40,6 +42,7 @@ void ATFM_SwingingSoapWeapon::ShootSecondary(ATFM_G1Character* CurrentCharacter)
 {
 	if(SoapSpawned)
 	{
+		UGameplayStatics::PlaySoundAtLocation(this, SecondaryShotAudio, GetActorLocation());
 		SoapSpawned->Constraint->BreakConstraint();
 		SoapSpawned->Constraint->TermComponentConstraint();
 		SoapSpawned->Destroy();
