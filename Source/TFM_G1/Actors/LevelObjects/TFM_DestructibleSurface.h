@@ -4,9 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "DestructibleComponent.h"
 #include "TFM_DestructibleSurface.generated.h"
-
 
 class UBoxComponent;
 
@@ -26,12 +24,11 @@ protected:
 		UStaticMeshComponent* Mesh = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "DestructibleSurface")
 		UBoxComponent* BoxCollider = nullptr;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "DestructibleSurface")
-		UDestructibleComponent* DestructibleComponent = nullptr;
 
 	virtual void BeginPlay() override;
 	UFUNCTION()
 		void OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
 
 
 };

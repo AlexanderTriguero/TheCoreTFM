@@ -4,7 +4,6 @@
 #include "Actors/Bubbles/TFM_BubbleBase.h"
 #include "Actors/SwingingSoap/TFM_SwingingSoap.h"
 #include "Components/AudioComponent.h"
-#include "Blueprint/UserWidget.h"
 #include "Materials/MaterialInterface.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Components/SphereComponent.h"
@@ -13,7 +12,6 @@
 #include "Kismet/GameplayStatics.h"
 #include "PhysicsEngine/PhysicsConstraintComponent.h"
 #include "Sound/SoundCue.h"
-#include "Widget/TFM_WeaponWidget.h"
 
 
 ATFM_WeaponBase::ATFM_WeaponBase()
@@ -43,11 +41,7 @@ void ATFM_WeaponBase::BeginPlay()
 	Super::BeginPlay();
 	WeaponMesh->SetMobility(EComponentMobility::Movable);
 
-	if (WeaponWidgetClass) {
-		WeaponWidget = CreateWidget<UTFM_WeaponWidget>(GetWorld(), WeaponWidgetClass);
-		WeaponWidget->AddToViewport();
-		WeaponWidget->SetVisibility(ESlateVisibility::Hidden);
-	}
+
 }
 
 
@@ -122,7 +116,6 @@ void ATFM_WeaponBase::StopShooting(ATFM_G1Character* CurrentCharacter)
 			SpawnedBubble = GetWorld()->SpawnActor<ATFM_BubbleBase>(BubbleToSpawn, ProjectileTransform, Params);
 			if (SpawnedBubble) {
 				CurrentCharacter->SpawnedBubbles.Find(BubbleToSpawn)->Add(SpawnedBubble);
-				WeaponWidget->CreateBubble();
 			}
 		}
 	}
@@ -161,10 +154,6 @@ void ATFM_WeaponBase::ShootSecondary(ATFM_G1Character* CurrentCharacter)
 			}
 		}
 		CurrentCharacter->SpawnedBubbles.Find(OutHit.GetActor()->GetClass())->Remove(BubbleBase);
-		if (ATFM_WeaponBase* Weapon = Cast<ATFM_WeaponBase>(BubbleBase->GetOwner()))
-		{
-			Weapon->GetWidget()->DeleteBubble();
-		}
 		if (SecondaryShotAudio)
 			UGameplayStatics::PlaySoundAtLocation(this, SecondaryShotAudio, GetActorLocation());
 		BubbleBase->Destroy();
@@ -217,20 +206,3 @@ void ATFM_WeaponBase::HideSpawnPreview()
 	}
 }
 
-void ATFM_WeaponBase::HideWeaponWidget()
-{
-	if (WeaponWidget) {
-		WeaponWidget->SetVisibility(ESlateVisibility::Hidden);
-	}
-}
-void ATFM_WeaponBase::ShowWeaponWidget()
-{
-	if (WeaponWidget) {
-		WeaponWidget->SetVisibility(ESlateVisibility::Visible);
-	}
-}
-
-UTFM_WeaponWidget* ATFM_WeaponBase::GetWidget()
-{
-	return WeaponWidget;
-}
