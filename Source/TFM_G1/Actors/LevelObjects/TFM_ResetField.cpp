@@ -31,12 +31,14 @@ void ATFM_ResetField::OnComponentEndOverlapOnField(UPrimitiveComponent* Overlapp
 			if (ATFM_BubbleBase* Bubble = Cast<ATFM_BubbleBase>(Actor))
 			{
 				if (!Bubble->bLevelAsset)
+				{
 					GameCharacter->SpawnedBubbles.Find(Bubble->GetClass())->Remove(Bubble);
 					if (ATFM_WeaponBase* Weapon = Cast<ATFM_WeaponBase>(Bubble->GetOwner()))
 					{
 						Weapon->GetWidget()->DeleteBubble();
 					}
 					Bubble->Destroy();
+				}
 			}
 		}
 	}
