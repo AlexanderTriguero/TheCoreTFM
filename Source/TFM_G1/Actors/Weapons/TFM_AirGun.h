@@ -7,6 +7,7 @@
 #include "TFM_AirGun.generated.h"
 
 class UCapsuleComponent;
+class UParticleSystemComponent;
 UCLASS()
 class TFM_G1_API ATFM_AirGun : public ATFM_WeaponBase
 {
@@ -33,6 +34,12 @@ protected:
 		float Force= 3000000.f;
 	UPROPERTY(EditAnywhere, Category = "Sound")
 		USoundCue* AirSound = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Particles")
+		UParticleSystemComponent* PushParticles = nullptr;
+	UPROPERTY(EditAnywhere, Category = "Particles")
+		UParticleSystemComponent* PullParticles = nullptr;
+	
 
 	
 	UFUNCTION()
