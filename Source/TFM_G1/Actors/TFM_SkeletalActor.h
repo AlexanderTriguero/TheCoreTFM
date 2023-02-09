@@ -39,6 +39,10 @@ protected:
 		UStaticMeshComponent* Frame = nullptr;
 	UPROPERTY(EditAnywhere, Category = "Door")
 		UStaticMeshComponent* Door = nullptr;
+	UPROPERTY(EditAnywhere, Category = "Audio")
+		USoundBase* DoorOpenSound = nullptr;
+	UPROPERTY(EditAnywhere, Category = "Audio")
+		USoundBase* DoorCloseSound = nullptr;
 private:
 	bool IsConnected();
 };

@@ -6,6 +6,7 @@
 #include "TFM_G1Character.h"
 #include "Actors/TFM_SkeletalActor.h"
 #include "Components/BoxComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 ATFM_SwitchFloor::ATFM_SwitchFloor() : Super()
 {
@@ -48,6 +49,8 @@ void ATFM_SwitchFloor::OnComponentEndOverlapOnSwitch(UPrimitiveComponent* Overla
 
 void ATFM_SwitchFloor::ActivateButton()
 {
+	if (SwitchOnSound)
+		UGameplayStatics::PlaySoundAtLocation(this, SwitchOnSound, GetActorLocation());
 	IsActive = true;
 	if (LightIndicator)
 		LightIndicator->SetEnabled(true);
@@ -60,6 +63,8 @@ void ATFM_SwitchFloor::ActivateButton()
 
 void ATFM_SwitchFloor::DeactivateButton()
 {
+	if (SwitchOffSound)
+		UGameplayStatics::PlaySoundAtLocation(this, SwitchOffSound, GetActorLocation());
 	IsActive = false;
 	if (LightIndicator)
 		LightIndicator->SetEnabled(false);

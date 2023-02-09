@@ -1,5 +1,6 @@
 #include "Actors/LevelObjects/TFM_WeaponObject.h"
 #include "Components/SphereComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "TFM_G1/TFM_G1Character.h"
 
 ATFM_WeaponObject::ATFM_WeaponObject()
@@ -53,7 +54,8 @@ void ATFM_WeaponObject::BeginOverlap(UPrimitiveComponent* OverlappedComponent,AA
 		{
 			Character->MagneticOn = true;
 		}
-
+		if (WeaponOnSound)
+			UGameplayStatics::PlaySoundAtLocation(this, WeaponOnSound, GetActorLocation());
 		Destroy();
 	}
 

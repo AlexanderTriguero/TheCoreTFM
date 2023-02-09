@@ -42,6 +42,8 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	UPROPERTY(EditAnywhere, Category = "Audio")
+		USoundBase* WeaponOnSound = nullptr;
 
 public:	
 	virtual void Tick(float DeltaTime) override;

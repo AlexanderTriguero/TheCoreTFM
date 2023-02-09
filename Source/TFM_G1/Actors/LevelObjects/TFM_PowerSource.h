@@ -23,6 +23,10 @@ public:
 		USphereComponent* ConnectionSphere = nullptr;
 	UPROPERTY(EditAnywhere)
 		USceneComponent* ConnectionPoint = nullptr;
+	UPROPERTY(EditAnywhere, Category = "Audio")
+		USoundBase* PowerOnSound = nullptr;
+	UPROPERTY(EditAnywhere, Category = "Audio")
+		USoundBase* PowerOffSound = nullptr;
 	UFUNCTION()
 		void OnComponentEndOverlapOnPowerSource(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 	virtual void BeginPlay() override;
