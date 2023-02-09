@@ -11,6 +11,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "Sound/SoundCue.h"
 
 
@@ -24,6 +25,15 @@ ATFM_AirGun::ATFM_AirGun() : Super()
 	AudioComp = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio Component"));
 	AudioComp->SetupAttachment(WeaponMesh);
 
+	PushParticles = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Push Particles"));
+	PushParticles->SetupAttachment(ProjectilePosition);
+	PullParticles = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Pull Particles"));
+	PullParticles->SetupAttachment(ProjectilePosition);
+	if (PushParticles)
+		PushParticles->SetVisibility(false);
+	if (PullParticles)
+		PullParticles->SetVisibility(false);
+
 }
 
 void ATFM_AirGun::BeginPlay()
@@ -32,7 +42,8 @@ void ATFM_AirGun::BeginPlay()
 	if (AirSound)
 		AudioComp->SetSound(AirSound);
 	VacuumCollision->OnComponentEndOverlap.AddUniqueDynamic(this, &ATFM_AirGun::onEndOverlap);
-
+	PushParticles->ActivateSystem();
+	PullParticles->ActivateSystem();
 }
 
 void ATFM_AirGun::Tick(float DeltaTime)
@@ -86,6 +97,8 @@ void ATFM_AirGun::Shoot(ATFM_G1Character* CurrentCharacter)
 	{
 		AudioComp->Play();
 		bIsShooting = true;
+		if (PushParticles)
+			PushParticles->SetVisibility(true);
 		PushAttracValue = 1;
 	}
 }
@@ -94,6 +107,8 @@ void ATFM_AirGun::StopShooting(ATFM_G1Character* CurrentCharacter)
 {
 	AudioComp->Stop();
 	bIsShooting = false;
+	if(PushParticles)
+		PushParticles->SetVisibility(false);
 }
 void ATFM_AirGun::ShootSecondary(ATFM_G1Character* CurrentCharacter)
 {
@@ -101,6 +116,8 @@ void ATFM_AirGun::ShootSecondary(ATFM_G1Character* CurrentCharacter)
 	{
 		AudioComp->Play();
 		bIsShooting = true;
+		if (PullParticles)
+			PullParticles->SetVisibility(true);
 		PushAttracValue = -1;
 	}
 }
@@ -108,6 +125,9 @@ void ATFM_AirGun::StopShootingSecondary()
 {
 	AudioComp->Stop();
 	bIsShooting = false;
+	if (PullParticles)
+		PullParticles->SetVisibility(false);
+
 }
 
 

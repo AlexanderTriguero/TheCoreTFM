@@ -5,7 +5,9 @@
 #include "TFM_WeaponObject.generated.h"
 
 class UStaticMeshComponent;
+class UTFM_BaseUserWidget;
 class USphereComponent;
+class UBoxComponent;
 
 UCLASS()
 class TFM_G1_API ATFM_WeaponObject : public AActor
@@ -32,6 +34,13 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Bubble Weapons")
 		bool MagneticOnPickUp;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget")
+		UBoxComponent* BoxCollider = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget")
+		TSubclassOf<UTFM_BaseUserWidget> WidgetToOpen = nullptr;
+	UPROPERTY()
+		UTFM_BaseUserWidget* Widget = nullptr;
+
 	UFUNCTION()
 		void BeginOverlap(UPrimitiveComponent* OverlappedComponent,
 			AActor* OtherActor,
@@ -39,6 +48,8 @@ public:
 			int32 OtherBodyIndex,
 			bool bFromSweep,
 			const FHitResult& SweepResult);
+	UFUNCTION()
+		void CloseTutorial(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 protected:
 	virtual void BeginPlay() override;
@@ -47,5 +58,4 @@ protected:
 
 public:	
 	virtual void Tick(float DeltaTime) override;
-
 };
