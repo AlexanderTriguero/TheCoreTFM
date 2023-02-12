@@ -29,5 +29,12 @@ protected:
 
 	UFUNCTION()
 		void OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION()
+		void ChangeLevel();
+	UPROPERTY(EditAnywhere, Category = "Audio")
+		USoundBase* WarpSound = nullptr;
 
+private:
+
+	FTimerHandle WarpTimer;
 };

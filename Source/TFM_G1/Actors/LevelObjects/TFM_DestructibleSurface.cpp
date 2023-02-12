@@ -4,6 +4,7 @@
 #include "Actors/LevelObjects/TFM_DestructibleSurface.h"
 #include "Actors/Bubbles/TFM_BubbleHeavy.h"
 #include "Components/BoxComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -50,7 +51,10 @@ void ATFM_DestructibleSurface::OnComponentBeginOverlap(UPrimitiveComponent* Over
 		float Speed = BubbleHeavy->GetMesh()->GetComponentVelocity().Size();
 
 		if (Speed > DestroySpeed)
-		{	
+		{
+			if (ShatterSound)
+				UGameplayStatics::PlaySoundAtLocation(this, ShatterSound, GetActorLocation());
+			BoxCollider->DestroyComponent();
 			Mesh->DestroyComponent();
 			FTimerHandle DebrisDeleteTimer;
 			GetWorldTimerManager().SetTimer(DebrisDeleteTimer, this, &ATFM_DestructibleSurface::DestroySelf, 1.0f, false, 2.5f);

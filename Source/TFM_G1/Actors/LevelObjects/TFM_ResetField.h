@@ -22,4 +22,8 @@ public:
 		UBoxComponent* ResetArea = nullptr;
 	UFUNCTION()
 		void OnComponentEndOverlapOnField(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+protected:
+	UPROPERTY(EditAnywhere, Category = "Audio")
+		USoundBase* ResetSound = nullptr;
 };

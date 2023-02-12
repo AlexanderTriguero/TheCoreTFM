@@ -41,6 +41,10 @@ public:
 	void ConnectToSource(ATFM_PowerSource* ExternalSource, bool SetToConnect);
 
 protected:
+	UPROPERTY(EditAnywhere, Category = "Audio")
+		USoundBase* ConnectionSound = nullptr;
+	UPROPERTY(EditAnywhere, Category = "Audio")
+		USoundBase* DisconnectionSound = nullptr;
 	UPROPERTY(EditAnywhere)
 		bool bIsConnectedToSource = false;
 	void ConnectVisual(AActor* bubbleToConnectTo);

@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "TFM_WeaponBase.generated.h"
 
+class USoundCue;
 class ATFM_G1Character;
 class ATFM_BubbleBase;
 class USphereComponent;
@@ -58,7 +59,12 @@ public:
 	virtual UTFM_WeaponWidget* GetWidget();
 
 protected:
-	
+	UPROPERTY(EditAnywhere, Category = "Audio")
+		class USoundBase* ShotAudio = nullptr;
+	UPROPERTY(EditAnywhere, Category = "Audio")
+		class USoundBase* SecondaryShotAudio = nullptr;
+
+
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 		int MaxSpawnedBubbles=4;
 

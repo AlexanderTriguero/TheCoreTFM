@@ -4,6 +4,7 @@
 #include "Actors/TFM_SkeletalActor.h"
 
 #include "Bubbles/TFM_BubbleElectric.h"
+#include "Kismet/GameplayStatics.h"
 #include "LevelObjects/TFM_SwitchFloor.h"
 
 // Sets default values
@@ -38,6 +39,8 @@ void ATFM_SkeletalActor::Activate()
 {
 	if (bIsSwitchable || bIsElectric)
 	{
+		if (DoorOpenSound)
+			UGameplayStatics::PlaySoundAtLocation(this, DoorOpenSound, GetActorLocation());
 		bIsActive = true;
 		Door->SetHiddenInGame(true);
 		Door->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -75,6 +78,8 @@ void ATFM_SkeletalActor::Deactivate()
 {
 	if (bIsSwitchable || (bIsElectric && !IsConnected()))
 	{
+		if (bIsActive && DoorCloseSound)
+			UGameplayStatics::PlaySoundAtLocation(this, DoorCloseSound, GetActorLocation());
 		bIsActive = false;
 		Door->SetHiddenInGame(false);
 		Door->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
