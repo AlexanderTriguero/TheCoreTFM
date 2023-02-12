@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "TFM_SkeletalActor.generated.h"
 
+class USphereComponent;
 class ATFM_SwitchFloor;
 UCLASS()
 class TFM_G1_API ATFM_SkeletalActor : public AActor
@@ -43,6 +44,8 @@ protected:
 		USoundBase* DoorOpenSound = nullptr;
 	UPROPERTY(EditAnywhere, Category = "Audio")
 		USoundBase* DoorCloseSound = nullptr;
+	UPROPERTY(EditAnywhere, Category = "Collision")
+		USphereComponent* CollisionSphere = nullptr;
 private:
 	bool IsConnected();
 };

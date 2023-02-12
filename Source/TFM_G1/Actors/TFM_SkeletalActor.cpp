@@ -16,6 +16,8 @@ ATFM_SkeletalActor::ATFM_SkeletalActor()
 	Frame->SetupAttachment(RootComponent);
 	Door = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Door"));
 	Door->SetupAttachment(Frame);
+	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Collision Sphere"));
+	CollisionSphere->SetupAttachment(RootComponent);
 
 }
 
@@ -39,7 +41,7 @@ void ATFM_SkeletalActor::Activate()
 {
 	if (bIsSwitchable || bIsElectric)
 	{
-		if (DoorOpenSound)
+		if (DoorOpenSound && !bIsActive)
 			UGameplayStatics::PlaySoundAtLocation(this, DoorOpenSound, GetActorLocation());
 		bIsActive = true;
 		Door->SetHiddenInGame(true);
