@@ -97,8 +97,10 @@ void ATFM_BubbleElectric::CheckConnection()
 				if (!bIsConnected)
 				{
 					if (ElectricBubble->bIsConnected && ElectricBubble->BubbleConnection != this)
+					{
 						BubbleConnection = ElectricBubble;
 						Connect(ElectricBubble);
+					}
 				}
 			}
 		}
