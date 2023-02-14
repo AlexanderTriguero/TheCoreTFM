@@ -25,7 +25,7 @@ ATFM_BubbleElectric::ATFM_BubbleElectric() : Super()
 
 void ATFM_BubbleElectric::Connect(ATFM_ActorBase* ConnectTo)
 {
-	if(ConnectionSound)
+	if(ConnectionSound && !bIsConnected)
 		UGameplayStatics::PlaySoundAtLocation(this, ConnectionSound, GetActorLocation());
 	bIsConnected = true;
 	Mesh->SetMaterial(0, ConnectedMaterial);
