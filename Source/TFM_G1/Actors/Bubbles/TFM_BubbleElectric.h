@@ -32,6 +32,8 @@ public:
 		USphereComponent* ConductionSphere = nullptr;
 	UPROPERTY(EditDefaultsOnly)
 		UCableComponent* ConductionVisual = nullptr;
+	UPROPERTY(EditDefaultsOnly)
+		USceneComponent* ConnectionPoint = nullptr;
 	UPROPERTY(EditAnywhere)
 		float ConductionRadius;
 	UPROPERTY(EditAnywhere)
