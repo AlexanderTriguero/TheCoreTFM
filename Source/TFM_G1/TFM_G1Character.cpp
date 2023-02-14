@@ -178,6 +178,9 @@ void ATFM_G1Character::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 	// Bind pause game event
 	PlayerInputComponent->BindAction("PauseGame", IE_Released, this, &ATFM_G1Character::PauseGame);
 
+	// Bind Read note event
+	PlayerInputComponent->BindAction("Read", IE_Pressed, this, &ATFM_G1Character::Read);
+
 	// Enable touchscreen input
 	EnableTouchscreenMovement(PlayerInputComponent);
 
@@ -536,4 +539,32 @@ bool ATFM_G1Character::IsMagneticEquiped() const
 {
 	return bMagneticEquiped;
 }
+
+
+void ATFM_G1Character::SetNoteToRead(TSubclassOf<UUserWidget> NoteContentClass)
+{
+	NoteToRead = CreateWidget(GetWorld(), NoteContentClass);
+	NoteToRead->AddToViewport();
+	NoteToRead->SetVisibility(ESlateVisibility::Hidden);
+	bCanRead = true;
+}
+void ATFM_G1Character::DisableRead()
+{
+	bCanRead = false;
+}
+
+void ATFM_G1Character::Read()
+{
+	if (bCanRead && NoteToRead) {
+		APlayerController* A = NoteToRead->GetOwningPlayer();
+		NoteToRead->SetVisibility(ESlateVisibility::Visible);
+		APlayerController* PC = GetWorld()->GetFirstPlayerController();
+		PC->bShowMouseCursor = true;
+		PC->bEnableClickEvents = true;
+		PC->bEnableMouseOverEvents = true;
+		PC->SetInputMode(FInputModeUIOnly());
+	}
+}
+
+
 
