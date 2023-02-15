@@ -85,7 +85,10 @@ void ATFM_G1Character::BeginPlay()
 
 	if (ATFM_WeaponBase* Weapon = GetWorld()->SpawnActor<ATFM_WeaponBase>(BaseStandardEmptyGun)) 
 	{
+		if(CurrentWeapon)
+			CurrentWeapon->HideWeaponWidget();
 		CurrentWeapon = Weapon;
+		CurrentWeapon->ShowWeaponWidget();
 	}
 
 	/*
@@ -502,8 +505,11 @@ void ATFM_G1Character::LoadGameInstanceInfo() {
 			if (NextWeapon->isOnCharacter)
 			{
 				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(true);
+				CurrentWeapon->HideWeaponWidget();
 				CurrentWeapon = NextWeapon;
 				CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(false);
+				CurrentWeapon->ShowWeaponWidget();
+
 			}
 		}
 	}
