@@ -109,6 +109,11 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Sound")
 		USoundBase* JumpSound = nullptr;
+
+	UPROPERTY()
+		TSubclassOf<UUserWidget> NoteToReadClass = nullptr;
+	UPROPERTY()
+		UUserWidget* NoteToRead=nullptr;
 protected:
 	void SwitchNextWeapon();
 	void SwitchPreviousWeapon();
@@ -181,12 +186,20 @@ public:
 	bool IsSoapEquiped() const;
 	bool IsMagneticEquiped() const;
 
+	void SetNoteToRead(TSubclassOf<UUserWidget> NoteContentClass);
+	void DisableRead();
+	void Read();
+	
+
 private:
 	bool bHeavyEquiped = false;
 	bool bAnchorEquiped = false;
 	bool bAirEquiped = false;
 	bool bSoapEquiped = false;
 	bool bMagneticEquiped = false;
+
+	bool bCanRead = false;
+
 
 };
 
