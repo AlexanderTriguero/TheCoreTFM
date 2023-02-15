@@ -30,7 +30,9 @@ public:
 		FVector GetPointToSpawn();
 	UFUNCTION()
 		bool HasSomethingOnTop();
-
+	UFUNCTION()
+		TSet<AActor*> TopActors();
+	bool bIsOnTop = false;
 	//UPROPERTY(EditAnywhere, Category = "Bubble Properties")
 			//bool canBeDestroyed = true;
 protected:

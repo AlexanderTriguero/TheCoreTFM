@@ -16,11 +16,13 @@ public:
 	
 	bool IsMovable();
 	UStaticMeshComponent* GetMesh();
+	USceneComponent* GetRootPoint();
 	virtual void ApplyForce(FVector Direction,float Force, int PushAttracValue);
 	
 	UPROPERTY(EditAnywhere, Category = "Mobility")
 		bool bLevelAsset = false;
-
+	UPROPERTY(EditAnywhere, Category = "Mobility")
+		USceneComponent* RootPoint = nullptr;
 	virtual void EnablePhysics();
 	virtual void DisablePhysics();
 
