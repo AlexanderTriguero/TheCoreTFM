@@ -21,6 +21,8 @@ public:
 	virtual void StopShooting(ATFM_G1Character* CurrentCharacter) override;
 	virtual void ShootSecondary(ATFM_G1Character* CurrentCharacter) override;
 	virtual void StopShootingSecondary() override;
+	virtual void HideSpawnPreview() override;
+
 
 
 private:

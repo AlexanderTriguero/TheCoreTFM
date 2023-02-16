@@ -12,6 +12,8 @@ ATFM_ActorBase::ATFM_ActorBase()
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 	Mesh->SetupAttachment(RootComponent);
+	RootPoint = CreateDefaultSubobject<USceneComponent>(TEXT("Root Point"));
+	RootPoint->SetupAttachment(Mesh);
 
 
 }
@@ -26,6 +28,11 @@ void ATFM_ActorBase::BeginPlay()
 UStaticMeshComponent* ATFM_ActorBase::GetMesh()
 {
 	return Mesh;
+}
+
+USceneComponent* ATFM_ActorBase::GetRootPoint()
+{
+	return RootPoint;
 }
 
 void ATFM_ActorBase::ApplyForce(FVector Direction, float Force, int PushAttracValue)
