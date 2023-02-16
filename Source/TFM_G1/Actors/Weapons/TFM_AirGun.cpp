@@ -116,6 +116,7 @@ void ATFM_AirGun::Shoot(ATFM_G1Character* CurrentCharacter)
 	{
 		AudioComp->Play();
 		bIsShooting = true;
+		bIsPushing = true;
 		if (PushParticles)
 			PushParticles->SetVisibility(true);
 		PushAttracValue = 1;
@@ -124,10 +125,13 @@ void ATFM_AirGun::Shoot(ATFM_G1Character* CurrentCharacter)
 
 void ATFM_AirGun::StopShooting(ATFM_G1Character* CurrentCharacter)
 {
-	AudioComp->Stop();
-	bIsShooting = false;
-	if(PushParticles)
-		PushParticles->SetVisibility(false);
+	if (!bIsPulling) {
+		AudioComp->Stop();
+		bIsShooting = false;
+		bIsPushing = false;
+		if (PushParticles)
+			PushParticles->SetVisibility(false);
+	}
 }
 void ATFM_AirGun::ShootSecondary(ATFM_G1Character* CurrentCharacter)
 {
@@ -135,6 +139,7 @@ void ATFM_AirGun::ShootSecondary(ATFM_G1Character* CurrentCharacter)
 	{
 		AudioComp->Play();
 		bIsShooting = true;
+		bIsPulling = true;
 		if (PullParticles)
 			PullParticles->SetVisibility(true);
 		PushAttracValue = -1;
@@ -142,11 +147,13 @@ void ATFM_AirGun::ShootSecondary(ATFM_G1Character* CurrentCharacter)
 }
 void ATFM_AirGun::StopShootingSecondary()
 {
-	AudioComp->Stop();
-	bIsShooting = false;
-	if (PullParticles)
-		PullParticles->SetVisibility(false);
-
+	if (!bIsPushing) {
+		AudioComp->Stop();
+		bIsShooting = false;
+		bIsPulling = false;
+		if (PullParticles)
+			PullParticles->SetVisibility(false);
+	}
 }
 
 
