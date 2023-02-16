@@ -177,5 +177,15 @@ void ATFM_AirGun::onEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	}
 }
 
+void ATFM_AirGun::HideSpawnPreview()
+{
+	AudioComp->Stop();
+	bIsShooting = false;
+	if (PullParticles)
+		PullParticles->SetVisibility(false);
+	if (PushParticles)
+		PushParticles->SetVisibility(false);
+}
+
 
 
