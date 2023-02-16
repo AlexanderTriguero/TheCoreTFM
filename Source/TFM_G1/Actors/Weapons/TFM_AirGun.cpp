@@ -72,7 +72,7 @@ void ATFM_AirGun::Tick(float DeltaTime)
 			if (ActorBase && ActorBase->IsMovable())
 			{
 				End = ActorBase->GetRootPoint()->GetComponentLocation();
-				UKismetSystemLibrary::LineTraceSingle(this, Start, End, TraceTypeQuery1, true, {}, EDrawDebugTrace::ForDuration, OutHit, true);
+				UKismetSystemLibrary::LineTraceSingle(this, Start, End, TraceTypeQuery1, true, {}, EDrawDebugTrace::None, OutHit, true);
 
 				Direction = UKismetMathLibrary::GetDirectionUnitVector(Start, End);	
 				//When pushing/pulling the height of the actor will not change

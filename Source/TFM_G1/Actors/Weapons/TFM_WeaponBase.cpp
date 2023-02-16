@@ -63,7 +63,7 @@ void ATFM_WeaponBase::Tick(float DeltaTime)
 
 		CheckIfCanSpawnBubble();
 
-		UKismetSystemLibrary::LineTraceSingle(this, Start, End, TraceTypeQuery1, true, {}, EDrawDebugTrace::ForDuration, OutHit, true);
+		UKismetSystemLibrary::LineTraceSingle(this, Start, End, TraceTypeQuery1, true, {}, EDrawDebugTrace::None, OutHit, true);
 
 
 		if (ATFM_BubbleBase* BubbleBase = Cast<ATFM_BubbleBase>(OutHit.GetActor()))
@@ -144,7 +144,7 @@ void ATFM_WeaponBase::ShootSecondary(ATFM_G1Character* CurrentCharacter)
 	FVector Start = ((ProjectilePosition->GetRightVector() * -100.f) + SpawnPosition);
 	FVector End = ((ProjectilePosition->GetRightVector() * 1000.f) + SpawnPosition);
 	FHitResult OutHit;
-	UKismetSystemLibrary::LineTraceSingle(this, Start, End, TraceTypeQuery1, true, {}, EDrawDebugTrace::ForDuration, OutHit, true);
+	UKismetSystemLibrary::LineTraceSingle(this, Start, End, TraceTypeQuery1, true, {}, EDrawDebugTrace::None, OutHit, true);
 	ATFM_BubbleBase* BubbleBase = Cast<ATFM_BubbleBase>(OutHit.GetActor());
 	if (BubbleBase && !BubbleBase->bLevelAsset)
 	{

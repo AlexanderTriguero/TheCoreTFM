@@ -13,7 +13,7 @@ void ATFM_SwingingSoapWeapon::Shoot(ATFM_G1Character* CurrentCharacter)
 {
 	FHitResult OutHit;
 	const FVector EndLocation = ProjectilePosition->GetComponentLocation() + ProjectilePosition->GetForwardVector() * 10000.f;
-	UKismetSystemLibrary::LineTraceSingle(this, ProjectilePosition->GetComponentLocation(), EndLocation, TraceTypeQuery1, true, {}, EDrawDebugTrace::ForDuration, OutHit, true);
+	UKismetSystemLibrary::LineTraceSingle(this, ProjectilePosition->GetComponentLocation(), EndLocation, TraceTypeQuery1, true, {}, EDrawDebugTrace::None, OutHit, true);
 	if(OutHit.GetActor()->IsA(BubbleToGrabOnto) && CanShoot())
 	{
 		FActorSpawnParameters Params;
