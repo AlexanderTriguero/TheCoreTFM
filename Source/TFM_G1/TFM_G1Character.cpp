@@ -266,6 +266,7 @@ void ATFM_G1Character::SwitchNextWeapon()
 			{
 				if(NextWeapon->isOnCharacter)
 				{
+					CurrentWeapon->HideSpawnPreview();
 					CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(true);
 					CurrentWeapon->HideWeaponWidget();
 					CurrentWeapon = NextWeapon;
@@ -292,6 +293,7 @@ void ATFM_G1Character::SwitchPreviousWeapon()
 			{
 				if (NextWeapon->isOnCharacter) 
 				{
+					CurrentWeapon->HideSpawnPreview();
 					CurrentWeapon->GetWeaponMesh()->SetHiddenInGame(true);
 					CurrentWeapon->HideWeaponWidget();
 					CurrentWeapon = NextWeapon;
