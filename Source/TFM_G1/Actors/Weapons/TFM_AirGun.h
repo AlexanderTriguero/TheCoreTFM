@@ -28,6 +28,8 @@ public:
 private:
 	int PushAttracValue = 1;
 	bool bIsShooting = false;
+	bool bIsPushing = false;
+	bool bIsPulling = false;
 	UAudioComponent* AudioComp = nullptr;
 protected:
 	UPROPERTY(EditAnywhere, Category="AirGun")
