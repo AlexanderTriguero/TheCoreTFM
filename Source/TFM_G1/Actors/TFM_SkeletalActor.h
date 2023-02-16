@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "TFM_SkeletalActor.generated.h"
 
+class AStaticMeshActor;
 class USphereComponent;
 class ATFM_SwitchFloor;
 UCLASS()
@@ -46,6 +47,14 @@ protected:
 		USoundBase* DoorCloseSound = nullptr;
 	UPROPERTY(EditAnywhere, Category = "Collision")
 		USphereComponent* CollisionSphere = nullptr;
+	UPROPERTY(EditAnywhere)
+		TArray<AStaticMeshActor*> LightPath;
+	UPROPERTY(EditAnywhere)
+		UMaterialInstance* OnMaterial = nullptr;
+	UPROPERTY(EditAnywhere)
+		UMaterialInstance* OffMaterial = nullptr;
+	UPROPERTY(EditAnywhere, Category = "Particles")
+		UParticleSystemComponent* LightParticles = nullptr;
 private:
 	bool IsConnected();
 };
