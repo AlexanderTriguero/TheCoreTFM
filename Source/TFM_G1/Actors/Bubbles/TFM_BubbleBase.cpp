@@ -86,6 +86,13 @@ bool ATFM_BubbleBase::HasSomethingOnTop()
 
 }
 
+TSet<AActor*> ATFM_BubbleBase::TopActors()
+{
+	TSet<AActor*> OverlappingActors;
+	TopDetection->GetOverlappingActors(OverlappingActors);
+
+	return OverlappingActors;
+}
 
 
 // Called when the game starts or when spawned

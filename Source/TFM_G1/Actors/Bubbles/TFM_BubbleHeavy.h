@@ -15,7 +15,8 @@ class TFM_G1_API ATFM_BubbleHeavy : public ATFM_BubbleBase
 
 public:
 	ATFM_BubbleHeavy();
-
+	UFUNCTION()
+		void NotifyDestruction(AActor* DestroyedActor);
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Collider")
 		UBoxComponent* BoxCollider = nullptr;
 	UPROPERTY(EditAnywhere, Category = "Level Actor")

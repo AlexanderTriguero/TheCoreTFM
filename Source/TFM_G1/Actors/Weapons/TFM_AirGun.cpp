@@ -71,7 +71,7 @@ void ATFM_AirGun::Tick(float DeltaTime)
 			ATFM_ActorBase* ActorBase = Cast<ATFM_ActorBase>(OtherActor);
 			if (ActorBase && ActorBase->IsMovable())
 			{
-				End = ActorBase->GetMesh()->GetComponentLocation();
+				End = ActorBase->GetRootPoint()->GetComponentLocation();
 				UKismetSystemLibrary::LineTraceSingle(this, Start, End, TraceTypeQuery1, true, {}, EDrawDebugTrace::ForDuration, OutHit, true);
 
 				Direction = UKismetMathLibrary::GetDirectionUnitVector(Start, End);	
@@ -84,7 +84,26 @@ void ATFM_AirGun::Tick(float DeltaTime)
 					if (ActorBase->IsA<ATFM_BubbleAnchor>() || ActorBase->IsA<ATFM_BubbleElectric>()) {
 						ActorBase->EnablePhysics();	
 					}
-						ActorBase->ApplyForce(Direction, Force, PushAttracValue);
+					if(ATFM_BubbleAnchor* AnchorBubble = Cast<ATFM_BubbleAnchor>(ActorBase))
+					{
+						if(AnchorBubble->HasSomethingOnTop())
+						{
+							for(AActor* TopActor : AnchorBubble->TopActors())
+							{
+								if(ATFM_BubbleBase* TopBubble = Cast<ATFM_BubbleBase>(TopActor))
+								{
+									TopBubble->bIsOnTop = true;
+								}
+							}
+						}
+					}
+
+					if(ATFM_BubbleBase* BaseBubble = Cast<ATFM_BubbleBase>(ActorBase))
+					{
+						if (BaseBubble->bIsOnTop)
+							continue;
+					}
+					ActorBase->ApplyForce(Direction, Force, PushAttracValue);
 				}			
 			}
 		}
