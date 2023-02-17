@@ -20,7 +20,7 @@ public:
 		bool bLevelSoap = false;
 	UPROPERTY(EditDefaultsOnly)
 		UCableComponent* Cable = nullptr;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		UPhysicsConstraintComponent* Constraint = nullptr;
 	void SwitchEnd(AActor* newAttachEnd, FName ComponentName);
 	UPROPERTY(EditAnywhere)
