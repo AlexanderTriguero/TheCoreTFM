@@ -4,8 +4,10 @@
 #include "Actors/TFM_SkeletalActor.h"
 
 #include "Bubbles/TFM_BubbleElectric.h"
+#include "Engine/StaticMeshActor.h"
 #include "Kismet/GameplayStatics.h"
 #include "LevelObjects/TFM_SwitchFloor.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
 ATFM_SkeletalActor::ATFM_SkeletalActor()
@@ -18,6 +20,10 @@ ATFM_SkeletalActor::ATFM_SkeletalActor()
 	Door->SetupAttachment(Frame);
 	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Collision Sphere"));
 	CollisionSphere->SetupAttachment(RootComponent);
+	LightParticles = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Push Particles"));
+	LightParticles->SetupAttachment(RootComponent);
+	if (LightParticles)
+		LightParticles->SetVisibility(false);
 
 }
 
@@ -41,6 +47,15 @@ void ATFM_SkeletalActor::Activate()
 {
 	if (bIsSwitchable || bIsElectric)
 	{
+		if(bIsElectric && LightPath.Num()>0 && OnMaterial)
+		{
+			for(AStaticMeshActor* Light : LightPath)
+			{
+				Light->GetStaticMeshComponent()->SetMaterial(0, OnMaterial);
+			}
+			if (LightParticles)
+				LightParticles->SetVisibility(true);
+		}
 		if (DoorOpenSound && !bIsActive)
 			UGameplayStatics::PlaySoundAtLocation(this, DoorOpenSound, GetActorLocation());
 		bIsActive = true;
@@ -80,6 +95,15 @@ void ATFM_SkeletalActor::Deactivate()
 {
 	if (bIsSwitchable || (bIsElectric && !IsConnected()))
 	{
+		if (bIsElectric && LightPath.Num() > 0 && OffMaterial)
+		{
+			for (AStaticMeshActor* Light : LightPath)
+			{
+				Light->GetStaticMeshComponent()->SetMaterial(0, OffMaterial);
+			}
+			if (LightParticles)
+				LightParticles->SetVisibility(false);
+		}
 		if (bIsActive && DoorCloseSound)
 			UGameplayStatics::PlaySoundAtLocation(this, DoorCloseSound, GetActorLocation());
 		bIsActive = false;
